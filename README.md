@@ -246,28 +246,6 @@ Wesal is a platform that connects sports enthusiasts for player discovery, match
 - Willing to pay: NO (price sensitive)
 
 **Secondary:** Sports venue managers, tournament organizers
-
-### 6.4 Success Metrics (MVP - 4 Weeks)
-
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| User Registrations | 500+ | Analytics |
-| Monthly Active Users | 300+ | Unique logins |
-| Matches Created | 75+ | Match creation events |
-| Matches Completed | 60+ | Match completion status |
-| Avg Participants/Match | 6-8 | Participant count |
-| Venue Partnerships | 10+ | Partner database |
-| User Retention (7-day) | 40%+ | Returning users |
-| User Satisfaction | 4.0+/5.0 | In-app rating |
-| Session Duration | 10+ mins | Analytics |
-
-**Definition of MVP Success:**
-- 300+ active users
-- 50+ successfully organized matches
-- 4.0+ user satisfaction rating
-- Proves market demand & product-market fit
-- Ready for Stage 2 scaling
-
 ---
 
 ## Feasibility Analysis
@@ -282,9 +260,9 @@ Wesal is a platform that connects sports enthusiasts for player discovery, match
 
 | Component | Technology | Availability | Team Knowledge | Risk |
 |-----------|-----------|--------------|-----------------|--------|
-| Mobile Frontend | React Native | ✅ Available | ✅ High | LOW |
+| Frontend | React| ✅ Available | ✅ High | LOW |
 | Backend | Node.js + Express | ✅ Available | ✅ High | LOW |
-| Database | MongoDB | ✅ Available | ✅ Medium | LOW |
+| Database | Supabase | ✅ Available | ✅ Medium | LOW |
 | APIs | Google Maps | ✅ Available | ✅ Medium | LOW |
 | Real-time | Socket.io | ✅ Available | ✅ Medium | LOW |
 | Hosting | AWS/DigitalOcean | ✅ Available | ✅ High | LOW |
@@ -298,7 +276,7 @@ Wesal is a platform that connects sports enthusiasts for player discovery, match
 **Technical Knowledge Assessment:**
 - Mobile development (React Native): Hadeel (Frontend Eng)
 - Backend development (Node.js): Jouri (Product Eng)
-- Database design (MongoDB): Jiour has experience
+- Database design (MongoDB): Jouri has experience
 - System architecture: Jouri can design
 - Location-based services: New but learnable
 - Real-time messaging: Standard libraries available
