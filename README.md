@@ -56,7 +56,7 @@
 | Reema AlMujalli | Product Designer | UX/UI research, design systems, prototyping |
 
 
-### 2.3 Communication Protocol
+### 2.2 Communication Protocol
 
 | Channel | Purpose | Frequency |
 |---------|---------|-----------|
@@ -65,13 +65,6 @@
 | Weekly Meeting | Status + planning | 1x/week (Monday) |
 | Notion | Documentation | Continuous |
 | GitHub | Code/specs | Continuous |
-
-### 2.4 Team Alignment Confirmation
-
-All 4 members unanimously aligned on Wesal as MVP
-No significant concerns or objections raised
-Team enthusiasm level: HIGH
-Commitment to timeline: CONFIRMED  
 
 ---
 
