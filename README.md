@@ -158,15 +158,15 @@ Wesal is a platform that connects sports enthusiasts for player discovery, match
 
 ### 5.2 Feature Scope
 
-| # | Feature | User Value | Complexity |
-|----|---------|-----------|-----------|----------|
-| 1 | User Registration & Profiles | Enables matching algorithm | Low |
-| 2 | Match/Player Discovery | Core value - find teammates | Medium |
-| 3 | Join Existing Matches | Zero-friction participation | Low |
-| 4 | Create Matches | Empowers organizers | Medium |
-| 5 | Venue Search & Booking | Solves location problem | Medium |
-| 6 | In-App Messaging | Reduces coordination friction | Medium |
-| 7 | Events Discovery | Connects to larger community | Low |
+| # | Feature | User value | Complexity | Priority |
+|---|---------|-----------|------------|----------|
+| 1 | Registration & profiles | Foundation for matching | Low | Must have |
+| 2 | Player & match discovery | Core value: find teammates and games | Medium | Must have |
+| 3 | Join existing matches | Zero-friction participation | Low | Must have |
+| 4 | Create matches | Empowers organizers | Medium | Must have |
+| 5 | Venue search | Solves the "where" problem | Medium | Should have |
+| 6 | In-app messaging | Keeps coordination inside the app | Medium | Should have |
+| 7 | Events discovery | Community engagement | Low | Nice to have |
 
 ### 5.3 Why Wesal
 
