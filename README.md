@@ -52,7 +52,7 @@
 |------|------|--------|
 | Jouri AlSulaiman | Product Engineer | Full-stack, system design, backend development |
 | Ahad AlQahtani | Project Manager | Coordination, planning, timeline management |
-| Hadeel AlQhtani | Frontend Engineer | Mobile development, UI/UX, React Native |
+| Hadeel AlQhtani | Frontend Engineer | Web app development, UI/UX, React Native |
 | Reema AlMujalli | Product Designer | UX/UI research, design systems, prototyping |
 
 
