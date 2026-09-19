@@ -149,9 +149,6 @@ All-in-one solution (discovery + coordination + venues)
 5. Deep-dived analysis
 6. Unanimous selection
 
-**Duration:** 10 days (Sept 1-15)  
-**Participants:** All 4 team members  
-**Output:** 6 documented concepts with detailed analysis
 
 ### 4.2 Ideas Generated
 
@@ -212,10 +209,10 @@ All-in-one solution (discovery + coordination + venues)
 ### 6.1 MVP Overview
 
 **Project Name:** Wesal  
-**Tagline:** "Connect. Organize. Play. Discover Your Sports Community"
+**Tagline:** "Connect. Organize. Play. Discover Your Community"
 
 **Description:**  
-Wesal is a mobile-first platform that connects sports enthusiasts for player discovery, match organization, venue booking, and sports event discovery. Users create profiles with sport preferences and skill levels, discover compatible players and matches, and easily organize or join games.
+Wesal is a platform that connects sports enthusiasts for player discovery, match organization, venue booking, and sports event discovery. Users create profiles with sport preferences and skill levels, discover compatible players and matches, and easily organize or join games.
 
 ### 6.2 Core Features (7 Total)
 
