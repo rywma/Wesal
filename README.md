@@ -48,12 +48,12 @@
 
 ### 2.1 Team Composition
 
-| Member | Role | Key Skills | Capacity |
+| Member | Role | Key Skills ||
 |--------|------|-----------|----------|
-| Jouri AlSulaiman | Product Engineer | Full-stack, system design, backend development | 100% |
-| Ahad AlQahtani | Project Manager | Coordination, planning, timeline management | 100% |
-| Hadeel AlQhtani | Frontend Engineer | Mobile development, UI/UX, React Native | 100% |
-| Reema AlMujalli | Product Designer | UX/UI research, design systems, prototyping | 100% |
+| Jouri AlSulaiman | Product Engineer | Full-stack, system design, backend development |
+| Ahad AlQahtani | Project Manager | Coordination, planning, timeline management |
+| Hadeel AlQhtani | Frontend Engineer | Mobile development, UI/UX, React Native |
+| Reema AlMujalli | Product Designer | UX/UI research, design systems, prototyping |
 
 ### 2.2 Decision-Making Authority
 
@@ -69,18 +69,17 @@
 
 | Channel | Purpose | Frequency |
 |---------|---------|-----------|
-| WhatsApp | Urgent updates | Real-time |
-| Slack | Detailed discussions | Daily |
+| Discord | Detailed discussions | Daily |
 | Weekly Meeting | Status + planning | 1x/week (Monday) |
 | Notion | Documentation | Continuous |
 | GitHub | Code/specs | Continuous |
 
 ### 2.4 Team Alignment Confirmation
 
-✅ All 4 members unanimously aligned on Wesal as MVP  
-✅ No significant concerns or objections raised  
-✅ Team enthusiasm level: HIGH  
-✅ Commitment to timeline: CONFIRMED  
+ All 4 members unanimously aligned on Wesal as MVP  
+ No significant concerns or objections raised  
+ Team enthusiasm level: HIGH  
+ Commitment to timeline: CONFIRMED  
 
 ---
 
@@ -145,9 +144,9 @@ Sports enthusiasts in Saudi Arabia struggle to find compatible teammates and org
 - Meetup.com (available but not sports-focused)
 
 **Competitive Advantage:**
-✅ First-mover in Saudi sports connection market  
-✅ Designed for Saudi culture & preferences  
-✅ All-in-one solution (discovery + coordination + venues)
+ First-mover in Saudi sports connection market  
+ Designed for Saudi culture & preferences  
+ All-in-one solution (discovery + coordination + venues)
 
 ---
 
