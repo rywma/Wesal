@@ -26,7 +26,7 @@
 
 **Problem:** 59.1% of Saudis engage in physical activity, yet 36.7% of men and 17.9% of women cite lack of group support as a barrier to participation. Current coordination methods (WhatsApp, Instagram) are fragmented and inefficient.
 
-**Solution:** Wesal is a unified mobile platform connecting sports enthusiasts for player discovery, match organization, and venue booking.
+**Solution:** Wesal is a unified platform for player discovery, match organization, venue booking, and expense management among sports groups.
 
 **Key Findings:**
 - Strong market validation from research
