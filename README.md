@@ -60,8 +60,8 @@
 
 | Channel | Purpose | Frequency |
 |---------|---------|-----------|
-| WhatsApp | Urgent updates | Real-time |
-| Slack | Detailed discussions | Daily |
+| Discord | Urgent updates | Real-time |
+| Zoom | Detailed discussions | Daily |
 | Weekly Meeting | Status + planning | 1x/week (Monday) |
 | Notion | Documentation | Continuous |
 | GitHub | Code/specs | Continuous |
