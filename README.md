@@ -48,22 +48,13 @@
 
 ### 2.1 Team Composition
 
-| Name | Role | Skills | Availability |
+| Name | Role | Skills |
 |------|------|--------|--------------|
-| Jouri AlSulaiman | Product Engineer | Full-stack, system design, backend development | Full-time |
-| Ahad AlQahtani | Project Manager | Coordination, planning, timeline management | Full-time |
-| Hadeel AlQhtani | Frontend Engineer | Mobile development, UI/UX, React Native | Full-time |
-| Reema AlMujalli | Product Designer | UX/UI research, design systems, prototyping | Full-time |
+| Jouri AlSulaiman | Product Engineer | Full-stack, system design, backend development |
+| Ahad AlQahtani | Project Manager | Coordination, planning, timeline management |
+| Hadeel AlQhtani | Frontend Engineer | Mobile development, UI/UX, React Native | 
+| Reema AlMujalli | Product Designer | UX/UI research, design systems, prototyping |
 
-### 2.2 Decision-Making Authority
-
-| Decision Type | Authority | Process |
-|---------------|-----------|---------|
-| Technical architecture | Product Engineer | Discussion + approval |
-| Timeline/scope | Project Manager | Consensus required |
-| Design direction | Product Designer + Frontend | Iteration loops |
-| Feature priority | Product Manager | Weekly review |
-| Go/No-Go to Stage 2 | All 4 members | Unanimous vote |
 
 ### 2.3 Communication Protocol
 
