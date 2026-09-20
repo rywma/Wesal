@@ -1,4 +1,4 @@
-# Stage 1 Report: Team Formation and Idea Development
+# Stage  Report: Team Formation and Idea Development
 ## Wesal - Sports Connection Platform
 
 ---
