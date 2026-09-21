@@ -4,7 +4,6 @@
 ---
 
 ## Table of Contents
-## Table of Contents
 1. [Executive Summary](#1-executive-summary)
 2. [Team Formation](#team-formation)
 3. [Problem Definition & Market Research](#problem-definition--market-research)
