@@ -1,4 +1,4 @@
-# Project Charter
+# Stage 2: Project Charter Development
  
 ## Objectives:
  
