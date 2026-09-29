@@ -1,23 +1,34 @@
-# Stage 2: Project Charter Development
+
+
+# Wesal - Stage 2:  Project Charter Development
  
+
+ ## Purpose: 
+
+Wesal is a web platform that helps players find, join and organize sports matches in one place, without the hassle of coordinating across multiple applications.
+
+Many players struggle to find enough people for a game, and organizers waste time coordinating through WhatsApp groups, calls, and venue bookings. Wesal solves this by bringing match discovery, organization, and cost splitting into a single platform. 
+
+Our goal is to make playing sports as easy as opening an app, and to help build an active local sports community.
+
+—
 ## Objectives:
- 
-- **Project Objectives:** Purpose and 2-3 SMART objectives.
-- **Stakeholders and Roles:** A list of all stakeholders and a description of team roles.
-- **Scope:** In-scope and out-of-scope items.
-- **Risks:** Potential risks with mitigation strategies.
-- **High-Level Plan:** Timeline or phases of the project.
----
- 
-## Project Objectives: SMART
- 
-|  | Goal 1: Help users find games | Goal 2: Make organization easy | Goal 3: Recurring players |
+
+- Help players easily find and join matches with friends or new players, filtered by sport, date, and location.
+- Allow organizers to create and manage a match in one simple flow, including inviting players.
+- Make paying for a match fair and clear by calculating each player's share and tracking who has paid.
+
+—
+
+## SMART Breakdown
+
+|  | Goal 1: Help users find games | Goal 2: Make organization easy | Goal 3: Make paying fair and clear |
 | --- | --- | --- | --- |
-| **Specific** | Let users find and join matches with friends/randoms | Allow organizers to set up matches in 1 flow | Marketing ads to recurring players to increase matches |
-| **Measurable** | 20+ matches between randomly assigned players | 50+ matches created in web | At least 30% player return rate |
-| **Achievable** | Finding a match is just filtering our database by sport, date and location | Creating forms is a realistic and achievable goal based on our skillset | Players can rejoin new matches based on their recent activity |
-| **Relevant** | People cannot find players | People waste 30+ minutes per game coordinating across apps | Recurring players help build an active sports community and keep matches available |
-| **Time Bound** | Objectives can be accomplished within the given time | Objectives can be accomplished within the given time | Achieve this by the end of the MVP development phase |
+| **Specific** | Players can search for matches by sport, date and location, and join or leave a match | Organizers can create a match and invite players in 1 simple flow | The platform calculates each player's share of the match cost and tracks who has paid |
+| **Measurable** | At least 10 test users can find and join a match in under 5 minutes without help | At least 10 test users can create a match and invite players in under 5 minutes | Cost shares are correct in 100% of test matches, and organizers can see every player's payment status |
+| **Achievable** | Search and join are simple core features that fit our team's skills and timeline | Creating forms is a realistic and achievable goal based on our skillset | It is a simple calculation plus a payment status, using simulated payments only |
+| **Relevant** | People struggle to find people to play with | Organizers waste 30+ minutes per game coordinating across apps | Collecting money from players is one of the most awkward parts of organizing a game |
+| **Time Bound** | Objectives can be accomplished by the end of week 10 | Objectives can be accomplished by the end of week 10 | Objectives can be accomplished by the end of week 10 |
  
 ---
  
@@ -28,7 +39,7 @@
 | Role | Name | Responsibility |
 | --- | --- | --- |
 | Backend engineer | Jouri | System architecture, database, technical decisions |
-| Frontend developer | Hadeel | Building the web screen, connecting to the API, responses |
+| Frontend developer | Hadeel | Building web pages, connecting them to backend, handling user interactions |
 | Project manager | Ahad | Planning, timeline, weekly scope reviews |
 | UI/UX designer | Reema | User research, wireframes, prototypes, design system |
  
@@ -39,7 +50,7 @@
 | Team members | Internal | Daily planning, weekly meetings |
 | Mentors | Internal | Feedback and reporting sessions |
 | Players + university clubs | External | User interviews, forms research, early outreach |
-| Stadium owners | External | Free listings during MVP |
+| Stadium owners | External | Future partners, early outreach for venue information |
  
 ---
  
@@ -63,11 +74,11 @@
 | Feature | Includes |
 | --- | --- |
 | Challenges | Creating public challenges for users to join |
-| In-App Chat — *Remove* | Direct messaging between players |
+| In-App Chat | Direct messaging between players |
 | Advanced Recommendations | Personalized or AI-based match recommendations |
-| Ranking and Points — *Push* | Leaderboards, levels or reward points — revenue/cost implications considered; money goes back to us anyway, maybe |
+| Ranking and Points | Leaderboards, levels or reward points |
 | Advanced Social Features | Followers, social feed or advanced profiles |
-| Payment | Real payment gateway integration, such as Mada or Apple Pay |
+| Real Payment Processing | Real payment gateway integration, such as Mada or Apple Pay |
  
 ---
  
@@ -75,12 +86,12 @@
  
 | Risk | Severity | Impact | Mitigation |
 | --- | --- | --- | --- |
-| User acquisition | High | No critical mass = no value | Pre-launch — partner with sports clubs, university groups |
+| User acquisition | High | Not enough users to fill matches | Pre-launch — partner with sports clubs, university groups |
 | Team turnover | Medium | Delays if member leaves | Knowledge sharing, documentation, role overlap |
 | Scope creep | High | Missing deadline | Weekly scope reviews, strict feature list, project manager supervises |
-| Location accuracy | Medium | Poor recommendations | Start simple, based on positive feedback |
-| Venue partnerships | Medium | Lack of venue data — operations post MVP | Manual outreach, free listing initially |
-| Competition | Medium | New entrants to market | Move fast, build network effects, improve UX |
+| Location accuracy | Medium | Poor reccomendations | Use city/district filters initially, add map-based locations later |
+| Venue partnerships | Medium | Lack of venue data | Manual outreach, organizers enter the venue themselves for now |
+| Competition | Medium | New entrants to market | Move fast, grow user base, improve UX |
  
 ---
  
@@ -88,9 +99,9 @@
  
 | Stage | Timeline | Key Milestones / Deliverables | Status |
 | --- | --- | --- | --- |
-| 1. Idea development | Week 1 | Form the team, discuss project ideas, finalize the selected idea | ✅ Completed |
-| 2. Project charter | Week 2 | Define project objectives, team roles, stakeholders, scope, risks, and high-level plan | 🔄 In Progress |
-| 3. Technical documentation | Weeks 3-4 | Create user stories, mockups, system architecture, database design, sequence diagrams and API plan | ⬜ Not Started |
-| 4. MVP development | Weeks 5-10 | Project setup, authentication, develop core match features, cost splitting, complete secondary features, integrations and testing | ⬜ Not Started |
-| 5. Project closure | Weeks 11-12 | Final testing, project review, poster, presentation and landing page | ⬜ Not Started |
+| 1. Idea development | Week 1 | Form the team, discuss project ideas, finalize the selected idea | Completed |
+| 2. Project charter | Week 2 | Define project objectives, team roles, stakeholders, scope, risks, and high-level plan | In Progress |
+| 3. Technical documentation | Weeks 3-4 | Create user stories, mockups, system architecture, database design, sequence diagrams and API plan |  Not Started |
+| 4. MVP development | Weeks 5-10 | Project setup, authentication, develop core match features, cost splitting, complete secondary features, integrations and testing | Not Started |
+| 5. Project closure | Weeks 11-12 | Final testing, project review, poster, presentation and landing page | Not Started |
  
