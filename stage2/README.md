@@ -1,8 +1,5 @@
-
-
 # Wesal - Stage 2:  Project Charter Development
  
-
  ## Purpose: 
 
 Wesal is a web platform that helps players find, join and organize sports matches in one place, without the hassle of coordinating across multiple applications.
@@ -11,14 +8,14 @@ Many players struggle to find enough people for a game, and organizers waste tim
 
 Our goal is to make playing sports as easy as opening an app, and to help build an active local sports community.
 
-—
+---
 ## Objectives:
 
 - Help players easily find and join matches with friends or new players, filtered by sport, date, and location.
 - Allow organizers to create and manage a match in one simple flow, including inviting players.
 - Make paying for a match fair and clear by calculating each player's share and tracking who has paid.
 
-—
+---
 
 ## SMART Breakdown
 
@@ -31,7 +28,7 @@ Our goal is to make playing sports as easy as opening an app, and to help build 
 | **Time Bound** | Objectives can be accomplished by the end of week 10 | Objectives can be accomplished by the end of week 10 | Objectives can be accomplished by the end of week 10 |
  
 ---
- 
+
 ## Stakeholders and Roles
  
 ### Team Roles
@@ -53,8 +50,8 @@ Our goal is to make playing sports as easy as opening an app, and to help build 
 | Stadium owners | External | Future partners, early outreach for venue information |
  
 ---
- 
-## Scope
+
+ ## Scope
  
 ### In-Scope Features
  
