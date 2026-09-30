@@ -16,12 +16,12 @@
 
 ### Could Have
 11. **Profile Setup:** As a registered player, I want to add my favorite sports, skill level, and a short bio, so that other players know my background.
+12. - Rankings, leaderboards, and points
 
 ### Won't Have (this MVP)
 - Public challenges
 - In-app chat
 - AI or personalized recommendations
-- Rankings, leaderboards, and points
 - Social features (followers, feed)
 - Real payment processing (Mada, Apple Pay)
 
