@@ -29,6 +29,7 @@
 https://www.figma.com/site/7HQSTm1kig0nwlwyElgvjR/Wesal?node-id=0-1&t=iPJU0UNrda5JEFH1-1
 
 
+
 ## 1. System Architecture
 
 Wesal is a web app with a React frontend, a Django backend and a PostgreSQL database. The diagram below shows how these parts connect and how data moves between them.
