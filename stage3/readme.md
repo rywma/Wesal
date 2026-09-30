@@ -25,3 +25,74 @@
 - Social features (followers, feed)
 - Real payment processing (Mada, Apple Pay)
 
+## 1. System Architecture
+
+Wesal is a web app with a React frontend, a Django backend and a PostgreSQL database. The diagram below shows how these parts connect and how data moves between them.
+
+```mermaid
+flowchart LR
+    User["User (browser)"] -->|HTTPS| FE
+
+    subgraph Frontend["Frontend: React"]
+        FE["Pages: Login, Discover,<br/>Match Details, Create Match,<br/>My Matches"]
+    end
+
+    subgraph Backend["Backend: Django + Django REST Framework"]
+        AUTH["Auth<br/>Django auth + JWT"]
+        APPS["Apps: accounts,<br/>matches, payments"]
+    end
+
+    DB[("PostgreSQL")]
+
+    FE -->|"1. log in"| AUTH
+    AUTH -->|"2. JWT"| FE
+    FE -->|"3. request + JWT"| APPS
+    APPS <-->|"4. Django ORM queries / results"| DB
+    APPS -->|"5. JSON response"| FE
+```
+
+### Components
+
+| Part | Tech | What it does |
+|------|------|--------------|
+| Frontend | React | The pages users see. Sends requests to the backend and shows the results |
+| Backend | Django + Django REST Framework | All the logic for accounts, matches, invites, cost splitting and payment status |
+| Auth | Django auth + Simple JWT | Sign up and login, gives the user a token for later requests |
+| Database | PostgreSQL | Stores users, matches, participants, invites and payments |
+| External APIs | None in the MVP | Maps and real payments are out of scope (see charter) |
+
+### How data flows
+
+1. The user logs in and the backend sends back a JWT.
+2. Every request from the frontend includes that token.
+3. Django checks the token before the request reaches any view.
+4. The view reads or updates the database through the Django ORM.
+5. The backend returns JSON and the page updates.
+
+Example: when a player joins a match, the frontend sends `POST /api/matches/:id/join/`. The backend checks there's a free spot, adds the player, recalculates each player's share of the cost, and returns the updated match.
+
+### Architecture style
+
+We're using a **monolithic** setup: one Django project split into three apps (accounts, matches, payments) that share one database. For a team of 4 with 6 weeks of development, this is simpler to build, test and deploy than microservices. Keeping the apps separate means we could split them later if Wesal grows.
+
+### Security
+
+- Passwords are hashed by Django's built-in auth. We never store them in plain text.
+- Every request needs a valid JWT, except sign up and login.
+- Only the creator of a match can edit it, cancel it, invite players or see payment tracking.
+- All traffic goes over HTTPS.
+- Django validates input before saving (for example, max players must be more than 0 and cost can't be negative).
+- We only store the user data we need, following SDAIA data-protection guidance.
+
+### Scalability
+
+- The frontend and backend run separately, so each can be scaled on its own.
+- JWT auth means the backend doesn't keep sessions, so more backend instances can be added if traffic grows.
+- The database has indexes on the fields we filter by most (sport, date, city).
+
+### Why these tools
+
+- **Django + DRF:** Our team knows Python, and Django gives us auth, an admin panel and migrations out of the box.
+- **React:** Keeps the frontend separate from the backend, so both can be built at the same time.
+- **PostgreSQL:** Our data is relational (users, matches and payments all link together) and it works well with Django.
+- **No maps API or payment gateway:** Players filter by city and district, and payments are simulated, as agreed in our charter.
