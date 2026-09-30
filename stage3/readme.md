@@ -101,3 +101,120 @@ We're using a **monolithic** setup: one Django project split into three apps (ac
 - **React:** Keeps the frontend separate from the backend, so both can be built at the same time.
 - **PostgreSQL:** Our data is relational (users, matches and payments all link together) and it works well with Django.
 - **No maps API or payment gateway:** Players filter by city and district, and payments are simulated, as agreed in our charter.
+
+
+## 2. Define Components, Classes, and Database Design
+
+### Back-end Classes
+
+Since we are using Django for the back-end, we identified the main classes based on the main features of the application.
+
+#### User
+Attributes:
+- id
+- name
+- username
+- email
+- password
+- profile_image
+
+Methods:
+- update_profile()
+
+#### Match
+Attributes:
+- id
+- creator_id
+- sport_id
+- date
+- time
+- location
+- max_players
+- status
+
+Methods:
+- create_match()
+- update_match()
+- cancel_match()
+
+#### Sport
+Attributes:
+- id
+- name
+
+Methods:
+- No specific methods defined yet.
+
+#### Participation
+Attributes:
+- id
+- user_id
+- match_id
+- status
+
+Methods:
+- join_match()
+- leave_match()
+
+#### Invitation
+Attributes:
+- id
+- sender_id
+- receiver_id
+- match_id
+- status
+
+Methods:
+- send_invitation()
+- accept_invitation()
+- decline_invitation()
+
+
+### Front-end Components
+
+Since we are using React for the front-end, we divided the interface into simple reusable components.
+
+- Navbar: used to move between the main pages.
+- MatchCard: shows the main match details.
+- MatchList: displays the available matches.
+- MatchFilters: filters matches by sport, date, and location.
+- CreateMatchForm: allows users to create a new match.
+- Profile: shows the user's basic information and profile image.
+- InvitationList: shows invitations received by the user.
+- JoinButton: allows the user to join a match.
+- LeaveButton: allows the user to leave a match.
+
+
+### Database Design
+
+We are using a relational database for the project. The main tables are Users, Sports, Matches, Participations, and Invitations.
+
+#### Users
+Stores user account information.
+
+#### Sports
+Stores the sports available in the application.
+
+#### Matches
+Stores the details of each created match.
+
+#### Participations
+Connects users with the matches they join.
+
+#### Invitations
+Stores match invitations sent between users.
+
+
+### Relationships
+
+- One user can create many matches.
+- One sport can be linked to many matches.
+- One user can join many matches.
+- One match can have many users.
+- One user can send invitations to other users.
+- Each invitation belongs to one match.
+
+
+### ER Diagram
+
+![ER Diagram]
