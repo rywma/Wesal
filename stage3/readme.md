@@ -109,8 +109,6 @@ We're using a **monolithic** setup: one Django project split into three apps (ac
 
 Since we are using Django for the back-end, we identified the main classes based on the main features of the application.
 
-### Back-end Classes
-
 | Class | Attributes | Methods |
 |---|---|---|
 | User | id, name, username, email, password, profile_image | update_profile() |
@@ -123,7 +121,6 @@ Since we are using Django for the back-end, we identified the main classes based
 
 Since we are using React for the front-end, we divided the interface into simple reusable components.
 
-### Front-end Components
 
 | Component | Description |
 |---|---|
