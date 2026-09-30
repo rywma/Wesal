@@ -217,4 +217,4 @@ Stores match invitations sent between users.
 
 ### ER Diagram
 
-![ER Diagram]
+![ER Diagram](Wesal%20Database%20ER%20Diagram.png)
