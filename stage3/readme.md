@@ -74,8 +74,8 @@ For example, when a player joins a match, the frontend sends `POST /api/matches/
 
 ### Why this setup
 
-We went with React and Node/Express because they're both JavaScript and our team already works with them. PostgreSQL fits our data well, since users, matches and payments all link to each other. Supabase gives us a hosted database and login for free, so we don't have to build authentication ourselves.
-
-The backend is a single Express app instead of separate microservices. With 4 people and 6 weeks, that's much easier to build and test. We kept the match, invite and payment logic in separate modules, so it can be split up later if needed.
-
-We're not using a maps API or a real payment gateway in the MVP. Players filter by city and district, and payments are simulated, as planned in our project charter.
+- **React + Node/Express:** Both are JavaScript, and our team already works with them.
+- **PostgreSQL:** Fits our data well, since users, matches and payments all link to each other.
+- **Supabase:** Gives us a hosted database and login for free, so we don't have to build authentication ourselves.
+- **Single Express app:** Much easier to build and test than microservices with 4 people and 6 weeks. The match, invite and payment logic are kept in separate modules, so they can be split up later if needed.
+- **No maps API or payment gateway:** Players filter by city and district, and payments are simulated, as planned in our project charter.
