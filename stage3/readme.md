@@ -109,80 +109,33 @@ We're using a **monolithic** setup: one Django project split into three apps (ac
 
 Since we are using Django for the back-end, we identified the main classes based on the main features of the application.
 
-#### User
-Attributes:
-- id
-- name
-- username
-- email
-- password
-- profile_image
+### Back-end Classes
 
-Methods:
-- update_profile()
-
-#### Match
-Attributes:
-- id
-- creator_id
-- sport_id
-- date
-- time
-- location
-- max_players
-- status
-
-Methods:
-- create_match()
-- update_match()
-- cancel_match()
-
-#### Sport
-Attributes:
-- id
-- name
-
-Methods:
-- No specific methods defined yet.
-
-#### Participation
-Attributes:
-- id
-- user_id
-- match_id
-- status
-
-Methods:
-- join_match()
-- leave_match()
-
-#### Invitation
-Attributes:
-- id
-- sender_id
-- receiver_id
-- match_id
-- status
-
-Methods:
-- send_invitation()
-- accept_invitation()
-- decline_invitation()
-
+| Class | Attributes | Methods |
+|---|---|---|
+| User | id, name, username, email, password, profile_image | update_profile() |
+| Match | id, creator_id, sport_id, date, time, location, max_players, status | create_match(), update_match(), cancel_match() |
+| Sport | id, name | No specific methods defined yet |
+| Participation | id, user_id, match_id, status | join_match(), leave_match() |
+| Invitation | id, sender_id, receiver_id, match_id, status | send_invitation(), accept_invitation(), decline_invitation() |
 
 ### Front-end Components
 
 Since we are using React for the front-end, we divided the interface into simple reusable components.
 
-- Navbar: used to move between the main pages.
-- MatchCard: shows the main match details.
-- MatchList: displays the available matches.
-- MatchFilters: filters matches by sport, date, and location.
-- CreateMatchForm: allows users to create a new match.
-- Profile: shows the user's basic information and profile image.
-- InvitationList: shows invitations received by the user.
-- JoinButton: allows the user to join a match.
-- LeaveButton: allows the user to leave a match.
+### Front-end Components
+
+| Component | Description |
+|---|---|
+| Navbar | Used to move between the main pages |
+| MatchCard | Shows the main match details |
+| MatchList | Displays the available matches |
+| MatchFilters | Filters matches by sport, date, and location |
+| CreateMatchForm | Allows users to create a new match |
+| Profile | Shows the user's basic information and profile image |
+| InvitationList | Shows invitations received by the user |
+| JoinButton | Allows the user to join a match |
+| LeaveButton | Allows the user to leave a match |
 
 
 ### Database Design
