@@ -26,7 +26,6 @@
 - Real payment processing (Mada, Apple Pay)
 
 ### Mockups
-https://www.figma.com/site/7HQSTm1kig0nwlwyElgvjR/Wesal?node-id=0-1&t=iPJU0UNrda5JEFH1-1
 
 
 
