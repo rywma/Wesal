@@ -113,7 +113,7 @@ Since we are using Django for the back-end, we identified the main classes based
 | User | id, name, username, email, password, profile_image | update_profile() |
 | Match | id, creator_id, sport_id, date, time, location, max_players, total_cost, status | create_match(), update_match(), cancel_match() |
 | Sport | id, name | No specific methods defined yet |
-| Participation | id, user_id, match_id, status, payment_status | join_match(), leave_match() |
+| Participation | id, user_id, match_id, status, payment_status | join_match(), leave_match(), update_payment_status() |
 | Invitation | id, sender_id, receiver_id, match_id, status | send_invitation(), accept_invitation(), decline_invitation() |
 
 ### Front-end Components
