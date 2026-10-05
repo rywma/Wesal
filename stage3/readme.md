@@ -1,3 +1,19 @@
+# Stage 3: Technical Documentation
+
+## 0. User Stories and Mockups
+
+## 1. System Architecture
+
+## 2. Define Components, Classes, and Database Design
+
+## 3. High-Level Sequence Diagrams
+
+## 4. Document External and Internal APIs
+
+## 5. Plan SCM and QA Strategies
+
+
+
 ## 0. User Stories and Mockups
 ## moscow framework for prioritization
 ### Must Have
