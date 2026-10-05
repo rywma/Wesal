@@ -211,3 +211,21 @@ sequenceDiagram
     B-->>F: Return created match
     F-->>U: Show match confirmation
 ```
+
+
+### Login
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as React Frontend
+    participant B as Django Backend
+    participant D as PostgreSQL
+
+    U->>F: Enter email and password
+    F->>B: POST /api/login/
+    B->>D: Check user credentials
+    D-->>B: Return user data
+    B-->>F: Return JWT token
+    F-->>U: Log in and open the app
+```
