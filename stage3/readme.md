@@ -7,7 +7,7 @@
 4. **Join or Leave a Match:** As a player, I want to join an available match or leave one I joined, so that I can play without organizing a game myself.
 5. **Create a Match:** As a match creator, I want to create a match by entering the sport, venue, date, time, and number of players, so that others can join my game.
 6. **Cost Splitting:** As a match creator, I want to enter the total match cost and have it split automatically among players, so that each player only pays their fair share.
-7. **Payment Status:** As a player, I want to mark my share as paid (simulated payment) and see my status (Paid / Pending), so that I know my spot is confirmed.
+7. ****Payment Status:** As a player, I want to complete a simulated payment, view my payment share, and see my status (Paid / Pending), so that I know my spot is confirmed.
 
 ### Should Have
 8. **Invite Players:** As a match creator, I want to invite players to my match, so that I can fill spots with people I know.
