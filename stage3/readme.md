@@ -264,7 +264,7 @@ sequenceDiagram
 
 | API | Why we chose it |
 |---|---|
-| Moyasar (test mode) | Saudi payment gateway that supports Mada, Visa and Apple Pay in SAR. Its test mode lets players pay their share with test cards, so we can show a real payment flow without using real money. Suggested by our mentor. |
+| Moyasar (test mode) | Used to simulate payments. Players pay their share with Moyasar's test cards, so no real money is used. We chose it because it is a Saudi payment gateway that works in SAR, and it was suggested by our mentor. |
 
 The frontend shows Moyasar's payment form, and the backend checks the payment with Moyasar (`GET https://api.moyasar.com/v1/payments/{id}`) before marking the player as Paid. The secret key is only stored on the backend.
 
