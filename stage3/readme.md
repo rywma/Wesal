@@ -191,7 +191,7 @@ Stores match invitations sent between users.
 
 ### Join Match
 
-This sequence shows how a user joins an available match and how the request moves through the frontend, backend, and database.
+This sequence shows how a user joins an available match and how the system handles both successful and full-match cases.
 
 ```mermaid
 sequenceDiagram
@@ -204,10 +204,16 @@ sequenceDiagram
     F->>B: POST /api/matches/{id}/join/
     B->>D: Check match and available spots
     D-->>B: Return match data
-    B->>D: Create participation
-    D-->>B: Participation created
-    B-->>F: Return join success + update match
-    F-->>U: Show join confirmation
+
+    alt Spot available
+        B->>D: Create participation
+        D-->>B: Participation created
+        B-->>F: Return join success + updated match
+        F-->>U: Show join confirmation
+    else Match is full
+        B-->>F: Return error: match is full
+        F-->>U: Show match full message
+    end
 ```
 
 
