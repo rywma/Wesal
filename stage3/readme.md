@@ -145,10 +145,10 @@ Stores user account information.
 Stores the sports available in the application.
 
 #### Matches
-Stores the details of each created match.
+Stores the details of each created match, including the sport, date, time, location, maximum number of players, total cost, and match status.
 
 #### Participations
-Connects users with the matches they join.
+Connects users with the matches they join and stores each player's participation and payment status.
 
 #### Invitations
 Stores match invitations sent between users.
