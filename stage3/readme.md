@@ -169,3 +169,26 @@ Stores match invitations sent between users.
 ### ER Diagram
 
 ![ER Diagram](Wesal%20Database%20ER%20Diagram.png)
+
+
+
+## 3. High-Level Sequence Diagrams
+
+### Join Match
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as React Frontend
+    participant B as Django Backend
+    participant D as PostgreSQL
+
+    U->>F: Click Join Match
+    F->>B: POST /api/matches/{id}/join/
+    B->>D: Check match and available spots
+    D-->>B: Return match data
+    B->>D: Create participation
+    D-->>B: Participation created
+    B-->>F: Return updated match
+    F-->>U: Show join confirmation
+```
