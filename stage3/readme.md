@@ -92,8 +92,7 @@ We're using a **monolithic** setup: one Django project split into three apps (ac
 
 - The frontend and backend run separately, so each can be scaled on its own.
 - JWT auth means the backend doesn't keep sessions, so more backend instances can be added if traffic grows.
-- The database has indexes on the fields we filter by most (sport, date, city).
-
+- - The database has indexes on the fields we filter by most (sport, date, and location).
 ### Why these tools
 
 - **Django + DRF:** Our team knows Python, and Django gives us auth, an admin panel and migrations out of the box.
