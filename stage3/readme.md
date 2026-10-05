@@ -257,3 +257,102 @@ sequenceDiagram
     B-->>F: Return JWT token
     F-->>U: Log in and open the app
 ```
+
+## 4. Document External and Internal APIs
+
+### External APIs
+
+| API | Why we chose it |
+|---|---|
+| Moyasar (test mode) | Saudi payment gateway that supports Mada, Visa and Apple Pay in SAR. Its test mode lets players pay their share with test cards, so we can show a real payment flow without using real money. Suggested by our mentor. |
+
+The frontend shows Moyasar's payment form, and the backend checks the payment with Moyasar (`GET https://api.moyasar.com/v1/payments/{id}`) before marking the player as Paid. The secret key is only stored on the backend.
+
+We are not using a maps API. Players filter matches by location for now.
+
+### Internal API
+
+All endpoints start with `/api/`, use JSON, and need a JWT in the header (`Authorization: Bearer <token>`), except sign up and login.
+
+| Method | URL path | Description | Input | Output |
+|---|---|---|---|---|
+| POST | `/api/register/` | Create an account | JSON: name, username, email, password | JSON: user |
+| POST | `/api/login/` | Log in | JSON: email, password | JSON: JWT token + user |
+| GET | `/api/profile/` | View my profile | None | JSON: user |
+| PATCH | `/api/profile/` | Update my profile | JSON: name, profile_image | JSON: user |
+| GET | `/api/sports/` | List sports | None | JSON: list of sports |
+| GET | `/api/matches/` | Browse matches | Query: sport, date, location | JSON: list of matches |
+| POST | `/api/matches/` | Create a match | JSON: sport_id, date, time, location, max_players, total_cost | JSON: match |
+| GET | `/api/matches/{id}/` | View match details | None | JSON: match with players |
+| PATCH | `/api/matches/{id}/` | Edit a match (creator only) | JSON: fields to change | JSON: match |
+| POST | `/api/matches/{id}/cancel/` | Cancel a match (creator only) | None | JSON: match |
+| POST | `/api/matches/{id}/join/` | Join a match | None | JSON: match |
+| POST | `/api/matches/{id}/leave/` | Leave a match | None | JSON: match |
+| POST | `/api/matches/{id}/invitations/` | Invite a player (creator only) | JSON: receiver_id | JSON: invitation |
+| GET | `/api/invitations/` | View my invitations | None | JSON: list of invitations |
+| POST | `/api/invitations/{id}/accept/` | Accept an invitation | None | JSON: invitation |
+| POST | `/api/invitations/{id}/decline/` | Decline an invitation | None | JSON: invitation |
+| GET | `/api/my-matches/` | View matches I created or joined | None | JSON: list of matches |
+| GET | `/api/matches/{id}/payments/` | View players' payment status (creator only) | None | JSON: list of players with share and status |
+| PATCH | `/api/matches/{id}/payments/{user_id}/` | Update a player's payment status (creator only) | JSON: payment_status | JSON: player's share and status |
+| POST | `/api/matches/{id}/pay/` | Confirm my Moyasar payment | JSON: moyasar_payment_id | JSON: my share and payment status |
+
+### Example Requests and Responses
+
+**Create a match:** `POST /api/matches/`
+
+Request:
+```json
+{
+  "sport_id": 1,
+  "date": "2026-11-20",
+  "time": "20:00",
+  "location": "Al Malqa, Riyadh",
+  "max_players": 10,
+  "total_cost": 400
+}
+```
+
+Response (201):
+```json
+{
+  "id": 7,
+  "sport": "Football",
+  "date": "2026-11-20",
+  "time": "20:00",
+  "location": "Al Malqa, Riyadh",
+  "max_players": 10,
+  "players_count": 1,
+  "total_cost": 400,
+  "status": "open"
+}
+```
+
+**Join a match:** `POST /api/matches/7/join/`
+
+Response (200):
+```json
+{
+  "id": 7,
+  "players_count": 2,
+  "spots_left": 8,
+  "my_share": 200,
+  "payment_status": "pending"
+}
+```
+
+**Error response** (for example, the match is full):
+```json
+{
+  "error": "This match is full."
+}
+```
+
+| Status code | Meaning |
+|---|---|
+| 200 | Success |
+| 201 | Created |
+| 400 | Invalid input (for example, the match is full) |
+| 401 | Not logged in |
+| 403 | Not allowed (for example, not the match creator) |
+| 404 | Not found |
