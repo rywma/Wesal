@@ -156,15 +156,15 @@ Stores match invitations sent between users.
 
 ### Relationships
 
-| Relationship | Description |
-|---|---|
-| User → Match | One user can create many matches |
-| Sport → Match | One sport can be linked to many matches |
-| User → Participation | One user can have many participations |
-| Match → Participation | One match can have many participations |
-| Participation | Each participation connects one user to one match |
-| User → Invitation | One user can send many invitations |
-| Match → Invitation | Each invitation belongs to one match |
+| Entities | Relationship | Description |
+|---|---|---|
+| User → Match | One-to-Many | One user can create many matches |
+| Sport → Match | One-to-Many | One sport can be linked to many matches |
+| User ↔ Match | Many-to-Many | Users can join many matches and matches can have many users through Participations |
+| User → Participation | One-to-Many | One user can have many participations |
+| Match → Participation | One-to-Many | One match can have many participations |
+| User → Invitation | One-to-Many | One user can send many invitations |
+| Match → Invitation | One-to-Many | One match can have many invitations |
 
 ### ER Diagram
 
