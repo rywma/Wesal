@@ -189,6 +189,6 @@ sequenceDiagram
     D-->>B: Return match data
     B->>D: Create participation
     D-->>B: Participation created
-    B-->>F: Return updated match
+    B-->>F: Return join success + update match
     F-->>U: Show join confirmation
 ```
