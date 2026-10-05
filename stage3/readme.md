@@ -82,7 +82,7 @@ We're using a **monolithic** setup: one Django project split into three apps (ac
 ### Security
 
 - Passwords are hashed by Django's built-in auth. We never store them in plain text.
-- Every request needs a valid JWT, except sign up and login.
+- - Protected endpoints require a valid JWT, while sign up and login remain publicly accessible.
 - Only the creator of a match can edit it, cancel it, invite players or see payment tracking.
 - All traffic goes over HTTPS.
 - Django validates input before saving (for example, max players must be more than 0 and cost can't be negative).
