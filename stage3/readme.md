@@ -62,7 +62,7 @@ flowchart LR
 | Frontend | React | The pages users see. Sends requests to the backend and shows the results |
 | Backend | Django + Django REST Framework | All the logic for accounts, matches, invites, cost splitting and payment status |
 | Auth | Django auth + Simple JWT | Sign up and login, gives the user a token for later requests |
-| Database | PostgreSQL | Stores users, matches, participants, invites and payments |
+| Database | PostgreSQL | Stores users, matches, participants, invitations, match costs, and payments statues |
 | External APIs | None in the MVP | Maps and real payments are out of scope (see charter) |
 
 ### How data flows
