@@ -98,7 +98,7 @@ We're using a **monolithic** setup: one Django project split into three apps (ac
 - **Django + DRF:** Our team knows Python, and Django gives us auth, an admin panel and migrations out of the box.
 - **React:** Keeps the frontend separate from the backend, so both can be built at the same time.
 - **PostgreSQL:** Our data is relational (users, matches and payments all link together) and it works well with Django.
-- **No maps API or payment gateway:** Players filter by city and district, and payments are simulated, as agreed in our charter.
+- **No maps API or payment gateway:** Players filter by location, and payments are simulated, as agreed in our charter.
 
 
 ## 2. Define Components, Classes, and Database Design
