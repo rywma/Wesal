@@ -132,7 +132,8 @@ Since we are using React for the front-end, we divided the interface into simple
 | InvitationList | Shows invitations received by the user |
 | JoinButton | Allows the user to join a match |
 | LeaveButton | Allows the user to leave a match |
-
+| PaymentStatus | Shows the player's payment share and payment status (Paid / Pending) |
+| PaymentTracker | Allows the match creator to view and update players' payment statuses |
 
 ### Database Design
 
