@@ -176,6 +176,8 @@ Stores match invitations sent between users.
 
 ### Join Match
 
+This sequence shows how a user joins an available match and how the request moves through the frontend, backend, and database.
+
 ```mermaid
 sequenceDiagram
     participant U as User
@@ -196,6 +198,8 @@ sequenceDiagram
 
 ### Create Match
 
+This sequence shows how a user creates a new match and how the match data is validated and stored.
+
 ```mermaid
 sequenceDiagram
     participant U as User
@@ -213,7 +217,10 @@ sequenceDiagram
 ```
 
 
-### Login
+### Login 
+
+This sequence shows how a user logs in and receives a JWT token after successful authentication.
+
 
 ```mermaid
 sequenceDiagram
