@@ -192,3 +192,22 @@ sequenceDiagram
     B-->>F: Return join success + update match
     F-->>U: Show join confirmation
 ```
+
+
+### Create Match
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as React Frontend
+    participant B as Django Backend
+    participant D as PostgreSQL
+
+    U->>F: Enter match details
+    F->>B: POST /api/matches/
+    B->>B: Validate match data
+    B->>D: Create match
+    D-->>B: Match created
+    B-->>F: Return created match
+    F-->>U: Show match confirmation
+```
