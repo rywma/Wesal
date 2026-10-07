@@ -183,37 +183,55 @@ Stores match invitations sent between users.
 
 ### ER Diagram
 
-![ER Diagram](Wesal%20Database%20ER%20Diagram.png)
-
-
-
-## 3. High-Level Sequence Diagrams
-
-### Join Match
-
-This sequence shows how a user joins an available match and how the system handles both successful and full-match cases.
-
 ```mermaid
-sequenceDiagram
-    participant U as User
-    participant F as React Frontend
-    participant B as Django Backend
-    participant D as PostgreSQL
+erDiagram
+    USERS {
+        int id PK
+        varchar name
+        varchar username UK
+        varchar email UK
+        varchar password_hash
+        varchar profile_image
+    }
 
-    U->>F: Click Join Match
-    F->>B: POST /api/matches/{id}/join/
-    B->>D: Check match and available spots
-    D-->>B: Return match data
+    SPORTS {
+        int id PK
+        varchar name UK
+    }
 
-    alt Spot available
-        B->>D: Create participation
-        D-->>B: Participation created
-        B-->>F: Return join success + updated match
-        F-->>U: Show join confirmation
-    else Match is full
-        B-->>F: Return error: match is full
-        F-->>U: Show match full message
-    end
+    MATCHES {
+        int id PK
+        int creator_id FK
+        int sport_id FK
+        date date
+        time time
+        varchar location
+        int max_players
+        varchar status
+    }
+
+    PARTICIPATIONS {
+        int id PK
+        int user_id FK
+        int match_id FK
+        varchar status
+    }
+
+    INVITATIONS {
+        int id PK
+        int sender_id FK
+        int receiver_id FK
+        int match_id FK
+        varchar status
+    }
+
+    USERS ||--o{ MATCHES : creates
+    SPORTS ||--o{ MATCHES : categorizes
+    USERS ||--o{ PARTICIPATIONS : joins
+    MATCHES ||--o{ PARTICIPATIONS : has
+    USERS ||--o{ INVITATIONS : sends
+    USERS ||--o{ INVITATIONS : receives
+    MATCHES ||--o{ INVITATIONS : includes
 ```
 
 
