@@ -228,6 +228,15 @@ erDiagram
         varchar status
     }
 
+        PAYMENTS {
+        int id PK
+        int participation_id FK
+        varchar moyasar_payment_id UK
+        decimal amount
+        varchar status
+        datetime created_at
+    }
+
     USERS ||--o{ MATCHES : creates
     SPORTS ||--o{ MATCHES : categorizes
     USERS ||--o{ PARTICIPATIONS : joins
@@ -235,6 +244,7 @@ erDiagram
     USERS ||--o{ INVITATIONS : sends
     USERS ||--o{ INVITATIONS : receives
     MATCHES ||--o{ INVITATIONS : includes
+    PARTICIPATIONS ||--o{ PAYMENTS : has
 ```
 
 
