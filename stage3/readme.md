@@ -152,7 +152,7 @@ Since we are using React for the front-end, we divided the interface into simple
 
 ### Database Design
 
-We are using a relational database for the project. The main tables are Users, Sports, Matches, Participations, and Invitations.
+We are using a relational database for the project. The main tables are Users, Sports, Matches, Participations, and Invitations, and Payments.
 
 #### Users
 Stores user account information.
@@ -169,6 +169,10 @@ Connects users with the matches they join and stores each player's participation
 #### Invitations
 Stores match invitations sent between users.
 
+**Payments**
+
+Stores simulated payment transactions processed through Moyasar Test Mode, including the payment ID, amount, status, and creation date. Each payment is linked to a player's participation in a match.
+
 
 ### Relationships
 
@@ -181,6 +185,7 @@ Stores match invitations sent between users.
 | Match → Participation | One-to-Many | One match can have many participations |
 | User → Invitation | One-to-Many | One user can send many invitations |
 | Match → Invitation | One-to-Many | One match can have many invitations |
+| Participation → Payment | One-to-Many | One participation can have multiple payment attempts, and each payment belongs to one participation |
 
 ### ER Diagram
 
