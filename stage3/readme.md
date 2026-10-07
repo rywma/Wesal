@@ -207,6 +207,7 @@ erDiagram
         time time
         varchar location
         int max_players
+        decimal total_cost
         varchar status
     }
 
@@ -215,6 +216,8 @@ erDiagram
         int user_id FK
         int match_id FK
         varchar status
+        decimal payment_amount
+        varchar payment_status
     }
 
     INVITATIONS {
