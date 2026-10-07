@@ -310,7 +310,6 @@ sequenceDiagram
 ```
 
 
-
 ### Create Match
 
 This sequence shows how a user creates a new match and how the match data is validated and stored.
@@ -329,6 +328,38 @@ sequenceDiagram
     D-->>B: Match created
     B-->>F: Return created match
     F-->>U: Show match confirmation
+```
+
+### Process Payment
+
+This sequence shows how a player completes a simulated payment using Moyasar Test Mode. The backend verifies the transaction before updating the payment status.
+
+```mermaid
+sequenceDiagram
+    actor U as User
+    participant F as React Frontend
+    participant M as Moyasar Test Mode
+    participant B as Django Backend
+    participant D as PostgreSQL
+
+    U->>F: Start payment
+    F->>M: Submit test payment details
+    M-->>F: Return payment ID
+    F->>B: POST /api/matches/{id}/pay/
+    B->>M: Verify payment ID
+    M-->>B: Return payment result
+
+    alt Payment successful
+        B->>D: Save payment transaction
+        B->>D: Update participation payment_status
+        D-->>B: Payment recorded
+        B-->>F: Payment confirmed
+        F-->>U: Show Paid status
+    else Payment failed
+        B->>D: Save failed payment attempt
+        B-->>F: Payment not confirmed
+        F-->>U: Show Pending status
+    end
 ```
 
 
