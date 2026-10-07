@@ -254,26 +254,7 @@ erDiagram
 ```
 
 
-### Create Match
-
-This sequence shows how a user creates a new match and how the match data is validated and stored.
-
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant F as React Frontend
-    participant B as Django Backend
-    participant D as PostgreSQL
-
-    U->>F: Enter match details
-    F->>B: POST /api/matches/
-    B->>B: Validate match data
-    B->>D: Create match
-    D-->>B: Match created
-    B-->>F: Return created match
-    F-->>U: Show match confirmation
-```
-
+## 3. High-Level Sequence Diagrams
 
 ### Login 
 
@@ -294,6 +275,62 @@ sequenceDiagram
     B-->>F: Return JWT token
     F-->>U: Log in and open the app
 ```
+
+
+### Join Match
+
+This sequence shows how a player joins an available match and how the system calculates each player's share of the match cost.
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as React Frontend
+    participant B as Django Backend
+    participant D as PostgreSQL
+
+    U->>F: Click Join Match
+    F->>B: POST /api/matches/{id}/join/
+    B->>D: Check match and available spots
+    D-->>B: Return match data
+
+    alt Spot available
+        B->>D: Create participation
+        D-->>B: Participation created
+        B->>D: Get active participants
+        D-->>B: Return participant count
+        B->>B: Calculate cost per player
+        B->>D: Update payment shares
+        D-->>B: Shares updated
+        B-->>F: Join success and payment share
+        F-->>U: Show confirmation and cost
+    else Match is full
+        B-->>F: Return error - match is full
+        F-->>U: Show match full message
+    end
+```
+
+
+
+### Create Match
+
+This sequence shows how a user creates a new match and how the match data is validated and stored.
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as React Frontend
+    participant B as Django Backend
+    participant D as PostgreSQL
+
+    U->>F: Enter match details
+    F->>B: POST /api/matches/
+    B->>B: Validate match data
+    B->>D: Create match
+    D-->>B: Match created
+    B-->>F: Return created match
+    F-->>U: Show match confirmation
+```
+
 
 ## 4. Document External and Internal APIs
 
