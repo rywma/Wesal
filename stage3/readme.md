@@ -15,31 +15,71 @@
 
 ## 0. User Stories and Mockups
 ## moscow framework for prioritization
-### Must Have
-1. **Account Creation & Login:** As a new user, I want to create an account and log in, so that I can access the platform features.
-2. **Browse & Filter Matches:** As a player, I want to browse available matches and filter them by sport, date, and location, so that I can find a match that fits my schedule.
-3. **View Match Details:** As a player, I want to see a match's date, time, location, players, and available spots, so that I can decide whether to join.
-4. **Join or Leave a Match:** As a player, I want to join an available match or leave one I joined, so that I can play without organizing a game myself.
-5. **Create a Match:** As a match creator, I want to create a match by entering the sport, venue, date, time, and number of players, so that others can join my game.
-6. **Cost Splitting:** As a match creator, I want to enter the total match cost and have it split automatically among players, so that each player only pays their fair share.
-7. ****Payment Status:** As a player, I want to complete a simulated payment, view my payment share, and see my status (Paid / Pending), so that I know my spot is confirmed.
-
-### Should Have
-8. **Invite Players:** As a match creator, I want to invite players to my match, so that I can fill spots with people I know.
-9. **Manage Match:** As a match creator, I want to view players, edit match details, or cancel the match, so that I can handle changes easily.
-10. **Track Payments:** As a match creator, I want to see which players have paid, so that I don't have to chase people manually.
-
-### Could Have
-11. **Profile Setup:** As a registered player, I want to add my favorite sports, skill level, and a short bio, so that other players know my background.
-12. - Rankings, leaderboards, and points
-
-### Won't Have (this MVP)
+## Overview
+ 
+| Priority | Stories | Scope |
+|----------|:-------:|-------|
+| Must Have | 7 | Core MVP, required for launch |
+| Should Have | 3 | Important, included if time allows |
+| Could Have | 2 | Nice to have |
+| Won't Have | 5 | Out of scope for this MVP |
+ 
+---
+ 
+## Must Have
+ 
+| # | Story | As a... | I want to... | So that... |
+|:-:|-------|---------|--------------|------------|
+| 1 | **Account Creation & Login** | new user | create an account and log in | I can access the platform features |
+| 2 | **Browse & Filter Matches** | player | browse available matches and filter them by sport, date, and location | I can find a match that fits my schedule |
+| 3 | **View Match Details** | player | see a match's date, time, location, players, and available spots | I can decide whether to join |
+| 4 | **Join or Leave a Match** | player | join an available match or leave one I joined | I can play without organizing a game myself |
+| 5 | **Create a Match** | match creator | create a match by entering the sport, venue, date, time, and number of players | others can join my game |
+| 6 | **Cost Splitting** | match creator | enter the total match cost and have it split automatically among players | each player only pays their fair share |
+| 7 | **Payment Status** | player | complete a simulated payment, view my payment share, and see my status (Paid / Pending) | I know my spot is confirmed |
+ 
+## Should Have
+ 
+| # | Story | As a... | I want to... | So that... |
+|:-:|-------|---------|--------------|------------|
+| 8 | **Invite Players** | match creator | invite players to my match | I can fill spots with people I know |
+| 9 | **Manage Match** | match creator | view players, edit match details, or cancel the match | I can handle changes easily |
+| 10 | **Track Payments** | match creator | see which players have paid | I don't have to chase people manually |
+ 
+## Could Have
+ 
+| # | Story | As a... | I want to... | So that... |
+|:-:|-------|---------|--------------|------------|
+| 11 | **Profile Setup** | registered player | add my favorite sports, skill level, and a short bio | other players know my background |
+| 12 | **Rankings & Leaderboards** | player | see rankings, leaderboards, and points | I can track my progress and compete with others |
+ 
+## Won't Have (this MVP)
+ 
 - Public challenges
 - In-app chat
 - AI or personalized recommendations
 - Social features (followers, feed)
 - Real payment processing (Mada, Apple Pay)
-
+---
+ 
+## Progress Tracker
+ 
+### Must Have
+- [ ] #1 Account Creation & Login
+- [ ] #2 Browse & Filter Matches
+- [ ] #3 View Match Details
+- [ ] #4 Join or Leave a Match
+- [ ] #5 Create a Match
+- [ ] #6 Cost Splitting
+- [ ] #7 Payment Status
+### Should Have
+- [ ] #8 Invite Players
+- [ ] #9 Manage Match
+- [ ] #10 Track Payments
+### Could Have
+- [ ] #11 Profile Setup
+- [ ] #12 Rankings & Leaderboards
+---
 ### Mockups
 
 
