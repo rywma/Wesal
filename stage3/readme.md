@@ -69,16 +69,16 @@ flowchart LR
     APPS <-->|"4. Django ORM queries / results"| DB
     APPS -->|"5. JSON response"| FE
 ```
-
 ### Components
-
-| Part | Tech | What it does |
-|------|------|--------------|
-| Frontend | React | The pages users see. Sends requests to the backend and shows the results |
-| Backend | Django + Django REST Framework | All the logic for accounts, matches, invites, cost splitting and payment status |
-| Auth | Django auth + Simple JWT | Sign up and login, gives the user a token for later requests |
-| Database | PostgreSQL | Stores users, matches, participants, invitations, match costs, and payments statues |
-| External APIs | None in the MVP | Maps and real payments are out of scope (see charter) |
+ 
+| Part | Tech | What it does | Technical Justification |
+|------|------|--------------|-------------------------|
+| Frontend | React | The pages users see. Sends requests to the backend and shows the results | Component-based, so it's easy to reuse screens (match card, invite list, payment status). It has a large ecosystem and community, and it works well with a REST API. |
+| Backend | Django + Django REST Framework | All the logic for accounts, matches, invites, cost splitting and payment status | Django comes with an ORM, admin panel, validation and built-in security (CSRF, SQL injection protection), which speeds up the MVP. DRF gives ready-made serializers, permissions and viewsets for building the API quickly. |
+| Auth | Django auth + Simple JWT | Sign up and login, gives the user a token for later requests | Reuses Django's user model and password hashing instead of building auth from scratch. JWT is stateless, so it suits a React frontend that is separate from the backend. |
+| Database | PostgreSQL | Stores users, matches, participants, invitations, match costs, and payment statuses | A relational database fits the data well (users ↔ matches ↔ participants ↔ payments). It supports transactions and constraints, which keeps cost splitting and payment statuses consistent. It also has first-class support in Django. |
+| Containerization | Docker + Docker Compose | Runs the frontend, backend and database as separate containers with one command (`docker compose up`) | Gives every team member the same environment, so there are no "works on my machine" problems. Setup is fast for new members, and the same images can later be deployed to a server. Compose wires the three services together without manual configuration. |
+| External APIs | None in the MVP | Maps and real payments are out of scope (see charter) | Keeps the MVP focused and reduces cost, complexity and integration risk. The architecture leaves room to add these APIs later. |
 
 ### How data flows
 
