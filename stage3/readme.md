@@ -81,12 +81,12 @@
 - [ ] #12 Rankings & Leaderboards
 ---
 ### Mockups
-
+we will add the figma link here
 
 
 ## 1. System Architecture
 
-Wesal is a web app with a React frontend, a Django backend and a PostgreSQL database. The diagram below shows how these parts connect and how data moves between them.
+Wesal is a web app with a React frontend, a Django backend and a PostgreSQL database. Payments are simulated through Moyasar's test mode. The diagram below shows how these parts connect and how data moves between them.
 
 ```mermaid
 flowchart LR
@@ -102,13 +102,17 @@ flowchart LR
     end
 
     DB[("PostgreSQL")]
+    MOY["Moyasar API<br/>(test mode)"]
 
     FE -->|"1. log in"| AUTH
     AUTH -->|"2. JWT"| FE
     FE -->|"3. request + JWT"| APPS
     APPS <-->|"4. Django ORM queries / results"| DB
     APPS -->|"5. JSON response"| FE
+    FE -->|"payment form"| MOY
+    APPS -->|"verify payment"| MOY
 ```
+
 ### Components
 
 | Part | Tech | What it does |
@@ -116,9 +120,10 @@ flowchart LR
 | Frontend | React | The pages users see. Sends requests to the backend and shows the results |
 | Backend | Django + Django REST Framework | All the logic for accounts, matches, invites, cost splitting and payment status |
 | Auth | Django auth + Simple JWT | Sign up and login, gives the user a token for later requests |
-| Database | PostgreSQL | Stores users, matches, participants, invitations, match costs, and payment statuses |
+| Database | PostgreSQL | Stores users, sports, matches, participations, invitations, and payment transactions |
 | Containerization | Docker + Docker Compose | Runs the frontend, backend and database as separate containers with one command (`docker compose up`) |
-| External APIs | None in the MVP | Maps and real payments are out of scope (see charter) |
+| External APIs | Moyasar (test mode) | Simulated payments: players pay their share with test cards, and the backend verifies each payment with Moyasar. No maps API; real payments are out of scope (see charter) |
+
 ### How data flows
 
 1. The user logs in and the backend sends back a JWT.
@@ -129,6 +134,8 @@ flowchart LR
 
 Example: when a player joins a match, the frontend sends `POST /api/matches/:id/join/`. The backend checks there's a free spot, adds the player, recalculates each player's share of the cost, and returns the updated match.
 
+Payment example: the player pays their share through Moyasar's payment form, which returns a payment ID. The frontend sends that ID to `POST /api/matches/:id/pay/`, and the backend checks it with Moyasar before marking the player as Paid.
+
 ### Architecture style
 
 We're using a **monolithic** setup: one Django project split into three apps (accounts, matches, payments) that share one database. For a team of 4 with 6 weeks of development, this is simpler to build, test and deploy than microservices. Keeping the apps separate means we could split them later if Wesal grows.
@@ -136,23 +143,25 @@ We're using a **monolithic** setup: one Django project split into three apps (ac
 ### Security
 
 - Passwords are hashed by Django's built-in auth. We never store them in plain text.
-- - Protected endpoints require a valid JWT, while sign up and login remain publicly accessible.
+- Protected endpoints require a valid JWT, while sign up and login remain publicly accessible.
 - Only the creator of a match can edit it, cancel it, invite players or see payment tracking.
 - All traffic goes over HTTPS.
 - Django validates input before saving (for example, max players must be more than 0 and cost can't be negative).
+- The Moyasar secret key is stored only on the backend as an environment variable. Card details go straight to Moyasar and never touch our servers.
 - We only store the user data we need, following SDAIA data-protection guidance.
 
 ### Scalability
 
 - The frontend and backend run separately, so each can be scaled on its own.
 - JWT auth means the backend doesn't keep sessions, so more backend instances can be added if traffic grows.
-- - The database has indexes on the fields we filter by most (sport, date, and location).
+- The database has indexes on the fields we filter by most (sport, date, and location).
+
 ### Why these tools
 
 - **Django + DRF:** Our team knows Python, and Django gives us auth, an admin panel and migrations out of the box.
 - **React:** Keeps the frontend separate from the backend, so both can be built at the same time.
 - **PostgreSQL:** Our data is relational (users, matches and payments all link together) and it works well with Django.
-- **No maps API or payment gateway:** Players filter by location, and payments are simulated, as agreed in our charter.
+- **Moyasar (test mode):** A Saudi payment gateway that works in SAR, suggested by our mentor. Test mode lets us simulate payments without real money, as agreed in our charter. No maps API; players filter by location.
 
 
 ## 2. Define Components, Classes, and Database Design
