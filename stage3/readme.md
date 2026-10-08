@@ -7,7 +7,7 @@
 - [2. Define Components, Classes, and Database Design](#2-define-components-classes-and-database-design)
 - [3. High-Level Sequence Diagrams](#3-high-level-sequence-diagrams)
 - [4. Document External and Internal APIs](#4-document-external-and-internal-apis)
-- [5. Plan SCM and QA Strategies](#5-plan-scm-and-qa-strategies)
+- [5. SCM and QA Strategies](#5-scm-and-qa-strategies)
 - [6. Technical Justifications](#6-technical-justifications)
 ---
 
