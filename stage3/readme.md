@@ -501,6 +501,68 @@ Response (200):
 | 403 | Not allowed (for example, not the match creator) |
 | 404 | Not found |
 
+## 5. SCM and QA Strategy
+
+### 5.1 Source Control Management
+
+**Tool.** Git, hosted on GitHub in a single team repository (`wesal`). 
+
+**Branching strategy.** We use a simplified Git Flow with three levels:
+
+| Branch | Purpose | Who merges into it |
+| --- | --- | --- |
+| `main` | Always working, deployable code. Only tested, reviewed work. | Only from `develop`, at the end of a milestone |
+| `develop` | Integration branch where everyone's work comes together | From feature branches, after review |
+| `feature/*` | One branch per task, branched off `develop` | — |
+
+Feature branches are named after what they do: `feature/user-signup`, `feature/match-discovery`, `fix/join-button-crash`. One task, one branch, one pull request. Branches are deleted after merging so the repository stays readable.
+
+**Commits.** Everyone commits at least once per working session, and commits are small and described in the imperative — "add match model", "fix distance filter rounding" — not "update" or "stuff". We prefix with the area where it helps: `api:`, `ui:`, `db:`.
+
+**Pull requests and code review.** No one merges their own work into `develop`. Every pull request needs **one approving review** from another team member before merging. The PR description says what changed, how to test it, and links the task. Reviewers check that the code runs, that it does what the PR claims, that it doesn't break existing features, and that naming and structure match the rest of the project. Reviews are expected within one working day so nobody is blocked; if a review is urgent, the author says so in Discord.
+
+Review pairings: Jouri reviews Hadeel's frontend work, Hadeel reviews Jouri's backend work, and Ahad reviews documentation and checks scope. Reema reviews anything that affects the interface against the design file.
+
+**Branch protection.** `main` and `develop` are protected: no direct pushes, pull request required, one approval required. This is set in GitHub repository settings and is what actually enforces the rules above.
+
+**Conflicts.** Before opening a pull request, the author pulls the latest `develop` into their branch and resolves conflicts locally. We avoid long-lived branches — anything open more than three days gets merged or split.
+
+### 5.2 Quality Assurance
+
+**Testing strategy.** Three layers, in order of how much we rely on them:
+
+| Layer | What it covers | Tool | Who |
+| --- | --- | --- | --- |
+| Unit tests | Individual backend functions — distance calculation, spot counting, input validation, permission checks | Jest | Jouri, Ahad |
+| API / integration tests | Each endpoint: correct response, correct status code, rejects bad input, rejects unauthorised users | Jest + Supertest, with a Postman collection for manual exploration | Jouri, Ahad |
+| Manual end-to-end testing | The full user journeys, clicked through by a person on a real device | Test checklist in Notion | All four |
+
+We are deliberately **not** writing automated end-to-end tests (Cypress or Playwright) for the MVP. They take longer to set up than they would save in four weeks, and our critical flows are few enough to test by hand reliably. This is noted as a Phase 2 improvement.
+
+**What gets tested first.** Priority goes to anything involving money-free but trust-critical logic: the venue approval permission (a non-admin must never be able to approve a venue), joining a full match (must fail cleanly), and the match-spot count staying correct when people join and leave.
+
+**Manual test checklist.** Before each merge into `main`, one member who did not write the code walks through: sign up as a new player, complete the profile, find a match by filter, join it, see it in My Games, create a match, have a second account join it, submit a venue as an owner, approve it as an admin, and confirm it appears publicly. Results are recorded in Notion with pass/fail and a screenshot for failures.
+
+**Bug tracking.** Bugs are filed as GitHub Issues with a label of `bug`, a severity (`critical`, `major`, `minor`), steps to reproduce, and expected versus actual behaviour. Critical bugs block the merge; minor ones go on the backlog. 
+
+**Definition of done.** A task is done when the code is merged into `develop`, it has at least one test if it's backend logic, the manual checklist for its flow passes, it matches the Figma design, and the documentation is updated if the API changed.
+
+### 5.3 Deployment Pipeline
+
+Three environments:
+
+| Environment | Branch | Hosting | Purpose |
+| --- | --- | --- | --- |
+| Local | feature branch | each member's machine | day-to-day development |
+| Staging | `develop` | Vercel (frontend) + Render (API), free tier | integration testing, team demos, tutor review |
+| Production | `main` | Vercel + Render, separate instance | what real users see |
+
+Both staging and production deploy automatically on push to their branch, which the hosting platforms do out of the box with no CI configuration needed. The database is Supabase, with a separate project for staging so test data never touches real users.
+
+We add one GitHub Action that runs `npm test` on every pull request. If tests fail, the pull request cannot be merged. That is the whole of our continuous integration — it's small, it's achievable in an afternoon, and it catches the most common mistake.
+
+Secrets (database keys, API keys) live in environment variables on the hosting platform and in a local `.env` file that is listed in `.gitignore` and never committed.
+
 ## 6. Technical Justifications
 
 Rationales for chosen technologies and designs.
