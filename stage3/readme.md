@@ -501,7 +501,7 @@ Response (200):
 | 403 | Not allowed (for example, not the match creator) |
 | 404 | Not found |
 
-## 6.Technical Justifications
+## 6. Technical Justifications
 
 Rationales for chosen technologies and designs.
 
