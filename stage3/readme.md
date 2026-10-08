@@ -8,7 +8,7 @@
 - [3. High-Level Sequence Diagrams](#3-high-level-sequence-diagrams)
 - [4. Document External and Internal APIs](#4-document-external-and-internal-apis)
 - [5. Plan SCM and QA Strategies](#5-plan-scm-and-qa-strategies)
-
+- [6. Technical Justifications](#6-Technical Justifications)
 ---
 
 
@@ -501,3 +501,18 @@ Response (200):
 | 401 | Not logged in |
 | 403 | Not allowed (for example, not the match creator) |
 | 404 | Not found |
+
+## 6.Technical Justifications
+
+Rationales for chosen technologies and designs.
+
+| Part | Tech | Technical Justification |
+|------|------|-------------------------|
+| Frontend | React | Component-based, so it's easy to reuse screens (match card, invite list, payment status). It has a large ecosystem and community, and it works well with a REST API. |
+| Backend | Django + Django REST Framework | Django comes with an ORM, admin panel, validation and built-in security (CSRF, SQL injection protection), which speeds up the MVP. DRF gives ready-made serializers, permissions and viewsets for building the API quickly. |
+| Auth | Django auth + Simple JWT | Reuses Django's user model and password hashing instead of building auth from scratch. JWT is stateless, so it suits a React frontend that is separate from the backend. |
+| Database | PostgreSQL | A relational database fits the data well (users ↔ matches ↔ participants ↔ payments). It supports transactions and constraints, which keeps cost splitting and payment statuses consistent. It also has first-class support in Django. |
+| Containerization | Docker + Docker Compose | Gives every team member the same environment, so there are no "works on my machine" problems. Setup is fast for new members, and the same images can later be deployed to a server. Compose wires the three services together without manual configuration. |
+| External APIs | None in the MVP | Keeps the MVP focused and reduces cost, complexity and integration risk. The architecture leaves room to add these APIs later. |
+
+**Overall justification:** the stack is simple, proven and quick to build for an MVP. Each layer has one clear responsibility, and Docker makes the whole system easy to run, test and hand over.
