@@ -1,7 +1,0 @@
-   Django>=4.2,<5.0
-   djangorestframework
-   djangorestframework-simplejwt
-   dj-database-url
-   psycopg[binary]
-   gunicorn
-   django-cors-headers
