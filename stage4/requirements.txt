@@ -3,3 +3,6 @@ Django==6.1.2
 psycopg2-binary==2.9.13
 python-dotenv==1.2.4
 sqlparse==0.6.0
+dj-database-url
+gunicorn
+django-cors-headers
