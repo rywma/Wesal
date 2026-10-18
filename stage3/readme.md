@@ -9,13 +9,11 @@
 - [4. Document External and Internal APIs](#4-document-external-and-internal-apis)
 - [5. SCM and QA Strategies](#5-scm-and-qa-strategies)
 - [6. Technical Justifications](#6-technical-justifications)
+
 ---
 
-
-
 ## 0. User Stories and Mockups
-## moscow framework for prioritization
-## Overview
+### MoSCoW Framework for Prioritization
  
 | Priority | Stories | Scope |
 |----------|:-------:|-------|
@@ -81,8 +79,7 @@
 - [ ] #12 Rankings & Leaderboards
 ---
 ### Mockups
-we will add the figma link here
-
+Figma mockup: https://www.figma.com/design/z2KL5Q6aLz08clnn6D1AZC/wesal-file?node-id=67-12655&t=z0svDUCvvEVix9H7-1
 
 ## 1. System Architecture
 
@@ -512,7 +509,7 @@ Response (200):
 
 ## 5. SCM and QA Strategy
 
-### 5.1 Source Control Management
+### Source Control Management
 
 **Tool.** Git, hosted on GitHub in a single team repository (`wesal`). 
 
@@ -536,14 +533,14 @@ Review pairings: Jouri reviews Hadeel's frontend work, Hadeel reviews Jouri's ba
 
 **Conflicts.** Before opening a pull request, the author pulls the latest `develop` into their branch and resolves conflicts locally. We avoid long-lived branches — anything open more than three days gets merged or split.
 
-### 5.2 Quality Assurance
+### Quality Assurance
 
 **Testing strategy.** Three layers, in order of how much we rely on them:
 
 | Layer | What it covers | Tool | Who |
 | --- | --- | --- | --- |
-| Unit tests | Individual backend functions — distance calculation, spot counting, input validation, permission checks | Jest | Jouri, Ahad |
-| API / integration tests | Each endpoint: correct response, correct status code, rejects bad input, rejects unauthorised users | Jest + Supertest, with a Postman collection for manual exploration | Jouri, Ahad |
+| Unit tests | Individual backend functions — distance calculation, spot counting, input validation, permission checks | pytest + pytest-django | Jouri, Ahad |
+| API / integration tests | Each endpoint: correct response, correct status code, rejects bad input, rejects unauthorised users | pytest + with a Postman collection for manual exploration | Jouri, Ahad |
 | Manual end-to-end testing | The full user journeys, clicked through by a person on a real device | Test checklist in Notion | All four |
 
 We are deliberately **not** writing automated end-to-end tests (Cypress or Playwright) for the MVP. They take longer to set up than they would save in four weeks, and our critical flows are few enough to test by hand reliably. This is noted as a Phase 2 improvement.
@@ -556,7 +553,7 @@ We are deliberately **not** writing automated end-to-end tests (Cypress or Playw
 
 **Definition of done.** A task is done when the code is merged into `develop`, it has at least one test if it's backend logic, the manual checklist for its flow passes, it matches the Figma design, and the documentation is updated if the API changed.
 
-### 5.3 Deployment Pipeline
+### Deployment Pipeline
 
 Three environments:
 
