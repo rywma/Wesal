@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     # apps here:
-    'users.apps.UsersConfig'
-    'matches.apps.MatchesConfig'
+    'users.apps.UsersConfig',
+    'matches.apps.MatchesConfig',
     'payments.apps.PaymentsConfig',
 ]
 
