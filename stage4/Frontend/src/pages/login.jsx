@@ -1,4 +1,4 @@
-
+import { Link } from 'react-router-dom';
 import { useState } from "react";
 
 export default function Login() {
@@ -74,6 +74,9 @@ export default function Login() {
       </form>
 
       <p>{message}</p>
+      <p>
+        Don't have an account? <Link to="/signup">Sign Up</Link>
+        </p>
     </main>
   );
 }
