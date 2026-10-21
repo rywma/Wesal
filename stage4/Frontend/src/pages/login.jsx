@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState } from "react";
+import '../styles/Auth.css';
 
 export default function Login() {
   const [message, setMessage] = useState("");
@@ -15,6 +16,7 @@ export default function Login() {
     setLoading(true);
     setMessage("");
 
+
     try {
       const response = await fetch(
         "https://wesal-backend-gy8a.onrender.com/users/login/",
@@ -28,12 +30,15 @@ export default function Login() {
       );
 
       const data = await response.json();
+      data.success = response.ok && data.status === "success";
 
-      if (response.ok && data.status === "success") {
+      if (data.success) {
         setMessage("Login successful!");
       } else {
         setMessage(data.message || "Login failed");
       }
+
+
     } catch (error) {
       console.error("Login error:", error);
       setMessage("Unable to connect to the server.");
@@ -42,41 +47,61 @@ export default function Login() {
     }
   };
 
+
   return (
-    <main>
-      <h1>Wesal</h1>
-      <h2>Login</h2>
+    <main className="auth-page">
+      <div className="auth-card">
+        <h1 className="auth-logo">Wesal.</h1>
 
-      <form onSubmit={handleLogin}>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          required
-        />
-
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-          />
-        </div>
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-
-      <p>{message}</p>
-      <p>
-        Don't have an account? <Link to="/signup">Sign Up</Link>
+        <h2>Welcome back!</h2>
+        <p className="auth-subtitle">
+          Log in to find your next game.
         </p>
+
+        <form className="auth-form" onSubmit={handleLogin}>
+          <div className="auth-field">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              autoComplete="email"
+              required
+            />
+          </div>
+
+          <div className="auth-field">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              autoComplete="current-password"
+              required
+            />
+          </div>
+
+          <button
+            className="auth-submit"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? 'Logging in...' : 'Log In'}
+          </button>
+        </form>
+
+        {message && (
+          <p className="auth-message" role="status">
+            {message}
+          </p>
+        )}
+
+        <p className="auth-switch">
+          Don't have an account? <Link to="/signup">Sign Up</Link>
+        </p>
+      </div>
     </main>
   );
 }
