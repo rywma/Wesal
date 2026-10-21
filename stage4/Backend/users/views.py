@@ -14,18 +14,36 @@ import json
 
 @csrf_exempt
 def login(request):
-    if request.method == 'POST':
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'Only POST is allowed'}, status=405)
 
+    try:
         data = json.loads(request.body)
-        email = data.get('email')
-        password = data.get('password')
-       
-        user = authenticate(request, username=email, password=password)
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
 
-        if user is not None:
-            return JsonResponse({'status': 'success', 'message': 'Login successful!'}, status=200)
-        else:
-            return JsonResponse({'status': 'error', 'message': 'Invalid email or password'}, status=400)
+    # sign up saves the email in lowercase, so login matches it the same way
+    email = (data.get('email') or '').strip().lower()
+    password = data.get('password')
+
+    if not email or not password:
+        return JsonResponse({'status': 'error', 'message': 'Email and password are required'}, status=400)
+
+    user = authenticate(request, username=email, password=password)
+
+    if user is None:
+        return JsonResponse({'status': 'error', 'message': 'Invalid email or password'}, status=400)
+
+    # access is sent with every request, refresh is used to get a new access token and to log out
+    refresh = RefreshToken.for_user(user)
+
+    return JsonResponse({
+        'status': 'success',
+        'message': 'Login successful!',
+        'access': str(refresh.access_token),
+        'refresh': str(refresh),
+        'user': {'id': user.id, 'name': user.first_name, 'email': user.email},
+    }, status=200)
 
 
 @csrf_exempt
