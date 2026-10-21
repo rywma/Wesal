@@ -1,0 +1,87 @@
+/* Hero Match Cards */
+.home .hero-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.home .match-card {
+  width: 100%;
+  max-width: 380px;
+  padding: 32px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #ff786b, #ffad71);
+  color: white;
+  box-shadow: 0 20px 50px rgba(255, 120, 107, 0.25);
+}
+
+.home .match-card:nth-child(2) {
+  background: linear-gradient(135deg, #4865ff, #24c8e8);
+  box-shadow: 0 20px 50px rgba(36, 200, 232, 0.25);
+}
+
+.home .match-sport {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.home .match-card h2 {
+  font-size: 42px;
+  margin: 20px 0 10px;
+}
+
+.home .match-card .match-location {
+  font-size: 17px;
+  color: white;
+  margin: 0;
+}
+
+.home .match-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 35px;
+}
+
+.home .match-bottom span {
+  font-size: 14px;
+}
+
+.home .match-join {
+  background: white;
+  color: #121027;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-weight: 700;
+  transition: transform 0.3s ease;
+}
+
+.home .match-join:hover {
+  transform: translateY(-3px);
+}
+
+
+/* Desktop Match Cards */
+@media (min-width: 901px) {
+  .home .match-card:first-child {
+    transform: translateX(-30px);
+  }
+
+  .home .match-card:nth-child(2) {
+    transform: translateX(30px);
+    margin-top: -35px;
+  }
+}
+
+
+/* Mobile Match Cards */
+@media (max-width: 900px) {
+  .home .match-card {
+    max-width: 380px;
+  }
+
+}
