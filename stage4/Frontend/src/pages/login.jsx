@@ -22,8 +22,10 @@ export default function Login() {
     setMessage("");
 
 
-    try {
-      if (data.success && data.tokens?.access && data.user) {
+      try {
+        const data = await loginUser(email, password);
+        
+        if (data.success && data.tokens?.access && data.user) {
         login(data.user, data.tokens);
         navigate('/');
       } else {
