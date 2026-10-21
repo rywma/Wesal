@@ -1,10 +1,15 @@
 import { Link } from 'react-router-dom';
 import { useState } from "react";
 import '../styles/Auth.css';
+import { loginUser } from '../services/authApi.js';
+import { useAuth } from '../context/AuthContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -18,25 +23,13 @@ export default function Login() {
 
 
     try {
-      const response = await fetch(
-        "https://wesal-backend-gy8a.onrender.com/users/login/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-
-      const data = await response.json();
-      data.success = response.ok && data.status === "success";
-
-      if (data.success) {
-        setMessage("Login successful!");
+      if (data.success && data.tokens?.access && data.user) {
+        login(data.user, data.tokens);
+        navigate('/');
       } else {
-        setMessage(data.message || "Login failed");
+        setMessage(data.message || 'Login failed.');
       }
+
 
 
     } catch (error) {
