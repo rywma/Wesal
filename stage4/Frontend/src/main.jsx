@@ -2,6 +2,7 @@
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route,} from 'react-router-dom'
 import Home from './pages/Home.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
 
 import Login from './pages/login.jsx'
 import Signup from './pages/signup.jsx'
@@ -20,4 +21,9 @@ function App() {
 
 const root = createRoot(document.getElementById('root'))
 
-root.render(<App />)
+root.render(
+  <AuthProvider>
+    <App />
+  </AuthProvider>
+);
+

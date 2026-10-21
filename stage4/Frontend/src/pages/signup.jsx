@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import '../styles/Auth.css';
+import { registerUser } from '../services/authApi.js';
 
 export default function Signup() {
   const [message, setMessage] = useState('');
@@ -19,10 +20,7 @@ export default function Signup() {
     setMessage('');
 
     try {
-      const data = {
-        success: false,
-        message: "Registration will be available soon."
-      };
+        const data = await registerUser(name, email, password);
 
       if (data.success) {
         setMessage('Account created successfully! You can now log in.');
