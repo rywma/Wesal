@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -41,6 +43,16 @@ class Match(models.Model):
 
     def __str__(self):
         return f'{self.sport} at {self.location} on {self.date}'
+
+    def players_count(self):
+        return self.participations.filter(status=Participation.Status.JOINED).count()
+
+    def spots_left(self):
+        return self.max_players - self.players_count()
+
+    # every player pays the same share (Total Cost / Capacity)
+    def share_per_player(self):
+        return (Decimal(self.total_cost) / self.max_players).quantize(Decimal('0.01'))
 
 
 class Participation(models.Model):
