@@ -2,7 +2,7 @@ from datetime import date
 
 from rest_framework import serializers
 
-from .models import Match, Sport
+from .models import Match, Participation, Sport
 
 
 class MatchSerializer(serializers.ModelSerializer):
@@ -26,3 +26,15 @@ class MatchSerializer(serializers.ModelSerializer):
         if value < date.today():
             raise serializers.ValidationError('The match date cannot be in the past.')
         return value
+
+
+class PaymentStatusSerializer(serializers.ModelSerializer):
+    # one player's share and payment status in a match
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
+    name = serializers.CharField(source='user.first_name', read_only=True)
+    email = serializers.EmailField(source='user.email', read_only=True)
+
+    class Meta:
+        model = Participation
+        fields = ['user_id', 'name', 'email', 'payment_amount', 'payment_status']
+        read_only_fields = ['payment_amount']
