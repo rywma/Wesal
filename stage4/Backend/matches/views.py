@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -6,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Match, Participation
-from .serializers import MatchSerializer
+from .serializers import MatchSerializer, PaymentStatusSerializer
 
 
 # 5 Create a Match
@@ -101,3 +103,67 @@ def leave_match(request, match_id):
             match.save()
 
     return Response(match_spots(match), status=status.HTTP_200_OK)
+
+
+# 6 + 7: the creator sees each player's share and payment status
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def match_payments(request, match_id):
+    match = get_object_or_404(Match, pk=match_id)
+    if match.creator != request.user:
+        return Response({'error': 'Only the match creator can see payments.'}, status=status.HTTP_403_FORBIDDEN)
+
+    players = match.participations.filter(status=Participation.Status.JOINED).select_related('user')
+    paid = [p for p in players if p.payment_status == Participation.PaymentStatus.PAID]
+
+    return Response({
+        'match_id': match.id,
+        'total_cost': str(match.total_cost),
+        'max_players': match.max_players,
+        'share_per_player': str(match.share_per_player()),
+        'paid_count': len(paid),
+        'pending_count': len(players) - len(paid),
+        'total_collected': str(sum((p.payment_amount for p in paid), Decimal('0.00'))),
+        'players': PaymentStatusSerializer(players, many=True).data,
+    })
+
+
+# 7: the creator marks a player as paid or pending
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_payment(request, match_id, user_id):
+    match = get_object_or_404(Match, pk=match_id)
+    if match.creator != request.user:
+        return Response({'error': 'Only the match creator can update payments.'}, status=status.HTTP_403_FORBIDDEN)
+
+    participation = Participation.objects.filter(
+        match=match, user_id=user_id, status=Participation.Status.JOINED
+    ).first()
+    if not participation:
+        return Response({'error': 'This player is not in this match.'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = PaymentStatusSerializer(participation, data=request.data, partial=True)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    serializer.save()
+    return Response(serializer.data)
+
+
+# 6 + 7: a player sees their own share and payment status
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def my_payment(request, match_id):
+    match = get_object_or_404(Match, pk=match_id)
+    participation = Participation.objects.filter(
+        match=match, user=request.user, status=Participation.Status.JOINED
+    ).first()
+    if not participation:
+        return Response({'error': 'You are not in this match.'}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response({
+        'match_id': match.id,
+        'total_cost': str(match.total_cost),
+        'my_share': str(participation.payment_amount),
+        'payment_status': participation.payment_status,
+    })
