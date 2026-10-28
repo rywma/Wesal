@@ -38,3 +38,18 @@ class PaymentStatusSerializer(serializers.ModelSerializer):
         model = Participation
         fields = ['user_id', 'name', 'email', 'payment_amount', 'payment_status']
         read_only_fields = ['payment_amount']
+
+        #CreatorProfileSerializer
+        class CreatorProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = settings.AUTH_USER_MODEL 
+        fields = ['id', 'first_name', 'last_name', 'email']
+
+
+
+        # MatchDetailSerializer
+        class MatchDetailSerializer(MatchSerializer):
+    creator = CreatorProfileSerializer(read_only=True)
+    participants = PaymentStatusSerializer(source='participations', many=True, read_only=True)
+class Meta(MatchSerializer.Meta):
+        fields = MatchSerializer.Meta.fields + ['participants']

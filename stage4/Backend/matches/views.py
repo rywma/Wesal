@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Match, Participation
 from .serializers import MatchSerializer, PaymentStatusSerializer
@@ -167,3 +168,32 @@ def my_payment(request, match_id):
         'my_share': str(participation.payment_amount),
         'payment_status': participation.payment_status,
     })
+# filtering, ordering, for matches
+@api_view(['GET'])
+def get_matches(request):
+    matches = Match.objects.all()
+    
+    sport_id = request.GET.get('sport')
+    if sport_id:
+        matches = matches.filter(sport_id=sport_id)
+        
+    match_status = request.GET.get('status')
+    if match_status:
+        matches = matches.filter(status=match_status)
+        
+    ordering = request.GET.get('ordering', 'date')
+    matches = matches.order_by(ordering)
+    
+    paginator = PageNumberPagination()
+    paginator.page_size = 10
+    paginated_matches = paginator.paginate_queryset(matches, request)
+    
+    serializer = MatchSerializer(paginated_matches, many=True)
+    return paginator.get_paginated_response(serializer.data)
+
+# match detail view
+@api_view(['GET'])
+def get_match_detail(request, match_id):
+    match = get_object_or_404(Match, pk=match_id)
+    serializer = MatchDetailSerializer(match)
+    return Response(serializer.data, status=status.HTTP_200_OK)
