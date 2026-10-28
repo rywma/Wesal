@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import '../styles/BrowseMatches.css';
+import BrowseMatchCard from '../components/BrowseMatchCard.jsx';
 
 function BrowseMatches() {
     const [sport, setSport] = useState('');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [location, setLocation] = useState('');
+    const matches = [];
 
     return (
         <div className="browse-matches">
@@ -45,9 +47,17 @@ function BrowseMatches() {
             <section className="matches-results">
                 <h2>Available Matches</h2>
 
-                <div className="matches-empty">
-                    <p>No matches available yet.</p>
-                </div>
+                {matches.length > 0 ? (
+                    <div className="matches-grid">
+                        {matches.map((match) => (
+                            <BrowseMatchCard key={match.id} match={match} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="matches-empty">
+                        <p>No matches available yet.</p>
+                    </div>
+                )}
             </section>
 
         </div>

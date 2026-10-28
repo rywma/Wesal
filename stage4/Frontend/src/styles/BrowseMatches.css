@@ -69,3 +69,27 @@
   color: #b8b5c9;
   margin: 0;
 }
+.matches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.browse-match-card {
+  background: #211b3b;
+  border: 1px solid #393253;
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.browse-match-card h3 {
+  color: #c7ff39;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.browse-match-card p {
+  color: #b8b5c9;
+  font-size: 14px;
+  margin: 8px 0;
+}
