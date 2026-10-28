@@ -2,6 +2,7 @@
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route,} from 'react-router-dom'
 import Home from './pages/Home.jsx';
+import BrowseMatches from './pages/BrowseMatches.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 
 import Login from './pages/login.jsx'
@@ -12,6 +13,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/matches" element={<BrowseMatches />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
