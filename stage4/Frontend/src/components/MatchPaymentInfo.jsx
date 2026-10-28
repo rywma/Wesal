@@ -18,7 +18,7 @@ function MatchPaymentInfo({ payment, onStatusChange }) {
 
 export default MatchPaymentInfo;
 
-export function PlayersPaymentList({ players }) {
+export function PlayersPaymentList({ players, onStatusChange }) {
     return (
         <div className="players-payment-list">
             <h3>Players Payment Status</h3>
