@@ -1,5 +1,6 @@
 
 import { createContext, useContext, useState } from 'react';
+import { logoutUser } from '../services/authApi.js';
 
 const AuthContext = createContext(null);
 
@@ -12,9 +13,25 @@ export function AuthProvider({ children }) {
     setTokens(userTokens);
   };
 
-  const logout = () => {
-    setUser(null);
-    setTokens(null);
+  const logout = async () => {
+    if (!tokens?.access || !tokens?.refresh) {
+      return false;
+    }
+
+    try {
+      const result = await logoutUser(tokens.access, tokens.refresh);
+
+      if (result.success) {
+        setUser(null);
+        setTokens(null);
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error("Logout failed:", error);
+      return false;
+    }
   };
 
   return (

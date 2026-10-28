@@ -5,7 +5,18 @@ import { useAuth } from '../context/AuthContext.jsx';
 
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const { user, isLoggedIn } = useAuth();
+    const { user, isLoggedIn, logout } = useAuth();
+    const [logoutError, setLogoutError] = useState('');
+
+    const handleLogout = async () => {
+        setLogoutError('');
+
+        const success = await logout();
+
+        if (!success) {
+            setLogoutError('Logout failed. Please try again.');
+        }
+    };
 
     return (
         <nav className="navbar">
@@ -43,9 +54,23 @@ function Navbar() {
 
                 <div className="navbar-auth">
                     {isLoggedIn ? (
-                        <span className="navbar-username">
-                            Hi, {user.name || user.email}
-                        </span>
+                        <>
+                            <span className="navbar-username">
+                                Hi, {user.name || user.email}
+                            </span>
+
+                            <button
+                                type="button"
+                                className="logout-btn"
+                                onClick={handleLogout}
+                            >
+                                Log Out
+                            </button>
+
+                            {logoutError && (
+                                <p role="alert">{logoutError}</p>
+                            )}
+                        </>
                     ) : (
                         <>
                             <Link to="/login">Log In</Link>
