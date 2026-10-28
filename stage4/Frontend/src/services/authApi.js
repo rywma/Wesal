@@ -1,5 +1,5 @@
 
-const API_URL = "https://wesal-backend-gy8a.onrender.com";
+const API_URL = import.meta.env.DEV ? "/api" : "https://wesal-backend-gy8a.onrender.com";
 
 async function authRequest(endpoint, userData) {
   const response = await fetch(`${API_URL}/users/${endpoint}/`, {
