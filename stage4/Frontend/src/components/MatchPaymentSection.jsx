@@ -7,6 +7,7 @@ import {
   getMatchPayments,
   updatePaymentStatus,
 } from "../services/paymentApi.js";
+import '../styles/MatchPayment.css';
 
 function MatchPaymentSection({ matchId, isOrganizer = false }) {
   const { tokens } = useAuth();
