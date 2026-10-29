@@ -25,3 +25,19 @@ export function loginUser(email, password) {
 export function registerUser(name, email, password) {
   return authRequest("register", { name, email, password });
 }
+
+export async function logoutUser(accessToken, refreshToken) {
+  const response = await fetch(`${API_URL}/users/logout/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ refresh: refreshToken }),
+  });
+  const data = await response.json();
+  return {
+    ...data,
+    success: response.ok && data.status === "success",
+  };
+}
