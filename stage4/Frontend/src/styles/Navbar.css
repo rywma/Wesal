@@ -93,6 +93,28 @@
   transform: translateY(-3px) scale(1.05);
 }
 
+.home .logout-btn {
+  background: transparent;
+  color: white;
+  border: 1px solid #c7ff39;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.home .logout-btn:hover {
+  background: #c7ff39;
+  color: #121027;
+}
+
+.home .navbar-username {
+  color: white;
+  font-size: 14px;
+}
+
 .home .navbar-menu {
   display: contents;
 }
