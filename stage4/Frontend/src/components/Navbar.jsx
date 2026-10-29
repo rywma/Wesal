@@ -38,7 +38,7 @@ function Navbar() {
                         Find Games
                     </a>
 
-                    <Link to="/login" onClick={() => setMenuOpen(false)}>
+                    <Link to="/create-match" onClick={() => setMenuOpen(false)}>
                         Host a Game
                     </Link>
 
