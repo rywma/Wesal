@@ -4,6 +4,7 @@ import '../styles/Auth.css';
 import { loginUser } from '../services/authApi.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../components/Loading';
 
 export default function Login() {
   const [message, setMessage] = useState("");
@@ -45,6 +46,7 @@ export default function Login() {
 
   return (
     <main className="auth-page">
+      {loading && <Loading />}
       <div className="auth-card">
         <h1 className="auth-logo">Wesal.</h1>
 
