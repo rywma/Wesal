@@ -25,12 +25,12 @@ class Match(models.Model):
 
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='created_matches')
     sport = models.ForeignKey(Sport, on_delete=models.PROTECT, related_name='matches')
-    date = models.DateField()
+    date = models.DateField(db_index=True)
     time = models.TimeField()
-    location = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, db_index=True)
     max_players = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     total_cost = models.DecimalField(max_digits=8, decimal_places=2, default=0, validators=[MinValueValidator(0)])
-    status = models.CharField(max_length=20, choices=Status.choices, default=Status.OPEN)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.OPEN, db_index=True)
     players = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Participation', related_name='joined_matches')
 
     class Meta:
