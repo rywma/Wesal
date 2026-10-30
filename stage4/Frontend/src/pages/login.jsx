@@ -21,7 +21,7 @@ export default function Login() {
 
     setLoading(true);
     setMessage("");
-
+await new Promise(resolve => setTimeout(resolve, 3000));
 
       try {
         const data = await loginUser(email, password);
