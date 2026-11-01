@@ -14,7 +14,7 @@ class MatchSerializer(serializers.ModelSerializer):
     spots_left = serializers.IntegerField(read_only=True)
     share_per_player = serializers.DecimalField(max_digits=8, decimal_places=2, read_only=True)
 
-    class Meta:
+     class Meta:
         model = Match
         fields = [
             'id', 'sport_id', 'sport', 'creator', 'date', 'time', 'location',
@@ -40,7 +40,7 @@ class PaymentStatusSerializer(serializers.ModelSerializer):
         read_only_fields = ['payment_amount']
 
         #CreatorProfileSerializer
-        class CreatorProfileSerializer(serializers.ModelSerializer):
+class CreatorProfileSerializer(serializers.ModelSerializer):
     class Meta:
          model = settings.AUTH_USER_MODEL 
          fields = ['id', 'first_name', 'last_name', 'email']
@@ -48,8 +48,8 @@ class PaymentStatusSerializer(serializers.ModelSerializer):
 
 
         # MatchDetailSerializer
-        class MatchDetailSerializer(MatchSerializer):
+class MatchDetailSerializer(MatchSerializer):
     creator = CreatorProfileSerializer(read_only=True)
     participants = PaymentStatusSerializer(source='participations', many=True, read_only=True)
 class Meta(MatchSerializer.Meta):
-        fields = MatchSerializer.Meta.fields + ['participants']
+    fields = MatchSerializer.Meta.fields + ['participants']
