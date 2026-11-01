@@ -42,8 +42,8 @@ class PaymentStatusSerializer(serializers.ModelSerializer):
         #CreatorProfileSerializer
         class CreatorProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = settings.AUTH_USER_MODEL 
-        fields = ['id', 'first_name', 'last_name', 'email']
+         model = settings.AUTH_USER_MODEL 
+         fields = ['id', 'first_name', 'last_name', 'email']
 
 
 
