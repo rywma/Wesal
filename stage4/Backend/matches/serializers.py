@@ -14,7 +14,7 @@ class MatchSerializer(serializers.ModelSerializer):
     spots_left = serializers.IntegerField(read_only=True)
     share_per_player = serializers.DecimalField(max_digits=8, decimal_places=2, read_only=True)
 
-     class Meta:
+ class Meta:
         model = Match
         fields = [
             'id', 'sport_id', 'sport', 'creator', 'date', 'time', 'location',
