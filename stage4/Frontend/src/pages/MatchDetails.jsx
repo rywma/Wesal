@@ -121,7 +121,7 @@ function MatchDetails() {
               <h1>{formatTime(match.time)}</h1>
               <p>{match.sport} · {formatDate(match.date)}</p>
               <h2>{match.location}</h2>
-              <p className="details-host">Hosted by {match.creator?.first_name || 'a player'}</p>
+              <p className="details-host">Hosted by {match.creator?.name || 'a player'}</p>
             </div>
 
             <div className="details-box">

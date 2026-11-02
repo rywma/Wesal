@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from django.utils.dateparse import parse_date
+from django.utils.dateparse import parse_date, parse_time
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -205,6 +205,13 @@ def get_matches(request):
         if not parse_date(match_date):
             return Response({'error': 'date must be YYYY-MM-DD.'}, status=status.HTTP_400_BAD_REQUEST)
         matches = matches.filter(date=match_date)
+
+    # matches starting at this time or later
+    start_time = request.GET.get('time')
+    if start_time:
+        if not parse_time(start_time):
+            return Response({'error': 'time must be HH:MM.'}, status=status.HTTP_400_BAD_REQUEST)
+        matches = matches.filter(time__gte=start_time)
 
     location = request.GET.get('location', '').strip()
     if location:

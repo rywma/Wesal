@@ -34,11 +34,13 @@ class BrowseAndDetailsTests(APITestCase):
         self.assertEqual(self.client.get(f'/matches/?sport={self.padel.id}').data['count'], 1)
         self.assertEqual(self.client.get('/matches/?location=waha').data['count'], 1)
         self.assertEqual(self.client.get(f'/matches/?date={self.match.date}').data['count'], 1)
+        self.assertEqual(self.client.get('/matches/?time=20:30').data['count'], 1)
 
     def test_bad_filters_return_400(self):
         self.assertEqual(self.client.get('/matches/?ordering=abc').status_code, 400)
         self.assertEqual(self.client.get('/matches/?date=tomorrow').status_code, 400)
         self.assertEqual(self.client.get('/matches/?sport=padel').status_code, 400)
+        self.assertEqual(self.client.get('/matches/?time=late').status_code, 400)
 
     def test_create_still_needs_login(self):
         response = self.client.post('/matches/', {}, format='json')
