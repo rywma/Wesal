@@ -1,20 +1,29 @@
+from datetime import date
 from decimal import Decimal
 
 from django.db import transaction
 from django.shortcuts import get_object_or_404
+from django.utils.dateparse import parse_date
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
 from .models import Match, Participation
-from .serializers import MatchSerializer, PaymentStatusSerializer
+from .serializers import MatchDetailSerializer, MatchSerializer, PaymentStatusSerializer
+
+
+# /matches/ : GET browses matches (anyone), POST creates one (logged in only)
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def match_list(request):
+    if request.method == 'POST':
+        return create_match(request)
+    return get_matches(request)
 
 
 # 5 Create a Match
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
 def create_match(request):
     serializer = MatchSerializer(data=request.data)
     if not serializer.is_valid():
@@ -168,32 +177,57 @@ def my_payment(request, match_id):
         'my_share': str(participation.payment_amount),
         'payment_status': participation.payment_status,
     })
-# filtering, ordering, for matches
-@api_view(['GET'])
+
+
+# the only fields the list can be sorted by ("-" means newest/highest first)
+ORDERING_FIELDS = ['date', '-date', 'time', '-time', 'total_cost', '-total_cost']
+
+
+# 2 Browse & Filter Matches: filtering, ordering and pages of 10
 def get_matches(request):
-    matches = Match.objects.all()
-    
+    # only upcoming matches, so old games don't show up in the list
+    matches = Match.objects.filter(date__gte=date.today()).select_related('sport', 'creator')
+
     sport_id = request.GET.get('sport')
     if sport_id:
+        if not sport_id.isdigit():
+            return Response({'error': 'sport must be a sport ID.'}, status=status.HTTP_400_BAD_REQUEST)
         matches = matches.filter(sport_id=sport_id)
-        
+
     match_status = request.GET.get('status')
     if match_status:
+        if match_status not in Match.Status.values:
+            return Response({'error': 'Unknown match status.'}, status=status.HTTP_400_BAD_REQUEST)
         matches = matches.filter(status=match_status)
-        
+
+    match_date = request.GET.get('date')
+    if match_date:
+        if not parse_date(match_date):
+            return Response({'error': 'date must be YYYY-MM-DD.'}, status=status.HTTP_400_BAD_REQUEST)
+        matches = matches.filter(date=match_date)
+
+    location = request.GET.get('location', '').strip()
+    if location:
+        matches = matches.filter(location__icontains=location)
+
     ordering = request.GET.get('ordering', 'date')
-    matches = matches.order_by(ordering)
-    
+    if ordering not in ORDERING_FIELDS:
+        return Response({'error': f'ordering must be one of: {", ".join(ORDERING_FIELDS)}'},
+                        status=status.HTTP_400_BAD_REQUEST)
+    matches = matches.order_by(ordering, 'time', 'id')
+
     paginator = PageNumberPagination()
     paginator.page_size = 10
     paginated_matches = paginator.paginate_queryset(matches, request)
-    
+
     serializer = MatchSerializer(paginated_matches, many=True)
     return paginator.get_paginated_response(serializer.data)
 
-# match detail view
+
+# 3 View Match Details: everything about one match, its host and its players
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_match_detail(request, match_id):
-    match = get_object_or_404(Match, pk=match_id)
+    match = get_object_or_404(Match.objects.select_related('sport', 'creator'), pk=match_id)
     serializer = MatchDetailSerializer(match)
     return Response(serializer.data, status=status.HTTP_200_OK)
