@@ -85,3 +85,9 @@ export function getMatches(token, sport = '', date = '', location = '', page = 1
 
   return matchRequest(`?${params.toString()}`, 'GET', token);
 }
+
+
+   // One match with its creator and players (used by the Match Details page).
+   export function getMatch(matchId) {
+     return matchRequest(`${matchId}/`, "GET");
+   }

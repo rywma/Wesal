@@ -40,7 +40,9 @@ function BrowseMatchCard({ match }) {
         {match.status || 'Open'} · {spotsText(availableSpots)}
       </span>
 
-      <h3>{formatTime(match.time)}</h3>
+      <h3>
+        <Link to={`/matches/${match.id}`}>{formatTime(match.time)}</Link>
+      </h3>
 
       <p className="browse-match-sport">
         {match.sport} · {formatDate(match.date)}

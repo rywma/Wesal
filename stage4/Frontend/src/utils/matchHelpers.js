@@ -37,3 +37,9 @@ export function spotsLeft(match) {
 export function spotsText(count) {
     return count === 1 ? '1 spot left' : `${count} spots left`;
 }
+
+export function paymentBadge(paymentStatus, matchIsFull) {
+    if (paymentStatus === 'paid') return { label: 'Paid', className: 'paid' };
+    if (matchIsFull) return { label: 'Unpaid', className: 'unpaid' };
+    return { label: 'Pending', className: 'pending' };
+}
