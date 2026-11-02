@@ -1,0 +1,337 @@
+/* Match Details Page */
+.match-details {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #171334, #101527);
+  color: white;
+}
+
+.match-details main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 60px 80px;
+  direction: ltr;
+  text-align: left;
+}
+
+.match-details .back-link {
+  display: inline-block;
+  color: #b8b5c8;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.match-details .back-link:hover {
+  color: #c7ff39;
+}
+
+.match-details .details-status {
+  margin-top: 40px;
+  color: #b8b5c8;
+}
+
+/* Layout */
+.match-details .details-layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 32px;
+  margin-top: 20px;
+}
+
+.match-details .details-main {
+  flex: 999 1 560px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.match-details .details-side {
+  flex: 1 1 320px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Match Card */
+.match-details .details-card {
+  padding: 32px;
+  border-radius: 28px;
+  color: #121027;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.match-details .details-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 14px;
+  background: rgba(18, 16, 39, 0.15);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.match-details .details-card h1 {
+  margin: 18px 0 6px;
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.match-details .details-card p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.match-details .details-card h2 {
+  margin: 12px 0 4px;
+  font-size: 26px;
+  overflow-wrap: anywhere;
+}
+
+.match-details .details-card .details-host {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+/* Sport Colors (same gradients as the Home sport cards) */
+.match-details .sport-padel {
+  background: linear-gradient(135deg, #ff786b, #ffad71);
+}
+
+.match-details .sport-football {
+  background: linear-gradient(135deg, #ff687c, #ff9767);
+}
+
+.match-details .sport-basketball {
+  background: linear-gradient(135deg, #28cbd0, #c7ff39);
+}
+
+.match-details .sport-volleyball {
+  background: linear-gradient(135deg, #6757ff, #21c8e9);
+}
+
+.match-details .sport-tennis {
+  background: linear-gradient(135deg, #28c978, #c7ff39);
+}
+
+/* Boxes */
+.match-details .details-box {
+  padding: 24px 28px;
+  background: #24203f;
+  border: 1px solid #393453;
+  border-radius: 24px;
+}
+
+.match-details .box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.match-details .box-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.match-details .box-header span {
+  color: #b8b5c8;
+  font-weight: 700;
+}
+
+/* Players */
+.match-details .player-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.match-details .player-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: #17142d;
+}
+
+.match-details .player-row.open {
+  background: transparent;
+  border: 1px dashed #514b6c;
+  color: #b8b5c8;
+}
+
+.match-details .player-avatar {
+  flex: 0 0 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6757ff, #21c8e9);
+  font-weight: 800;
+}
+
+.match-details .player-row.open .player-avatar {
+  background: transparent;
+  border: 1px dashed #514b6c;
+}
+
+.match-details .player-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-weight: 700;
+}
+
+.match-details .player-tag {
+  margin-left: 8px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #b8b5c8;
+  font-size: 11px;
+}
+
+/* Payment Badges */
+.match-details .payment-badge {
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.match-details .payment-badge.paid {
+  background: rgba(199, 255, 57, 0.15);
+  color: #c7ff39;
+}
+
+.match-details .payment-badge.pending {
+  background: rgba(255, 255, 255, 0.1);
+  color: #d3d8ee;
+}
+
+.match-details .payment-badge.unpaid {
+  background: rgba(255, 151, 103, 0.18);
+  color: #ffad71;
+}
+
+.match-details .mark-btn {
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid #c7ff39;
+  background: transparent;
+  color: #c7ff39;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.match-details .mark-btn:hover {
+  background: #c7ff39;
+  color: #121027;
+}
+
+.match-details .details-error {
+  margin: 12px 0 0;
+  color: #ffb0b2;
+  font-size: 14px;
+}
+
+/* Map */
+.match-details .details-map {
+  display: block;
+  width: 100%;
+  height: 260px;
+  border: 0;
+  border-radius: 16px;
+}
+
+/* Cost */
+.match-details .cost-list {
+  margin: 0 0 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #393453;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.match-details .cost-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.match-details .cost-list dt {
+  color: #b8b5c8;
+  font-size: 14px;
+}
+
+.match-details .cost-list dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.match-details .side-label {
+  color: #b8b5c8;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.match-details .share,
+.match-details .collected {
+  display: block;
+  margin-top: 8px;
+  color: #c7ff39;
+  font-size: 40px;
+}
+
+.match-details .collected {
+  font-size: 28px;
+}
+
+.match-details .side-note {
+  margin: 10px 0 0;
+  color: #b8b5c8;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.match-details .my-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 18px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid #393453;
+  font-weight: 700;
+}
+
+/* Tablet and Mobile */
+@media (max-width: 900px) {
+  .match-details main {
+    padding: 32px 24px 60px;
+  }
+
+  .match-details .details-card h1 {
+    font-size: 44px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .match-details .player-row {
+    flex-wrap: wrap;
+  }
+}
