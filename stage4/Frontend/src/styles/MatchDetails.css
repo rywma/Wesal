@@ -1,0 +1,159 @@
+.match-details {
+  min-height: 100vh;
+  background: #171334;
+  color: white;
+  padding: 60px;
+  direction: ltr;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.match-details p {
+  color: #b8b5c9;
+  margin: 6px 0;
+}
+
+.details-back {
+  color: #c7ff39;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.details-header h1 {
+  font-size: 36px;
+  margin: 16px 0 8px;
+}
+
+.details-status {
+  display: inline-block;
+  background: #34304d;
+  color: #c7ff39;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.details-status.full {
+  color: #ff8a8a;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.details-card {
+  background: #211b3b;
+  border: 1px solid #393253;
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.details-card h3 {
+  color: #c7ff39;
+  font-size: 20px;
+  margin: 0 0 14px;
+}
+
+.details-card strong {
+  color: white;
+}
+
+.details-card a {
+  color: #7dff91;
+  font-size: 14px;
+}
+
+.capacity-bar {
+  height: 8px;
+  background: #34304d;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.capacity-bar div {
+  height: 100%;
+  background: linear-gradient(90deg, #c7ff39, #7dff91);
+}
+
+.participants {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.participants li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #393253;
+}
+
+.participants li:last-child {
+  border-bottom: none;
+}
+
+.payment-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.payment-badge.paid {
+  background: #c7ff39;
+  color: #171334;
+}
+
+.payment-badge.pending {
+  background: #34304d;
+  color: #ffd166;
+}
+
+.details-action {
+  max-width: 320px;
+}
+
+.details-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg, #c7ff39, #7dff91);
+  color: #171334;
+  border: none;
+  border-radius: 25px;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.details-btn.leave {
+  background: transparent;
+  color: #ff8a8a;
+  border: 1px solid #ff8a8a;
+}
+
+.details-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.details-note {
+  color: #c7ff39 !important;
+}
+
+@media (max-width: 768px) {
+  .match-details {
+    padding: 30px 20px;
+  }
+
+  .details-header h1 {
+    font-size: 28px;
+  }
+}

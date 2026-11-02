@@ -140,6 +140,19 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.browse-match-status.full {
+  color: #ff8a8a;
+}
+
+.browse-match-card .details-link {
+  display: block;
+  margin-top: 12px;
+  color: #c7ff39;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+}
 @media (max-width: 768px) {
   .browse-matches {
     padding: 30px 20px;

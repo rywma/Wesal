@@ -136,8 +136,8 @@ function CreateMatch() {
               >
                 Host another game
               </button>
-              <Link to="/" className="success-link">
-                Back to home
+              <Link to={`/matches/${createdMatch.id}`} className="success-link">
+                View match
               </Link>
             </div>
           </div>

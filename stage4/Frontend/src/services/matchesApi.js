@@ -74,11 +74,17 @@ export function updatePayment(matchId, userId, paymentStatus, token) {
   });
 }
 
-export function getMatches(token, sport = '', date = '', location = '', page = 1) {
+// Everything about one match: host, price and the players in it.
+export function getMatchDetail(matchId) {
+  return matchRequest(`${matchId}/`, "GET");
+}
+
+export function getMatches(token, sport = '', date = '', location = '', page = 1, time = '') {
   const params = new URLSearchParams();
 
   if (sport) params.set('sport', sport);
   if (date) params.set('date', date);
+  if (time) params.set('time', time);
   if (location.trim()) params.set('location', location.trim());
 
   params.set('page', page);
