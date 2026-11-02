@@ -29,7 +29,8 @@ async function matchRequest(endpoint, method, token, body) {
     method,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+
     },
     body: body ? JSON.stringify(body) : undefined,
   });
@@ -71,4 +72,16 @@ export function updatePayment(matchId, userId, paymentStatus, token) {
   return matchRequest(`${matchId}/payments/${userId}/`, "PATCH", token, {
     payment_status: paymentStatus,
   });
+}
+
+export function getMatches(token, sport = '', date = '', location = '', page = 1) {
+  const params = new URLSearchParams();
+
+  if (sport) params.set('sport', sport);
+  if (date) params.set('date', date);
+  if (location.trim()) params.set('location', location.trim());
+
+  params.set('page', page);
+
+  return matchRequest(`?${params.toString()}`, 'GET', token);
 }

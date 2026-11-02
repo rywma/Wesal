@@ -3,6 +3,7 @@ import '../styles/Home.css';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import '../styles/Footer.css';
+import { Link } from 'react-router-dom';
 
 function Home() {
     return (
@@ -19,9 +20,9 @@ function Home() {
                             padel, basketball and more.
                         </p>
 
-                        <a href="#matches" className="explore-btn">
+                        <Link to="/matches" className="explore-btn">
                             Explore Matches
-                        </a>
+                        </Link>
 
                     </div>
 
