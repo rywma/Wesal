@@ -34,9 +34,9 @@ function Navbar() {
 
             <div className={`navbar-menu ${menuOpen ? 'open' : ''}`}>
                 <div className="navbar-links">
-                    <a href="#matches" onClick={() => setMenuOpen(false)}>
+                    <Link to="/matches" onClick={() => setMenuOpen(false)}>
                         Find Games
-                    </a>
+                    </Link>
 
                     <Link to="/create-match" onClick={() => setMenuOpen(false)}>
                         Host a Game

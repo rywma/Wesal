@@ -7,6 +7,7 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import Login from './pages/login.jsx'
 import Signup from './pages/signup.jsx'
 import CreateMatch from './pages/CreateMatch.jsx'
+import BrowseMatches from './pages/BrowseMatches.jsx'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/create-match" element={<CreateMatch />} />
+        <Route path="/matches" element={<BrowseMatches />} />
       </Routes>
     </BrowserRouter>
   )
