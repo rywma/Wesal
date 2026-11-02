@@ -1,0 +1,66 @@
+
+/* Payment card */
+.match-payment-info,
+.players-payment-list {
+  background: #211d3d;
+  border: 1px solid #393453;
+  border-radius: 20px;
+  padding: 24px;
+  color: white;
+  width: 100%;
+  max-width: 550px;
+  box-sizing: border-box;
+}
+
+.match-payment-info h3,
+.players-payment-list h3 {
+  color: #c7ff39;
+  font-size: 22px;
+  margin: 0 0 24px;
+}
+
+/* Player payment details */
+.match-payment-info p {
+  padding: 14px 0;
+  margin: 0;
+  border-bottom: 1px solid #393453;
+  font-size: 15px;
+}
+
+.match-payment-info p:last-child {
+  border-bottom: none;
+}
+
+.match-payment-info span {
+  color: #c7ff39;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Organizer payment list */
+.player-payment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #393453;
+}
+
+.player-payment:last-child {
+  border-bottom: none;
+}
+
+.player-payment span {
+  font-size: 14px;
+}
+
+.player-payment select {
+  background: #171334;
+  color: #c7ff39;
+  border: 1px solid #c7ff39;
+  border-radius: 10px;
+  padding: 9px 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
