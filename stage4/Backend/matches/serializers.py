@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from .models import Match, Participation, Sport
@@ -39,17 +40,34 @@ class PaymentStatusSerializer(serializers.ModelSerializer):
         fields = ['user_id', 'name', 'email', 'payment_amount', 'payment_status']
         read_only_fields = ['payment_amount']
 
-        #CreatorProfileSerializer
+
 class CreatorProfileSerializer(serializers.ModelSerializer):
+    # the host's public info (no email, anyone can open a match)
+    name = serializers.CharField(source='first_name', read_only=True)
+
     class Meta:
-         model = settings.AUTH_USER_MODEL 
-         fields = ['id', 'first_name', 'last_name', 'email']
+        model = get_user_model()
+        fields = ['id', 'name']
 
 
+class ParticipantSerializer(serializers.ModelSerializer):
+    # one player in the match details, with their payment badge
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
+    name = serializers.CharField(source='user.first_name', read_only=True)
 
-        # MatchDetailSerializer
+    class Meta:
+        model = Participation
+        fields = ['user_id', 'name', 'payment_amount', 'payment_status']
+
+
 class MatchDetailSerializer(MatchSerializer):
     creator = CreatorProfileSerializer(read_only=True)
-    participants = PaymentStatusSerializer(source='participations', many=True, read_only=True)
-class Meta(MatchSerializer.Meta):
-    fields = MatchSerializer.Meta.fields + ['participants']
+    participants = serializers.SerializerMethodField()
+
+    class Meta(MatchSerializer.Meta):
+        fields = MatchSerializer.Meta.fields + ['participants']
+
+    def get_participants(self, match):
+        # only players still in the match, not the ones who left
+        players = match.participations.filter(status=Participation.Status.JOINED).select_related('user')
+        return ParticipantSerializer(players, many=True).data
