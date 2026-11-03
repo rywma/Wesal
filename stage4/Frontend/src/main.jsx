@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route,} from 'react-router-dom'
 import Home from './pages/Home.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
-
+import MyMatches from './pages/MyMatches.jsx';
 import Login from './pages/login.jsx'
 import Signup from './pages/signup.jsx'
 import CreateMatch from './pages/CreateMatch.jsx'
@@ -20,6 +20,7 @@ function App() {
         <Route path="/create-match" element={<CreateMatch />} />
         <Route path="/matches" element={<BrowseMatches />} />
         <Route path="/matches/:id" element={<MatchDetails />} />
+        <Route path="/my-matches" element={<MyMatches />} />
       </Routes>
     </BrowserRouter>
   )

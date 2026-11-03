@@ -42,13 +42,13 @@ function Navbar() {
                         Host a Game
                     </Link>
 
-                    <a href="#sports" onClick={() => setMenuOpen(false)}>
-                        Sports
-                    </a>
+                    <Link to="/my-matches" onClick={() => setMenuOpen(false)}>
+                        My Matches
+                    </Link>
 
-                    <a href="#how-it-works" onClick={() => setMenuOpen(false)}>
-                        How It Works
-                    </a>
+                    <Link to="/" onClick={() => setMenuOpen(false)}>
+                        Home
+                    </Link>
                 </div>
 
 
