@@ -3,7 +3,7 @@ from datetime import date
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from .models import Match, Participation, Sport
+from .models import Invitation, Match, Participation, Sport
 
 
 class MatchSerializer(serializers.ModelSerializer):
@@ -71,3 +71,13 @@ class MatchDetailSerializer(MatchSerializer):
         # only players still in the match, not the ones who left
         players = match.participations.filter(status=Participation.Status.JOINED).select_related('user')
         return ParticipantSerializer(players, many=True).data
+
+
+class InvitationSerializer(serializers.ModelSerializer):
+    # one invitation, with who sent it and the match it's for
+    sender = serializers.CharField(source='sender.first_name', read_only=True)
+    match = MatchSerializer(read_only=True)
+
+    class Meta:
+        model = Invitation
+        fields = ['id', 'sender', 'match', 'status']
