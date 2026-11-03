@@ -1,6 +1,7 @@
 from datetime import date
 from decimal import Decimal
 
+from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils.dateparse import parse_date, parse_time
@@ -10,8 +11,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticate
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
-from .models import Match, Participation
-from .serializers import MatchDetailSerializer, MatchSerializer, PaymentStatusSerializer
+from .models import Invitation, Match, Participation
+from .serializers import InvitationSerializer, MatchDetailSerializer, MatchSerializer, PaymentStatusSerializer
 
 
 # /matches/ : GET browses matches (anyone), POST creates one (logged in only)
@@ -47,6 +48,35 @@ def match_spots(match):
     }
 
 
+# puts a player in a match, used by Join and by accepting an invitation
+# (the match must already be locked with select_for_update)
+def add_player(match, user):
+    if match.status not in (Match.Status.OPEN, Match.Status.FULL):
+        return None, 'This match is not open.'
+
+    participation = Participation.objects.filter(user=user, match=match).first()
+    if participation and participation.status == Participation.Status.JOINED:
+        return None, 'You already joined this match.'
+
+    if match.status == Match.Status.FULL or match.spots_left() <= 0:
+        return None, 'This match is full.'
+
+    if participation:
+        # the player left before and is joining again
+        participation.status = Participation.Status.JOINED
+        participation.payment_amount = match.share_per_player()
+        participation.payment_status = Participation.PaymentStatus.PENDING
+        participation.save()
+    else:
+        participation = Participation.objects.create(user=user, match=match, payment_amount=match.share_per_player())
+
+    if match.spots_left() == 0:
+        match.status = Match.Status.FULL
+        match.save()
+
+    return participation, None
+
+
 # 4 Join a Match
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -55,31 +85,9 @@ def join_match(request, match_id):
         # select_for_update locks this match row until the transaction ends,
         # so two players can't take the last spot at the same time
         match = get_object_or_404(Match.objects.select_for_update(), pk=match_id)
-
-        if match.status not in (Match.Status.OPEN, Match.Status.FULL):
-            return Response({'error': 'This match is not open.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        participation = Participation.objects.filter(user=request.user, match=match).first()
-        if participation and participation.status == Participation.Status.JOINED:
-            return Response({'error': 'You already joined this match.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if match.status == Match.Status.FULL or match.spots_left() <= 0:
-            return Response({'error': 'This match is full.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if participation:
-            # the player left before and is joining again
-            participation.status = Participation.Status.JOINED
-            participation.payment_amount = match.share_per_player()
-            participation.payment_status = Participation.PaymentStatus.PENDING
-            participation.save()
-        else:
-            participation = Participation.objects.create(
-                user=request.user, match=match, payment_amount=match.share_per_player()
-            )
-
-        if match.spots_left() == 0:
-            match.status = Match.Status.FULL
-            match.save()
+        participation, error = add_player(match, request.user)
+        if error:
+            return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({
         **match_spots(match),
@@ -238,3 +246,86 @@ def get_match_detail(request, match_id):
     match = get_object_or_404(Match.objects.select_related('sport', 'creator'), pk=match_id)
     serializer = MatchDetailSerializer(match)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# 8 Invite Players: the creator invites a player by email
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def invite_player(request, match_id):
+    match = get_object_or_404(Match, pk=match_id)
+    if match.creator != request.user:
+        return Response({'error': 'Only the match creator can invite players.'}, status=status.HTTP_403_FORBIDDEN)
+
+    if match.status != Match.Status.OPEN:
+        return Response({'error': 'You can only invite players to an open match.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    email = str(request.data.get('email', '')).strip()
+    receiver = get_user_model().objects.filter(email__iexact=email).first() if email else None
+    if not receiver:
+        return Response({'error': 'No player found with this email.'}, status=status.HTTP_404_NOT_FOUND)
+
+    if receiver == request.user:
+        return Response({'error': 'You cannot invite yourself.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if Participation.objects.filter(match=match, user=receiver, status=Participation.Status.JOINED).exists():
+        return Response({'error': 'This player is already in the match.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    invitation, created = Invitation.objects.get_or_create(match=match, receiver=receiver,
+                                                           defaults={'sender': request.user})
+    if not created:
+        if invitation.status == Invitation.Status.PENDING:
+            return Response({'error': 'This player is already invited.'}, status=status.HTTP_400_BAD_REQUEST)
+        # they declined (or left after accepting), so send it again
+        invitation.status = Invitation.Status.PENDING
+        invitation.save()
+
+    return Response(InvitationSerializer(invitation).data, status=status.HTTP_201_CREATED)
+
+
+# 8: a player sees the invitations sent to them, newest first
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def my_invitations(request):
+    invitations = (Invitation.objects.filter(receiver=request.user)
+                   .select_related('sender', 'match__sport', 'match__creator')
+                   .order_by('-id'))
+    return Response(InvitationSerializer(invitations, many=True).data)
+
+
+# 8: the player accepts, which joins them to the match
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def accept_invitation(request, invitation_id):
+    with transaction.atomic():
+        # only the receiver can find their invitation, anyone else gets 404
+        invitation = get_object_or_404(Invitation.objects.select_for_update(), pk=invitation_id, receiver=request.user)
+        if invitation.status != Invitation.Status.PENDING:
+            return Response({'error': 'You already answered this invitation.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # lock the match like Join does, so the last spot can't be taken twice
+        match = Match.objects.select_for_update().get(pk=invitation.match_id)
+        participation, error = add_player(match, request.user)
+        if error:
+            return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
+
+        invitation.status = Invitation.Status.ACCEPTED
+        invitation.save()
+
+    return Response({
+        **InvitationSerializer(invitation).data,
+        'my_share': str(participation.payment_amount),
+        'payment_status': participation.payment_status,
+    }, status=status.HTTP_200_OK)
+
+
+# 8: the player declines
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def decline_invitation(request, invitation_id):
+    invitation = get_object_or_404(Invitation, pk=invitation_id, receiver=request.user)
+    if invitation.status != Invitation.Status.PENDING:
+        return Response({'error': 'You already answered this invitation.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    invitation.status = Invitation.Status.DECLINED
+    invitation.save()
+    return Response(InvitationSerializer(invitation).data, status=status.HTTP_200_OK)
