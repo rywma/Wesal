@@ -9,10 +9,11 @@ import {
 } from "../services/paymentApi.js";
 import '../styles/MatchPayment.css';
 
-function MatchPaymentSection({ matchId, isOrganizer = false }) {
+function MatchPaymentSection({ matchId, isOrganizer = false, onPaymentChange }) {
   const { tokens } = useAuth();
   const [payment, setPayment] = useState(null);
   const [players, setPlayers] = useState([]);
+  const [paymentSummary, setPaymentSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -34,6 +35,7 @@ function MatchPaymentSection({ matchId, isOrganizer = false }) {
 
         if (isOrganizer) {
           setPlayers(data.players || []);
+          setPaymentSummary(data);
         } else {
           setPayment(data);
         }
@@ -69,6 +71,9 @@ function MatchPaymentSection({ matchId, isOrganizer = false }) {
 
       const data = await getMatchPayments(matchId, tokens.access);
       setPlayers(data.players || []);
+      setPaymentSummary(data);
+
+      await onPaymentChange?.();
     } catch (err) {
       setError(err.message);
     }
@@ -81,10 +86,26 @@ function MatchPaymentSection({ matchId, isOrganizer = false }) {
       {error && <p role="alert">{error}</p>}
 
       {isOrganizer ? (
-        <PlayersPaymentList
-          players={players}
-          onStatusChange={handleStatusChange}
-        />
+        <>
+          <PlayersPaymentList
+            players={players}
+            onStatusChange={handleStatusChange}
+          />
+
+          {paymentSummary && (
+            <div className="payment-summary">
+              <span className="side-label">Payment Tracker</span>
+
+              <strong className="collected">
+                {paymentSummary.total_collected} / {paymentSummary.total_cost} SAR
+              </strong>
+
+              <p className="side-note">
+                {paymentSummary.paid_count} paid · {paymentSummary.pending_count} not paid yet.
+              </p>
+            </div>
+          )}
+        </>
       ) : (
         <MatchPaymentInfo payment={payment} />
       )}

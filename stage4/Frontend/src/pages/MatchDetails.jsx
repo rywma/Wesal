@@ -1,43 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import JoinLeaveButton from '../components/JoinLeaveButton.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
-import { getMatch, getMatchPayments, updatePayment } from '../services/matchesApi.js';
+import { getMatch } from '../services/matchesApi.js';
 import { formatDate, formatTime, paymentBadge, spotsText } from '../utils/matchHelpers.js';
 import '../styles/MatchDetails.css';
 import '../styles/Footer.css';
+import MatchPaymentSection from '../components/MatchPaymentSection.jsx';
 
 function MatchDetails() {
   const { id } = useParams();
-  const { user, isLoggedIn, tokens, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, isLoggedIn } = useAuth();
 
   const [match, setMatch] = useState(null);
-  const [payments, setPayments] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
-  const [paymentMessage, setPaymentMessage] = useState('');
 
-  const handleExpired = async () => {
-    await logout();
-    navigate('/login');
-  };
-
-  const loadPayments = async () => {
-    try {
-      const data = await getMatchPayments(id, tokens.access);
-
-      if (data.success) {
-        setPayments(data);
-      } else if (data.sessionExpired) {
-        handleExpired();
-      }
-    } catch (error) {
-      console.error('Payments error:', error);
-    }
-  };
 
   const loadMatch = async () => {
     try {
@@ -47,9 +27,7 @@ function MatchDetails() {
         setMatch(data);
         setMessage('');
 
-        if (isLoggedIn && data.creator?.id === user.id) {
-          loadPayments();
-        }
+
       } else {
         setMessage(data.message || 'Could not load this match.');
       }
@@ -65,24 +43,6 @@ function MatchDetails() {
     loadMatch();
   }, [id]);
 
-  const handlePayment = async (userId, newStatus) => {
-    setPaymentMessage('');
-
-    try {
-      const data = await updatePayment(id, userId, newStatus, tokens.access);
-
-      if (data.success) {
-        loadMatch();
-      } else if (data.sessionExpired) {
-        handleExpired();
-      } else {
-        setPaymentMessage(data.message || 'Could not update the payment.');
-      }
-    } catch (error) {
-      console.error('Update payment error:', error);
-      setPaymentMessage('Unable to connect to the server.');
-    }
-  };
 
   if (loading || !match) {
     return (
@@ -102,7 +62,6 @@ function MatchDetails() {
   const isCreator = isLoggedIn && match.creator?.id === user.id;
   const me = isLoggedIn ? match.participants.find((player) => player.user_id === user.id) : null;
   const isFull = match.status === 'full' || match.spots_left <= 0;
-  const myBadge = me ? paymentBadge(me.payment_status, isFull) : null;
   const mapQuery = encodeURIComponent(`${match.location}, Riyadh`);
 
   return (
@@ -148,17 +107,6 @@ function MatchDetails() {
                       </span>
                       <span className={`payment-badge ${badge.className}`}>{badge.label}</span>
 
-                      {isCreator && (
-                        <button
-                          type="button"
-                          className="mark-btn"
-                          onClick={() =>
-                            handlePayment(player.user_id, player.payment_status === 'paid' ? 'pending' : 'paid')
-                          }
-                        >
-                          {player.payment_status === 'paid' ? 'Undo' : 'Mark paid'}
-                        </button>
-                      )}
                     </li>
                   );
                 })}
@@ -171,9 +119,7 @@ function MatchDetails() {
                 )}
               </ul>
 
-              {paymentMessage && (
-                <p className="details-error" role="status">{paymentMessage}</p>
-              )}
+
             </div>
 
             <div className="details-box">
@@ -208,12 +154,7 @@ function MatchDetails() {
                 {match.total_cost} SAR ÷ {match.max_players} players. Fixed for everyone.
               </p>
 
-              {myBadge && (
-                <p className="my-status">
-                  Your payment
-                  <span className={`payment-badge ${myBadge.className}`}>{myBadge.label}</span>
-                </p>
-              )}
+
             </div>
 
             <div className="details-box">
@@ -226,18 +167,16 @@ function MatchDetails() {
               />
             </div>
 
-            {isCreator && payments && (
+            {(isCreator || me) && (
               <div className="details-box">
-                <span className="side-label">Payment tracker</span>
-                <strong className="collected">
-                  {payments.total_collected} / {payments.total_cost} SAR
-                </strong>
-                <p className="side-note">
-                  {payments.paid_count} paid · {payments.pending_count} not paid yet.
-                  Players pay you directly. Mark them as paid once you receive it.
-                </p>
+                <MatchPaymentSection
+                  matchId={match.id}
+                  isOrganizer={isCreator}
+                  onPaymentChange={loadMatch}
+                />
               </div>
             )}
+
           </aside>
         </div>
       </main>
