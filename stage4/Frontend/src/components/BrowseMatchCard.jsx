@@ -13,7 +13,9 @@ function BrowseMatchCard({ match, showJoin = true }) {
   const { isLoggedIn, tokens } = useAuth();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const availableSpots = spotsLeft(match);
+  const [joined, setJoined] = useState(false);
+  const [playersCount, setPlayersCount] = useState(match.players_count);
+  const availableSpots = match.max_players - playersCount;
 
   async function handleJoin() {
     setLoading(true);
@@ -23,6 +25,8 @@ function BrowseMatchCard({ match, showJoin = true }) {
       const data = await joinMatch(match.id, tokens.access);
 
       if (data.success) {
+        setJoined(true);
+        setPlayersCount(data.players_count);
         setMessage('Joined successfully!');
       } else {
         setMessage(data.message || 'Failed to join match.');
@@ -53,7 +57,7 @@ function BrowseMatchCard({ match, showJoin = true }) {
       </p>
 
       <p className="browse-match-players">
-        {match.players_count} / {match.max_players} Players
+        {playersCount} / {match.max_players} Players
       </p>
 
       {!showJoin ? (
@@ -65,9 +69,9 @@ function BrowseMatchCard({ match, showJoin = true }) {
           type="button"
           className="join-btn"
           onClick={handleJoin}
-          disabled={loading}
+          disabled={loading || joined}
         >
-          {loading ? 'Joining...' : 'Join'}
+          {loading ? 'Joining...' : joined ? 'Joined ✓' : 'Join'}
         </button>
       ) : (
         <Link to="/login" className="join-btn">
