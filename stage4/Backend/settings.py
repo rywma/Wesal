@@ -156,3 +156,6 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+
+# Moyasar test mode secret key (sk_test_...), used to verify payments
+MOYASAR_SECRET_KEY = os.environ.get("MOYASAR_SECRET_KEY", "")
