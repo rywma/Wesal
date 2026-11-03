@@ -9,6 +9,7 @@ import Signup from './pages/signup.jsx'
 import CreateMatch from './pages/CreateMatch.jsx'
 import BrowseMatches from './pages/BrowseMatches.jsx'
 import MatchDetails from './pages/MatchDetails.jsx'
+import ManageMatch from './pages/ManageMatch.jsx';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/matches" element={<BrowseMatches />} />
         <Route path="/matches/:id" element={<MatchDetails />} />
         <Route path="/my-matches" element={<MyMatches />} />
+        <Route path="/matches/:id/manage" element={<ManageMatch />} />
       </Routes>
     </BrowserRouter>
   )
