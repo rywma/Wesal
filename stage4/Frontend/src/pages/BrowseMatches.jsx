@@ -9,6 +9,7 @@ import '../styles/Footer.css';
 function BrowseMatches() {
     const [sport, setSport] = useState('');
     const [date, setDate] = useState('');
+    const [time, setTime] = useState('');
     const [location, setLocation] = useState('');
     const [matches, setMatches] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -21,7 +22,7 @@ function BrowseMatches() {
 
             try {
                 const sportId = sport ? SPORT_IDS[sport] : '';
-                const data = await getMatches(null, sportId, date, location);
+                const data = await getMatches(null, sportId, date, location, 1, time);
 
                 if (data.success) {
                     setMatches(data.results || []);
@@ -37,7 +38,7 @@ function BrowseMatches() {
         }
 
         fetchMatches();
-    }, [sport, date, location]);
+    }, [sport, date, time, location]);
 
     function renderMatches() {
         if (loading) {
@@ -86,6 +87,13 @@ function BrowseMatches() {
                         type="date"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
+                    />
+
+                    <input
+                        type="time"
+                        aria-label="Starting from"
+                        value={time}
+                        onChange={(e) => setTime(e.target.value)}
                     />
 
                     <input
