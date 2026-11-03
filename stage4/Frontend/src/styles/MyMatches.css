@@ -1,0 +1,27 @@
+.my-matches {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #171334, #101527);
+  color: white;
+  direction: ltr;
+}
+
+.my-matches main {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 70px 40px;
+  box-sizing: border-box;
+}
+
+.my-matches h1 {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.my-matches main p {
+  color: #b8b5c8;
+  font-size: 16px;
+}

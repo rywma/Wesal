@@ -9,7 +9,7 @@ import {
   spotsText
 } from '../utils/matchHelpers.js';
 
-function BrowseMatchCard({ match }) {
+function BrowseMatchCard({ match, showJoin = true }) {
   const { isLoggedIn, tokens } = useAuth();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -55,7 +55,12 @@ function BrowseMatchCard({ match }) {
       <p className="browse-match-players">
         {match.players_count} / {match.max_players} Players
       </p>
-      {isLoggedIn ? (
+
+      {!showJoin ? (
+        <Link to={`/matches/${match.id}`} className="join-btn">
+          View Details
+        </Link>
+      ) : isLoggedIn ? (
         <button
           type="button"
           className="join-btn"
