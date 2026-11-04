@@ -10,6 +10,7 @@ import '../styles/MatchDetails.css';
 import '../styles/Footer.css';
 import '../styles/ManageMatch.css';
 import MatchPaymentSection from '../components/MatchPaymentSection.jsx';
+import PayShare from '../components/PayShare.jsx';
 
 function MatchDetails() {
   const { id } = useParams();
@@ -176,9 +177,21 @@ function MatchDetails() {
               />
             </div>
 
+            {me && (
+              <div className="details-box">
+                <PayShare
+                  match={match}
+                  amount={me.payment_amount || match.share_per_player}
+                  hasPaid={me.payment_status === 'paid'}
+                  onPaid={loadMatch}
+                />
+              </div>
+            )}
+
             {(isCreator || me) && (
               <div className="details-box">
                 <MatchPaymentSection
+                  key={me?.payment_status}
                   matchId={match.id}
                   isOrganizer={isCreator}
                   onPaymentChange={loadMatch}

@@ -16,7 +16,7 @@ async function paymentRequest(path, accessToken, options = {}) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || "Payment request failed");
+    throw new Error(data.error || data.detail || "Payment request failed");
   }
 
   return data;
@@ -43,6 +43,17 @@ export function updatePaymentStatus(matchId, userId, paymentStatus, accessToken)
     {
       method: "PATCH",
       body: JSON.stringify({ payment_status: paymentStatus }),
+    }
+  );
+}
+
+export function payMyShare(matchId, paymentId, accessToken) {
+  return paymentRequest(
+    `/payments/${matchId}/pay/`,
+    accessToken,
+    {
+      method: "POST",
+      body: JSON.stringify({ payment_id: paymentId }),
     }
   );
 }
