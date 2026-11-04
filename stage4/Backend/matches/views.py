@@ -330,6 +330,25 @@ def decline_invitation(request, invitation_id):
     invitation.status = Invitation.Status.DECLINED
     invitation.save()
     return Response(InvitationSerializer(invitation).data, status=status.HTTP_200_OK)
+    # 9: the creator can edit a match 
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def edit_match(request, match_id):
+    match = get_object_or_404(Match, pk=match_id)
+
+    if match.creator != request.user:
+        return Response({'error': 'Only the match creator can edit this match.'},
+                        status=status.HTTP_403_FORBIDDEN)
+
+    if match.status == Match.Status.CANCELLED:
+        return Response({'error': 'A cancelled match cannot be edited.'},
+                        status=status.HTTP_400_BAD_REQUEST)
+
+    # PUT = full update, PATCH = partial update
+    serializer = MatchSerializer(match, data=request.data, partial=(request.method == 'PATCH'))
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
     # 10: the creator can cancel a match
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
