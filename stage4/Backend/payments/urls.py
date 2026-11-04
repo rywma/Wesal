@@ -1,3 +1,7 @@
 from django.urls import path
 
-urlpatterns = []
+from . import views
+
+urlpatterns = [
+    path('<int:match_id>/pay/', views.pay, name='pay'),
+]
