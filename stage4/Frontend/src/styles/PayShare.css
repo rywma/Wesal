@@ -1,0 +1,58 @@
+.pay-share h3 {
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+
+.pay-share p {
+  margin: 0;
+  color: #b8b5c9;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.pay-share .pay-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #c7ff39, #76ff9c);
+  color: #121027;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Moyasar's form is made for a light background */
+.pay-share .mysr-form {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  color: #121027;
+}
+
+.pay-share .pay-cancel {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  background: transparent;
+  color: white;
+  border: 1px solid #514b6c;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pay-share .pay-done,
+.pay-share .pay-success {
+  color: #c7ff39;
+  font-weight: 700;
+}
+
+.pay-share .pay-success {
+  margin-top: 12px;
+}
+
+.pay-share .pay-error {
+  margin-top: 12px;
+  color: #ffb0b2;
+}

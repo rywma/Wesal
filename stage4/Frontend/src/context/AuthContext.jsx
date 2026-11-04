@@ -4,34 +4,48 @@ import { logoutUser } from '../services/authApi.js';
 
 const AuthContext = createContext(null);
 
+// The login is saved in the browser so a refresh or coming back from
+// the Moyasar payment page doesn't log the user out
+function getSavedAuth() {
+  try {
+    return JSON.parse(localStorage.getItem('wesal-auth')) || {};
+  } catch {
+    return {};
+  }
+}
+
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [tokens, setTokens] = useState(null);
+  const savedAuth = getSavedAuth();
+  const [user, setUser] = useState(savedAuth.user || null);
+  const [tokens, setTokens] = useState(savedAuth.tokens || null);
 
   const login = (userData, userTokens) => {
     setUser(userData);
     setTokens(userTokens);
+    localStorage.setItem('wesal-auth', JSON.stringify({ user: userData, tokens: userTokens }));
+  };
+
+  const clearAuth = () => {
+    setUser(null);
+    setTokens(null);
+    localStorage.removeItem('wesal-auth');
   };
 
   const logout = async () => {
     if (!tokens?.access || !tokens?.refresh) {
-      return false;
+      clearAuth();
+      return true;
     }
 
     try {
-      const result = await logoutUser(tokens.access, tokens.refresh);
-
-      if (result.success) {
-        setUser(null);
-        setTokens(null);
-        return true;
-      }
-
-      return false;
+      await logoutUser(tokens.access, tokens.refresh);
     } catch (error) {
       console.error("Logout failed:", error);
-      return false;
     }
+
+    // Log out on this device even if the backend call failed (for example an expired token)
+    clearAuth();
+    return true;
   };
 
   return (
