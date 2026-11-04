@@ -8,6 +8,7 @@ import { getMatch } from '../services/matchesApi.js';
 import { formatDate, formatTime, paymentBadge, spotsText } from '../utils/matchHelpers.js';
 import '../styles/MatchDetails.css';
 import '../styles/Footer.css';
+import '../styles/ManageMatch.css';
 import MatchPaymentSection from '../components/MatchPaymentSection.jsx';
 
 function MatchDetails() {
@@ -158,6 +159,14 @@ function MatchDetails() {
             </div>
 
             <div className="details-box">
+              {isCreator && (
+                <Link
+                  to={`/matches/${match.id}/manage`}
+                  className="manage-match-link"
+                >
+                  Manage Match
+                </Link>
+              )}
               <JoinLeaveButton
                 match={match}
                 isJoined={Boolean(me)}

@@ -1,0 +1,61 @@
+
+.manage-cancel-section {
+  margin-top: 30px;
+}
+
+.manage-cancel-btn {
+  background: transparent;
+  border: 1px solid #ff7b8b;
+  color: #ff7b8b;
+  padding: 14px 24px;
+  border-radius: 30px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.manage-cancel-btn:hover {
+  background: rgba(255, 123, 139, 0.1);
+}
+
+.manage-confirm {
+  margin-top: 20px;
+  padding: 24px;
+  background: #24203f;
+  border: 1px solid #514b6c;
+  border-radius: 20px;
+}
+
+.manage-confirm h2 {
+  margin: 0 0 10px;
+}
+
+.manage-confirm p {
+  color: #b8b5c8;
+  margin-bottom: 20px;
+}
+
+.manage-confirm button {
+  padding: 12px 20px;
+  margin-right: 10px;
+  border-radius: 25px;
+  border: 1px solid #514b6c;
+  background: #17142d;
+  color: white;
+  cursor: pointer;
+}
+
+.manage-confirm button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.manage-match-link {
+  display: block;
+  padding: 12px 20px;
+  margin-bottom: 16px;
+  border-radius: 25px;
+  background: #c7ff39;
+  color: #121027;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 700;
+}
