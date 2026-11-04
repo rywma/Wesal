@@ -33,16 +33,15 @@
 
 /* Layout */
 .create-match .create-layout {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: stretch;
   gap: 32px;
   margin-top: 36px;
 }
 
 /* Form */
 .create-match .create-form {
-  flex: 999 1 560px;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -167,6 +166,11 @@
   transition: transform 0.3s ease;
 }
 
+/* keeps the button at the bottom when the preview column is taller */
+.create-match .create-form .create-submit {
+  margin-top: auto;
+}
+
 .create-match .create-submit:hover:not(:disabled) {
   transform: translateY(-3px);
 }
@@ -184,7 +188,7 @@
 
 /* Preview */
 .create-match .create-preview {
-  flex: 1 1 320px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -253,7 +257,8 @@
 
 /* Share Box */
 .create-match .share-box {
-  padding: 24px 28px;
+  flex: 1;
+  padding: 28px;
   background: #24203f;
   border: 1px solid #393453;
   border-radius: 24px;
@@ -391,6 +396,10 @@
 
   .create-match h1 {
     font-size: clamp(36px, 8vw, 48px);
+  }
+
+  .create-match .create-layout {
+    grid-template-columns: 1fr;
   }
 
   .create-match .create-form {

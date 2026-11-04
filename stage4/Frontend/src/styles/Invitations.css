@@ -1,0 +1,133 @@
+.invitations {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #171334, #101527);
+  color: white;
+  direction: ltr;
+}
+
+.invitations main {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 70px 40px;
+  box-sizing: border-box;
+}
+
+.invitations h1 {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.invitations main p {
+  color: #b8b5c9;
+  font-size: 16px;
+}
+
+.invitations main a {
+  color: #c7ff39;
+}
+
+.invitations .invitations-error {
+  color: #ffb0b2;
+}
+
+.invitations-results {
+  margin-top: 40px;
+}
+
+.invitations-empty {
+  background: #211b3b;
+  border: 1px solid #393253;
+  border-radius: 14px;
+  padding: 45px 20px;
+  text-align: center;
+}
+
+.invitations-empty p {
+  margin: 0;
+}
+
+.invitations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.invitation-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #211b3b;
+  border: 1px solid #393253;
+  border-radius: 18px;
+  padding: 24px;
+}
+
+.invitation-card h3 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.invitations .invitation-card p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.invitations .invitation-card .invitation-sender {
+  color: #c7ff39;
+  font-weight: 700;
+}
+
+.invitation-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.invitation-buttons button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.accept-btn {
+  background: linear-gradient(135deg, #c7ff39, #76ff9c);
+  color: #121027;
+  border: none;
+}
+
+.decline-btn {
+  background: transparent;
+  color: white;
+  border: 1px solid #514b6c;
+}
+
+.invitation-status {
+  align-self: flex-start;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.invitation-status.accepted {
+  background: rgba(199, 255, 57, 0.15);
+  color: #c7ff39;
+}
+
+.invitation-status.declined {
+  background: rgba(255, 255, 255, 0.1);
+  color: #d3d8ee;
+}
+
+.invitations .invitation-link {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 700;
+}

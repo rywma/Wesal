@@ -10,6 +10,7 @@ import '../styles/MatchDetails.css';
 import '../styles/Footer.css';
 import '../styles/ManageMatch.css';
 import MatchPaymentSection from '../components/MatchPaymentSection.jsx';
+import InviteForm from '../components/InviteForm.jsx';
 
 function MatchDetails() {
   const { id } = useParams();
@@ -175,6 +176,12 @@ function MatchDetails() {
                 onChange={loadMatch}
               />
             </div>
+
+            {isCreator && match.status === 'open' && (
+              <div className="details-box">
+                <InviteForm matchId={match.id} />
+              </div>
+            )}
 
             {(isCreator || me) && (
               <div className="details-box">
