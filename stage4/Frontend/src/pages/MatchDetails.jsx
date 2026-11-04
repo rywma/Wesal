@@ -11,6 +11,7 @@ import '../styles/Footer.css';
 import '../styles/ManageMatch.css';
 import MatchPaymentSection from '../components/MatchPaymentSection.jsx';
 import PayShare from '../components/PayShare.jsx';
+import InviteForm from '../components/InviteForm.jsx';
 
 function MatchDetails() {
   const { id } = useParams();
@@ -177,6 +178,12 @@ function MatchDetails() {
               />
             </div>
 
+            {isCreator && match.status === 'open' && (
+              <div className="details-box">
+                <InviteForm matchId={match.id} />
+              </div>
+            )}
+
             {me && (
               <div className="details-box">
                 <PayShare
@@ -187,7 +194,7 @@ function MatchDetails() {
                 />
               </div>
             )}
-
+            
             {(isCreator || me) && (
               <div className="details-box">
                 <MatchPaymentSection

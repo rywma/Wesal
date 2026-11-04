@@ -257,9 +257,7 @@ function CreateMatch() {
             )}
           </form>
 
-          <aside className="create-preview">
-            <span className="preview-label">Preview</span>
-
+          <aside className="create-preview" aria-label="Match preview">
             <div className={`preview-card sport-${sport.toLowerCase()}`}>
               <span className="preview-badge">
                 Open · {format.players - 1} spots left

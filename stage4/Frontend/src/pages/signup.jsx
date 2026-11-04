@@ -1,12 +1,15 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import '../styles/Auth.css';
-import { registerUser } from '../services/authApi.js';
+import { loginUser, registerUser } from '../services/authApi.js';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Signup() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSignup = async (event) => {
     event.preventDefault();
@@ -23,7 +26,15 @@ export default function Signup() {
         const data = await registerUser(name, email, password);
 
       if (data.success) {
-        setMessage('Account created successfully! You can now log in.');
+        // Log in straight away
+        const loginData = await loginUser(email, password);
+        
+        if (loginData.success && loginData.tokens?.access && loginData.user) {
+          login(loginData.user, loginData.tokens);
+          navigate('/');
+        } else {
+          setMessage('Account created! Please log in.');
+        }
       } else {
         const errorMessage = data.message;
         setMessage(
