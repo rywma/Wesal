@@ -81,3 +81,32 @@ class InvitationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invitation
         fields = ['id', 'sender', 'match', 'status']
+
+ class MatchUpdateSerializer(serializers.ModelSerializer):
+    # fields the creator is allowed to edit (sport can't be changed)
+    class Meta:
+        model = Match
+        fields = ['date', 'time', 'location', 'max_players', 'total_cost']
+
+    def validate_date(self, value):
+        if value < date.today():
+            raise serializers.ValidationError('The match date cannot be in the past.')
+        return value
+
+    def validate_max_players(self, value):
+        if value < 2:
+            raise serializers.ValidationError('A match needs at least 2 players.')
+        # can't go below the number of players who already joined
+        joined = self.instance.participations.filter(
+            status=Participation.Status.JOINED
+        ).count()
+        if value < joined:
+            raise serializers.ValidationError(
+                f'Cannot set max players below the {joined} players already joined.'
+            )
+        return value
+
+    def validate_total_cost(self, value):
+        if value < 0:
+            raise serializers.ValidationError('Total cost cannot be negative.')
+        return value
