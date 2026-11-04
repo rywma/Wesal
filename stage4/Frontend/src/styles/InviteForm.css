@@ -1,0 +1,57 @@
+.invite-form h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.invite-form p {
+  margin: 0;
+  color: #b8b5c9;
+  font-size: 14px;
+}
+
+.invite-form form {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.invite-form input {
+  flex: 1;
+  min-width: 0;
+  background: #211b3b;
+  color: white;
+  border: 1px solid #393253;
+  border-radius: 10px;
+  padding: 12px 15px;
+  font-size: 14px;
+  outline: none;
+}
+
+.invite-form input:focus {
+  border-color: #c7ff39;
+}
+
+.invite-form button {
+  background: linear-gradient(135deg, #c7ff39, #76ff9c);
+  color: #121027;
+  border: none;
+  border-radius: 10px;
+  padding: 0 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.invite-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.invite-form .invite-success {
+  margin-top: 12px;
+  color: #c7ff39;
+}
+
+.invite-form .invite-error {
+  margin-top: 12px;
+  color: #ffb0b2;
+}

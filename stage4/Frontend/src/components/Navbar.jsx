@@ -34,6 +34,10 @@ function Navbar() {
 
             <div className={`navbar-menu ${menuOpen ? 'open' : ''}`}>
                 <div className="navbar-links">
+                    <Link to="/" onClick={() => setMenuOpen(false)}>
+                        Home
+                    </Link>
+
                     <Link to="/matches" onClick={() => setMenuOpen(false)}>
                         Find Games
                     </Link>
@@ -46,9 +50,12 @@ function Navbar() {
                         My Matches
                     </Link>
 
-                    <Link to="/" onClick={() => setMenuOpen(false)}>
-                        Home
-                    </Link>
+                    {isLoggedIn && (
+                        <Link to="/invitations" onClick={() => setMenuOpen(false)}>
+                            Invitations
+                        </Link>
+                    )}
+
                 </div>
 
 
