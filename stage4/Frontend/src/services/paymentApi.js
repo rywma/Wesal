@@ -36,16 +36,6 @@ export function getMatchPayments(matchId, accessToken) {
   );
 }
 
-export function updatePaymentStatus(matchId, userId, paymentStatus, accessToken) {
-  return paymentRequest(
-    `/matches/${matchId}/payments/${userId}/`,
-    accessToken,
-    {
-      method: "PATCH",
-      body: JSON.stringify({ payment_status: paymentStatus }),
-    }
-  );
-}
 
 export function payMyShare(matchId, paymentId, accessToken) {
   return paymentRequest(
