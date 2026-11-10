@@ -13,7 +13,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.db.models import Q
 from .models import Invitation, Match, Participation
 from .serializers import InvitationSerializer, MatchDetailSerializer, MatchSerializer, PaymentStatusSerializer
-
+from users.views import add_points
 
 # /matches/ : GET browses matches (anyone), POST creates one (logged in only)
 @api_view(['GET', 'POST'])
@@ -35,7 +35,7 @@ def create_match(request):
         match = serializer.save(creator=request.user)
         # the creator is the first player in the match
         Participation.objects.create(user=request.user, match=match, payment_amount=match.share_per_player())
-
+        add_points(request.user, 'match_scheduling')
     return Response(MatchSerializer(match).data, status=status.HTTP_201_CREATED)
 
 
@@ -73,9 +73,9 @@ def add_player(match, user):
     if match.spots_left() == 0:
         match.status = Match.Status.FULL
         match.save()
-
+    
     return participation, None
-
+    add_points(user, 'participation')
 
 # 4 Join a Match
 @api_view(['POST'])
@@ -89,7 +89,7 @@ def join_match(request, match_id):
         participation, error = add_player(match, request.user)
         if error:
             return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
-
+        add_points(request.user, 'participation')
     return Response({
         **match_spots(match),
         'my_share': str(participation.payment_amount),
