@@ -4,14 +4,14 @@ import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
-import { getMatch } from '../services/matchesApi.js';
+import { getMatch, editMatch, cancelMatch } from '../services/matchesApi.js';
 import '../styles/CreateMatch.css';
 import '../styles/ManageMatch.css';
 import '../styles/Footer.css';
 
 function ManageMatch() {
     const { id } = useParams();
-    const { user, isLoggedIn } = useAuth();
+    const { user, isLoggedIn, tokens } = useAuth();
 
     const [match, setMatch] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -22,6 +22,10 @@ function ManageMatch() {
         location: '',
     });
     const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+    const [cancelling, setCancelling] = useState(false);
+    const [cancelMessage, setCancelMessage] = useState('');
+    const [saving, setSaving] = useState(false);
+    const [saveMessage, setSaveMessage] = useState('');
 
     useEffect(() => {
         async function loadMatch() {
@@ -47,6 +51,46 @@ function ManageMatch() {
 
         loadMatch();
     }, [id]);
+    async function handleSave(e) {
+        e.preventDefault();
+        setSaving(true);
+        setSaveMessage('');
+
+        try {
+            const data = await editMatch(id, formData, tokens.access);
+
+            if (data.success) {
+                setSaveMessage('Match updated successfully!');
+            } else {
+                setSaveMessage(data.message || 'Failed to update match.');
+            }
+        } catch (err) {
+            setSaveMessage('Unable to connect to the server.');
+        } finally {
+            setSaving(false);
+        }
+    }
+
+    async function handleCancel() {
+        setCancelling(true);
+        setCancelMessage('');
+
+        try {
+            const data = await cancelMatch(id, tokens.access);
+
+            if (data.success) {
+                setMatch((prev) => ({ ...prev, status: 'cancelled' }));
+                setShowCancelConfirm(false);
+                setCancelMessage('Match cancelled successfully!');
+            } else {
+                setCancelMessage(data.message || 'Failed to cancel match.');
+            }
+        } catch (err) {
+            setCancelMessage('Unable to connect to the server.');
+        } finally {
+            setCancelling(false);
+        }
+    }
 
     const isOrganizer =
         isLoggedIn && match?.creator?.id === user?.id;
@@ -62,6 +106,8 @@ function ManageMatch() {
                     <p role="alert">{error}</p>
                 ) : !isOrganizer ? (
                     <p>Only the organizer can manage this match.</p>
+                ) : match.status === 'cancelled' ? (
+                    <p>This match has been cancelled.</p>
                 ) : (
                     <div>
                         <h1>Manage Match</h1>
@@ -69,7 +115,7 @@ function ManageMatch() {
                             Update your match details.
                         </p>
 
-                        <form className="create-form">
+                        <form className="create-form" onSubmit={handleSave}>
                             <div className="create-field">
                                 <label htmlFor="edit-location">Location</label>
                                 <input
@@ -111,9 +157,15 @@ function ManageMatch() {
                                 </div>
                             </div>
 
-                            <button type="button" className="create-submit" disabled>
-                                Save Changes
+                            <button
+                                type="submit"
+                                className="create-submit"
+                                disabled={saving}
+                            >
+                                {saving ? 'Saving...' : 'Save Changes'}
                             </button>
+
+                            {saveMessage && <p role="status">{saveMessage}</p>}
                         </form>
                         <div className="manage-cancel-section">
                             <button
@@ -132,16 +184,22 @@ function ManageMatch() {
                                     <button
                                         type="button"
                                         onClick={() => setShowCancelConfirm(false)}
+                                        disabled={cancelling}
                                     >
                                         Keep Match
                                     </button>
 
-                                    <button type="button" disabled>
-                                        Confirm Cancellation
+                                    <button
+                                        type="button"
+                                        onClick={handleCancel}
+                                        disabled={cancelling}
+                                    >
+                                        {cancelling ? 'Cancelling...' : 'Confirm Cancellation'}
                                     </button>
                                 </div>
                             )}
                         </div>
+                        {cancelMessage && <p role="status">{cancelMessage}</p>}
                     </div>
                 )}
             </main>

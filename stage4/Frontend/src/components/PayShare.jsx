@@ -62,6 +62,17 @@ function PayShare({ match, amount, hasPaid, onPaid }) {
   }, [showForm]);
 
   function renderPayment() {
+    if (match.status === 'cancelled') {
+      return (
+        <div>
+          <p>This match has been cancelled. Payments are closed.</p>
+          <p>
+            Payment status: {hasPaid ? 'Paid' : 'Pending'}
+          </p>
+        </div>
+      );
+    }
+
     if (hasPaid) {
       return <p className="pay-done">You've paid your share ✓</p>;
     }

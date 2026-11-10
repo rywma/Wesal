@@ -5,11 +5,10 @@ import MatchPaymentInfo, { PlayersPaymentList } from "./MatchPaymentInfo.jsx";
 import {
   getMyPayment,
   getMatchPayments,
-  updatePaymentStatus,
 } from "../services/paymentApi.js";
 import '../styles/MatchPayment.css';
 
-function MatchPaymentSection({ matchId, isOrganizer = false, onPaymentChange }) {
+function MatchPaymentSection({ matchId, isOrganizer = false }) {
   const { tokens } = useAuth();
   const [payment, setPayment] = useState(null);
   const [players, setPlayers] = useState([]);
@@ -58,26 +57,7 @@ function MatchPaymentSection({ matchId, isOrganizer = false, onPaymentChange }) 
     };
   }, [matchId, isOrganizer, tokens?.access]);
 
-  async function handleStatusChange(userId, newStatus) {
-    try {
-      setError("");
 
-      await updatePaymentStatus(
-        matchId,
-        userId,
-        newStatus,
-        tokens.access
-      );
-
-      const data = await getMatchPayments(matchId, tokens.access);
-      setPlayers(data.players || []);
-      setPaymentSummary(data);
-
-      await onPaymentChange?.();
-    } catch (err) {
-      setError(err.message);
-    }
-  }
 
   if (loading) return <p>Loading payment details...</p>;
 
@@ -87,10 +67,7 @@ function MatchPaymentSection({ matchId, isOrganizer = false, onPaymentChange }) 
 
       {isOrganizer ? (
         <>
-          <PlayersPaymentList
-            players={players}
-            onStatusChange={handleStatusChange}
-          />
+          <PlayersPaymentList players={players} />
 
           {paymentSummary && (
             <div className="payment-summary">

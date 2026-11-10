@@ -1,4 +1,4 @@
-function MatchPaymentInfo({ payment, onStatusChange }) {
+function MatchPaymentInfo({ payment }) {
     if (!payment) {
         return <p>Payment information unavailable.</p>;
     }
@@ -18,7 +18,7 @@ function MatchPaymentInfo({ payment, onStatusChange }) {
 
 export default MatchPaymentInfo;
 
-export function PlayersPaymentList({ players, onStatusChange }) {
+export function PlayersPaymentList({ players }) {
     return (
         <div className="players-payment-list">
             <h3>Players Payment Status</h3>
@@ -27,13 +27,9 @@ export function PlayersPaymentList({ players, onStatusChange }) {
                 <div className="player-payment" key={player.user_id}>
                     <span>{player.name || player.email}</span>
                     <span>{player.payment_amount} SAR</span>
-                    <select
-                        value={player.payment_status}
-                        onChange={(e) => onStatusChange(player.user_id, e.target.value)}
-                    >
-                        <option value="pending">Pending</option>
-                        <option value="paid">Paid</option>
-                    </select>
+                    <span className="payment-status">
+                        {player.payment_status === 'paid' ? 'Paid' : 'Pending'}
+                    </span>
                 </div>
             ))}
         </div>
