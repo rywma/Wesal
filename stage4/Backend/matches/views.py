@@ -1,6 +1,6 @@
 from datetime import date
 from decimal import Decimal
-
+from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.shortcuts import get_object_or_404
@@ -81,6 +81,7 @@ def add_player(match, user):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def join_match(request, match_id):
+    cancel_expired_unpaid_participations_internal()
     with transaction.atomic():
         # select_for_update locks this match row until the transaction ends,
         # so two players can't take the last spot at the same time
@@ -193,6 +194,7 @@ ORDERING_FIELDS = ['date', '-date', 'time', '-time', 'total_cost', '-total_cost'
 
 # 2 Browse & Filter Matches: filtering, ordering and pages of 10
 def get_matches(request):
+    matches = Match.objects.filter(date__gte=date.today()).exclude(status='pending_payment').select_related('sport', 'creator')
     # only upcoming matches, so old games don't show up in the list
     matches = Match.objects.filter(date__gte=date.today()).select_related('sport', 'creator')
 
@@ -296,6 +298,7 @@ def my_invitations(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def accept_invitation(request, invitation_id):
+    cancel_expired_unpaid_participations_internal()
     with transaction.atomic():
         # only the receiver can find their invitation, anyone else gets 404
         invitation = get_object_or_404(Invitation.objects.select_for_update(), pk=invitation_id, receiver=request.user)
@@ -388,3 +391,22 @@ def my_matches(request):
         .order_by('date', 'time')
     )
     return Response(MatchSerializer(matches, many=True).data)
+# 12: Cancel expired unpaid participations
+def cancel_expired_unpaid_participations_internal():
+    from datetime import timedelta
+    expiration_limit = timezone.now() - timedelta(minutes=5)
+    
+    expired_participations = Participation.objects.filter(
+        payment_status=Participation.PaymentStatus.PENDING,
+        status=Participation.Status.JOINED,
+        joined_at__lt=expiration_limit
+    )
+    
+    for participation in expired_participations:
+        participation.status = 'cancelled_by_timeout' if hasattr(Participation.Status, 'CANCELLED_BY_TIMEOUT') else Participation.Status.LEFT
+        participation.save()
+        
+        match = participation.match
+        if match.status == Match.Status.FULL:
+            match.status = Match.Status.OPEN
+            match.save()
