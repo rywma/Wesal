@@ -1,85 +1,30 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext.jsx';
-import { useState } from 'react';
-import { joinMatch } from '../services/matchesApi.js';
-import {
-  formatDate,
-  formatTime,
-  spotsLeft,
-  spotsText
-} from '../utils/matchHelpers.js';
+import { formatDate, formatTime } from '../utils/matchHelpers.js';
 
-function BrowseMatchCard({ match, showJoin = true }) {
-  const { isLoggedIn, tokens } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const [joined, setJoined] = useState(false);
-  const [playersCount, setPlayersCount] = useState(match.players_count);
-  const availableSpots = match.max_players - playersCount;
+// One game in a list, joining happens on the Match Details page
+function BrowseMatchCard({ match }) {
+  const isFull = match.status === 'full' || match.players_count >= match.max_players;
 
-  async function handleJoin() {
-    setLoading(true);
-    setMessage('');
-
-    try {
-      const data = await joinMatch(match.id, tokens.access);
-
-      if (data.success) {
-        setJoined(true);
-        setPlayersCount(data.players_count);
-        setMessage('Joined successfully!');
-      } else {
-        setMessage(data.message || 'Failed to join match.');
-      }
-    } catch (error) {
-      console.error('Join error:', error);
-      setMessage('Unable to connect to the server.');
-    } finally {
-      setLoading(false);
-    }
-  }
   return (
-    <div className="browse-match-card">
-      <span className="browse-match-status">
-        {match.status || 'Open'} · {spotsText(availableSpots)}
-      </span>
+    <li className={`match-row sport-${match.sport.toLowerCase()}`}>
+      <p className="match-row-time">{formatTime(match.time)}</p>
 
-      <h3>
-        <Link to={`/matches/${match.id}`}>{formatTime(match.time)}</Link>
-      </h3>
+      <div className="match-row-what">
+        <p className="match-row-sport">{match.sport}</p>
+        <p>{formatDate(match.date)}</p>
+      </div>
 
-      <p className="browse-match-sport">
-        {match.sport} · {formatDate(match.date)}
+      <p className="match-row-location">{match.location}</p>
+
+      <p className="match-row-players">
+        {match.players_count} of {match.max_players} joined
+        {isFull && <span className="match-row-full">Full</span>}
       </p>
 
-      <p className="browse-match-location">
-        {match.location}
-      </p>
-
-      <p className="browse-match-players">
-        {playersCount} / {match.max_players} Players
-      </p>
-
-      {!showJoin ? (
-        <Link to={`/matches/${match.id}`} className="join-btn">
-          View Details
-        </Link>
-      ) : isLoggedIn ? (
-        <button
-          type="button"
-          className="join-btn"
-          onClick={handleJoin}
-          disabled={loading || joined}
-        >
-          {loading ? 'Joining...' : joined ? 'Joined ✓' : 'Join'}
-        </button>
-      ) : (
-        <Link to="/login" className="join-btn">
-          Join
-        </Link>
-      )}
-      {message && <p role="status">{message}</p>}
-    </div>
+      <Link to={`/matches/${match.id}`} className="match-row-link">
+        View details
+      </Link>
+    </li>
   );
 }
 

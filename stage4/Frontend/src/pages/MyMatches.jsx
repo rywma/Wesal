@@ -74,16 +74,20 @@ function MyMatches() {
             <Navbar />
 
             <main>
-                <h1>My Matches</h1>
-                <p>View the matches you've hosted or joined.</p>
-
                 {!isLoggedIn ? (
-                    <section>
-                        <h2>Log in to see your matches</h2>
+                    <div className="login-needed">
+                        <h1>Log in to see your matches.</h1>
+                        <p>The games you host or join show up here.</p>
                         <Link to="/login">Log In</Link>
-                    </section>
+                    </div>
+                ) : (
+                    <>
+                        <h1>My Matches</h1>
+                        <p>View the matches you've hosted or joined.</p>
+                    </>
+                )}
 
-                ) : loading ? (
+                {!isLoggedIn ? null : loading ? (
                     <p>Loading matches...</p>
                 ) : error ? (
                     <p role="alert">{error}</p>
@@ -94,11 +98,11 @@ function MyMatches() {
                             {hostedMatches.length === 0 ? (
                                 <p>You haven't hosted any matches yet.</p>
                             ) : (
-                                <div className="matches-grid">
+                                <ul className="matches-list">
                                     {hostedMatches.map((match) => (
-                                        <BrowseMatchCard key={match.id} match={match} showJoin={false} />
+                                        <BrowseMatchCard key={match.id} match={match} />
                                     ))}
-                                </div>
+                                </ul>
                             )}
                         </section>
 
@@ -107,11 +111,11 @@ function MyMatches() {
                             {joinedMatches.length === 0 ? (
                                 <p>You haven't joined any matches yet.</p>
                             ) : (
-                                <div className="matches-grid">
+                                <ul className="matches-list">
                                     {joinedMatches.map((match) => (
-                                        <BrowseMatchCard key={match.id} match={match} showJoin={false} />
+                                        <BrowseMatchCard key={match.id} match={match} />
                                     ))}
-                                </div>
+                                </ul>
                             )}
                         </section>
                     </>

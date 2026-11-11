@@ -1,262 +1,209 @@
+/* Hallmark · shape: Poster · genre: playful · theme: Piste (deal 3/3, seed pickup-sports-games-riyadh-8be8·c5b908d7·2026-11-07·r0) · redesign: full
+ * hero: Poster (/) · nav: edge-aligned, a wordmark, links and the account actions · footer: one quiet line · imagery: the product (the open-games board) · signature: the open games set as a ruled board beside the headline · piste: brand (the team's Figma: plum ground, soft glows behind, off-white actions, no neon, rows instead of cards)
+ * axes: light/display-condensed/cool · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S3 R4 V3 · weakest: S (no photographs of Riyadh courts yet), the board carries the hero until the team supplies real pictures */
+@import url("./tokens.css");
+@import url("./base.css");
 
-/* Global */
-:root {
-  font-family: Arial, sans-serif;
-  color: #ffffff;
-  background-color: #121027;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-}
-
-/* Home Page */
 .home {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #171334, #101527);
-  color: white;
+  direction: ltr;
 }
 
 .home main {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 80px 60px;
-  direction: ltr;
-  text-align: left;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
 }
 
-.home main h1 {
-  font-size: 64px;
-  font-weight: 800;
-  line-height: 1.1;
-  max-width: 550px;
-  margin: 0 0 24px;
+.home h1 {
+  text-transform: uppercase;
 }
 
-.home main p {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #b8b5c8;
-  max-width: 480px;
+.home h1,
+.home h2,
+.home h3 {
+  line-height: 1;
 }
 
-/* Hero Section */
+/* Hero: the headline on the left, the open games on the right */
 .home .hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 60px;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap-columns);
+  align-items: end;
+  padding-block: var(--space-2xl) var(--space-3xl);
 }
 
-.home .hero-content,
-.home .hero-visual {
-  flex: 1;
+.home .hero-content {
+  grid-column: 1 / 8;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-lg);
+}
+
+.home .hero h1 {
+  max-width: 11ch;
+  font-size: clamp(3.5rem, 8vw, 8rem);
+  line-height: 0.95;
+}
+
+.home .hero-content p {
+  max-width: 34ch;
+  font-size: var(--text-lead);
+  color: var(--color-ink-2);
 }
 
 .home .explore-btn {
-  display: inline-block;
-  margin-top: 24px;
-  padding: 15px 32px;
-  border-radius: 30px;
-  background: linear-gradient(135deg, #c7ff39, #76ff9c);
-  color: #121027;
-  font-size: 16px;
-  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 var(--space-xl);
+  border-radius: var(--radius-pill);
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
+  font: 800 var(--text-lg)/1 var(--font-display);
+  text-transform: uppercase;
   text-decoration: none;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color var(--dur-micro) var(--ease-out);
 }
 
 .home .explore-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 30px rgba(199, 255, 57, 0.45);
+  background: var(--color-brand-deep);
 }
 
-/* Sports Section */
-.home .sports-section {
-  padding: 70px 0;
+.home .explore-btn:active {
+  background: var(--color-ink);
+  color: var(--color-accent-ink);
 }
 
-.home .sports-section h2 {
-  font-size: 30px;
-  margin-bottom: 10px;
+.home .hero-visual {
+  grid-column: 8 / 13;
 }
 
-.home .sports-section p {
-  color: #b8b5c8;
-  margin-bottom: 30px;
+.home .hero-visual h2 {
+  max-width: none;
+  font-family: var(--font-body);
+  font-weight: 600;
+  padding-bottom: var(--space-sm);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+  font-size: var(--text-md);
+  color: var(--color-ink-2);
 }
 
-.home .sports-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 15px;
-}
-
-.home .sport-card {
-  min-height: 150px;
-  padding: 20px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #ff786b, #ffad71);
-  display: flex;
-  align-items: flex-end;
-  transition: transform 0.3s ease;
-}
-
-.home .sport-card:nth-child(2) {
-  background: linear-gradient(135deg, #ff687c, #ff9767);
-}
-
-.home .sport-card:nth-child(3) {
-  background: linear-gradient(135deg, #28cbd0, #c7ff39);
-}
-
-.home .sport-card:nth-child(4) {
-  background: linear-gradient(135deg, #6757ff, #21c8e9);
-}
-
-.home .sport-card:nth-child(5) {
-  background: linear-gradient(135deg, #28c978, #c7ff39);
-}
-
-.home .sport-card h3 {
-  font-size: 17px;
-  color: #121027;
+.home .games-list {
   margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.home .sport-card:hover {
-  transform: translateY(-6px);
+.home .games-status,
+.home .games-empty p {
+  margin-top: var(--space-md);
+  color: var(--color-ink-2);
 }
 
-/* How It Works */
-.home .how-section {
-  padding: 70px 0;
+.home .games-empty a {
+  display: inline-block;
+  margin-top: var(--space-xs);
+  color: var(--color-ink);
+  font-weight: 600;
 }
 
-.home .how-section h2 {
-  font-size: 30px;
-  margin-bottom: 10px;
+/* Sports: the names set big, each lights up in its own colour */
+.home .sports-section {
+  padding-block: var(--section-gap-s) 0;
 }
 
-.home .how-section > p {
-  color: #b8b5c8;
-  margin-bottom: 30px;
+.home .sports-section h2,
+.home .why-section h2 {
+  font-size: var(--text-display-s);
 }
 
-.home .steps-grid {
+.home .sports-section > p {
+  margin-top: var(--space-sm);
+  font-size: var(--text-lead);
+  color: var(--color-ink-2);
+}
+
+.home .sports-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-xl);
+  margin: var(--space-xl) 0 0;
+  padding: var(--space-lg) 0 0;
+  border-top: var(--rule-hair) solid var(--color-rule);
+  list-style: none;
+}
+
+.home .sports-list li {
+  --sport: var(--sport-padel);
+}
+
+.home .sports-list .sport-football { --sport: var(--sport-football); }
+.home .sports-list .sport-basketball { --sport: var(--sport-basketball); }
+.home .sports-list .sport-volleyball { --sport: var(--sport-volleyball); }
+.home .sports-list .sport-tennis { --sport: var(--sport-tennis); }
+
+.home .sports-list a {
+  display: inline-block;
+  color: var(--color-muted);
+  font: 800 var(--text-display)/1.05 var(--font-display);
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--dur-micro) var(--ease-out);
+}
+
+.home .sports-list a:hover,
+.home .sports-list a:focus-visible {
+  color: var(--sport);
+}
+
+.home .sports-list a:active {
+  color: var(--color-accent);
+}
+
+/* Why Wesal: three things it does for a group */
+.home .why-section {
+  padding-block: var(--section-gap-s) var(--space-2xl);
+}
+
+.home .why-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+  gap: var(--gap-columns);
+  margin-top: var(--space-2xl);
 }
 
-.home .step-card {
-  background: #24203f;
-  border: 1px solid #393453;
-  border-radius: 20px;
-  padding: 30px;
+.home .why-item h3 {
+  padding-bottom: var(--space-sm);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+  font-size: var(--text-2xl);
 }
 
-.home .step-card span {
-  color: #c7ff39;
-  font-size: 32px;
-  font-weight: 800;
+.home .why-item p {
+  max-width: 45ch;
+  margin-top: var(--space-sm);
+  color: var(--color-ink-2);
 }
 
-.home .step-card h3 {
-  font-size: 20px;
-  margin: 20px 0 10px;
-}
-
-.home .step-card p {
-  color: #b8b5c8;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-/* Available Matches */
-.home .matches-section {
-  padding: 70px 0;
-}
-
-.home .matches-header {
-  margin-bottom: 30px;
-}
-
-.home .matches-header h2 {
-  font-size: 30px;
-  margin-bottom: 10px;
-}
-
-.home .matches-header p {
-  color: #b8b5c8;
-}
-
-.home .matches-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: #24203f;
-  border: 1px solid #393453;
-  border-radius: 20px;
-  padding: 65px 25px;
-  text-align: center;
-}
-
-.home .matches-empty h3 {
-  width: 100%;
-  font-size: 22px;
-  margin: 0;
-  text-align: center;
-}
-
-.home .matches-empty p {
-  width: 100%;
-  color: #b8b5c8;
-  font-size: 15px;
-  margin: 0;
-  text-align: center;
-}
-
-/* Tablet and Mobile */
-@media (max-width: 900px) {
-  .home main {
-    padding: 50px 24px;
-  }
-
+/* Tablet and mobile */
+@media (max-width: 60rem) {
   .home .hero {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 30px;
+    row-gap: var(--space-2xl);
+    padding-block: var(--space-xl) var(--space-2xl);
   }
 
-  .home main h1 {
-    font-size: clamp(36px, 8vw, 56px);
-  }
-
+  .home .hero-content,
   .home .hero-visual {
-    width: 100%;
-    gap: 20px;
+    grid-column: 1 / -1;
   }
 
-  .home .sports-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .home .why-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .home .steps-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Small Mobile */
-@media (max-width: 480px) {
-  .home .sports-grid {
-    grid-template-columns: 1fr;
+  .home .sports-list a {
+    font-size: var(--text-3xl);
   }
 }
