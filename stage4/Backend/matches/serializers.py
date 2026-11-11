@@ -25,7 +25,7 @@ class MatchSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'sport_id', 'sport', 'creator', 'date', 'time', 'location',
             'max_players', 'total_cost', 'status', 'players_count', 'spots_left', 'share_per_player',
-            'opponent_id', 'opponent', 'winner',
+            'opponent_id', 'opponent', 'winner','host_payment_expires_at', 'payment_expires_at',
         ]
         read_only_fields = ['status']
 
