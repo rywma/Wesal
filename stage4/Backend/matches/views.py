@@ -411,6 +411,21 @@ def my_matches(request):
         .order_by('date', 'time')
     )
     return Response(MatchSerializer(matches, many=True).data)
+    # confirm
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def confirm_payment(request, match_id):
+    match = get_object_or_404(Match, pk=match_id)
+    
+
+    if match.host_payment_expires_at and timezone.now() > match.host_payment_expires_at:
+        return Response({'error': 'Payment window has expired.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    match.status = Match.Status.OPEN
+    match.save()
+    
+    return Response({'message': 'Payment confirmed successfully, match is now open!'}, status=status.HTTP_200_OK)
 # 12: Cancel expired unpaid participations
 def cancel_expired_unpaid_participations_internal():
     from datetime import timedelta
