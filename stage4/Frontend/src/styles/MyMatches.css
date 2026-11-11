@@ -2,26 +2,40 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #171334, #101527);
-  color: white;
+  background: transparent;
+  color: var(--color-ink);
   direction: ltr;
 }
 
 .my-matches main {
   flex: 1;
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--container);
   margin: 0 auto;
-  padding: 70px 40px;
+  padding: var(--space-2xl) var(--gutter) var(--section-gap-s);
   box-sizing: border-box;
 }
 
 .my-matches h1 {
-  font-size: 40px;
+  font-size: var(--text-display-s);
+  text-transform: uppercase;
+  line-height: 1;
   margin-bottom: 12px;
 }
 
-.my-matches main p {
-  color: #b8b5c8;
-  font-size: 16px;
+.my-matches main > p,
+.my-matches main section > p {
+  margin-top: var(--space-sm);
+  color: var(--color-ink-2);
+  font-size: var(--text-md);
+}
+
+.my-matches h2 {
+  margin-top: var(--space-2xl);
+  font-size: var(--text-2xl);
+  text-transform: uppercase;
+}
+
+.my-matches main h2 + p {
+  margin-top: var(--space-sm);
 }

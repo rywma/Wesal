@@ -2,28 +2,25 @@
 /* Payment card */
 .match-payment-info,
 .players-payment-list {
-  background: #211d3d;
-  border: 1px solid #393453;
-  border-radius: 20px;
-  padding: 24px;
-  color: white;
+  background: transparent;
+  padding: 0;
+  color: var(--color-ink);
   width: 100%;
-  max-width: 550px;
   box-sizing: border-box;
 }
 
 .match-payment-info h3,
 .players-payment-list h3 {
-  color: #c7ff39;
-  font-size: 22px;
-  margin: 0 0 24px;
+  color: var(--color-ink);
+  font-size: var(--text-xl);
+  margin: 0 0 var(--space-sm);
 }
 
 /* Player payment details */
 .match-payment-info p {
   padding: 14px 0;
   margin: 0;
-  border-bottom: 1px solid #393453;
+  border-bottom: 1px solid var(--color-rule);
   font-size: 15px;
 }
 
@@ -32,7 +29,7 @@
 }
 
 .match-payment-info span {
-  color: #c7ff39;
+  color: var(--color-ink);
   font-weight: 600;
   text-transform: capitalize;
 }
@@ -44,7 +41,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 16px 0;
-  border-bottom: 1px solid #393453;
+  border-bottom: 1px solid var(--color-rule);
 }
 
 .player-payment:last-child {
@@ -56,9 +53,9 @@
 }
 
 .player-payment select {
-  background: #171334;
-  color: #c7ff39;
-  border: 1px solid #c7ff39;
+  background: transparent;
+  color: var(--color-ink);
+  border: 1px solid var(--color-ink);
   border-radius: 10px;
   padding: 9px 12px;
   cursor: pointer;

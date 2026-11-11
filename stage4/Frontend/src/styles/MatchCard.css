@@ -1,87 +1,83 @@
-/* Hero Match Cards */
-.home .hero-visual {
-  display: flex;
-  flex-direction: column;
+/* Match card: one row of the open-games board on Home */
+.match-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "sport   join"
+    "time    join"
+    "place   join"
+    "players join";
+  column-gap: var(--space-md);
+  padding-block: var(--space-md);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.match-card .match-sport {
+  grid-area: sport;
+  display: inline-flex;
   align-items: center;
-  gap: 20px;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-muted);
 }
 
-.home .match-card {
-  width: 100%;
-  max-width: 380px;
-  padding: 32px;
-  border-radius: 28px;
-  background: linear-gradient(135deg, #ff786b, #ffad71);
-  color: white;
-  box-shadow: 0 20px 50px rgba(255, 120, 107, 0.25);
-}
-
-.home .match-card:nth-child(2) {
-  background: linear-gradient(135deg, #4865ff, #24c8e8);
-  box-shadow: 0 20px 50px rgba(36, 200, 232, 0.25);
-}
-
-.home .match-sport {
-  font-size: 14px;
-  font-weight: 600;
+.match-card h3 {
+  grid-area: time;
+  max-width: none;
+  font-size: var(--text-3xl);
+  line-height: 1;
   text-transform: uppercase;
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
 }
 
-.home .match-card h2 {
-  font-size: 42px;
-  margin: 20px 0 10px;
+.match-card .match-location {
+  grid-area: place;
+  margin-top: var(--space-2xs);
+  font-weight: 500;
 }
 
-.home .match-card .match-location {
-  font-size: 17px;
-  color: white;
-  margin: 0;
+.match-card .match-players {
+  grid-area: players;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
 }
 
-.home .match-bottom {
-  display: flex;
-  justify-content: space-between;
+.match-card .match-join {
+  grid-area: join;
+  align-self: center;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  margin-top: 35px;
-}
-
-.home .match-bottom span {
-  font-size: 14px;
-}
-
-.home .match-join {
-  background: white;
-  color: #121027;
+  min-height: 44px;
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-pill);
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
+  font: 800 var(--text-md)/1 var(--font-display);
+  text-transform: uppercase;
   text-decoration: none;
-  padding: 12px 20px;
-  border-radius: 25px;
-  font-weight: 700;
-  transition: transform 0.3s ease;
+  white-space: nowrap;
+  transition: background-color var(--dur-micro) var(--ease-out);
 }
 
-.home .match-join:hover {
-  transform: translateY(-3px);
+.match-card .match-join:hover,
+.match-card:hover .match-join {
+  background: var(--color-brand-deep);
+  color: var(--color-accent-ink);
 }
 
-
-/* Desktop Match Cards */
-@media (min-width: 901px) {
-  .home .match-card:first-child {
-    transform: translateX(-30px);
-  }
-
-  .home .match-card:nth-child(2) {
-    transform: translateX(30px);
-    margin-top: -35px;
-  }
+.match-card .match-join::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 }
 
+.match-card:hover {
+  background: var(--color-hover);
+}
 
-/* Mobile Match Cards */
-@media (max-width: 900px) {
-  .home .match-card {
-    max-width: 380px;
-  }
-
+.match-card:last-child {
+  border-bottom: 0;
 }

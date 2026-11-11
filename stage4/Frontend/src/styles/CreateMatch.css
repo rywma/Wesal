@@ -1,32 +1,34 @@
 /* Create Match Page */
 .create-match {
   min-height: 100vh;
-  background: linear-gradient(135deg, #171334, #101527);
-  color: white;
+  background: transparent;
+  color: var(--color-ink);
 }
 
 .create-match main {
-  max-width: 1200px;
+  max-width: var(--container);
   margin: 0 auto;
-  padding: 60px 60px 80px;
+  padding: var(--space-2xl) var(--gutter) var(--section-gap-s);
   direction: ltr;
   text-align: left;
 }
 
 .create-match h1 {
-  font-size: 56px;
+  font-size: var(--text-display-s);
+  text-transform: uppercase;
+  line-height: 1;
   font-weight: 800;
   line-height: 1.1;
   margin: 0;
 }
 
 .create-match h1 span {
-  color: #c7ff39;
+  color: var(--color-ink);
 }
 
 .create-match .create-subtitle {
   margin: 14px 0 0;
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   font-size: 16px;
   line-height: 1.6;
 }
@@ -46,11 +48,9 @@
   display: flex;
   flex-direction: column;
   gap: 22px;
-  padding: 36px;
-  background: #24203f;
-  border: 1px solid #393453;
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  padding: var(--space-lg) 0 0;
+  border-top: var(--rule-hair) solid var(--color-rule);
+  box-shadow: none;
 }
 
 .create-match .create-row {
@@ -77,10 +77,10 @@
   box-sizing: border-box;
   width: 100%;
   padding: 14px 16px;
-  border: 1px solid #514b6c;
+  border: 1px solid var(--color-rule);
   border-radius: 12px;
-  background: #17142d;
-  color: white;
+  background: transparent;
+  color: var(--color-ink);
   font-size: 15px;
   outline: none;
   color-scheme: dark;
@@ -88,7 +88,7 @@
 
 .create-match .create-field input:focus,
 .create-match .create-field select:focus {
-  border-color: #c7ff39;
+  border-color: var(--color-ink);
 }
 
 .create-match .create-field select {
@@ -124,8 +124,8 @@
   display: inline-block;
   padding: 11px 20px;
   border-radius: 22px;
-  border: 1px solid #514b6c;
-  background: #17142d;
+  border: 1px solid var(--color-rule);
+  background: transparent;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -137,13 +137,13 @@
 }
 
 .create-match .sport-option input:checked + span {
-  background: linear-gradient(135deg, #c7ff39, #76ff9c);
+  background: var(--color-ink);
   border-color: transparent;
-  color: #121027;
+  color: var(--color-accent-ink);
 }
 
 .create-match .sport-option input:focus-visible + span {
-  outline: 2px solid #c7ff39;
+  outline: 2px solid var(--color-ink);
   outline-offset: 3px;
 }
 
@@ -156,8 +156,8 @@
   margin-top: 10px;
   border: none;
   border-radius: 30px;
-  background: linear-gradient(135deg, #c7ff39, #76ff9c);
-  color: #121027;
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
   font-size: 16px;
   font-weight: 700;
   text-align: center;
@@ -195,25 +195,22 @@
 }
 
 .create-match .preview-label {
-  color: #b8b5c8;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
 }
 
 .create-match .preview-card {
-  padding: 28px;
-  border-radius: 28px;
-  color: #121027;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  padding: 0 0 var(--space-lg);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+  color: var(--color-ink);
 }
 
 .create-match .preview-badge {
   display: inline-block;
   padding: 6px 14px;
   border-radius: 14px;
-  background: rgba(18, 16, 39, 0.15);
+  background: transparent;
   font-size: 12px;
   font-weight: 700;
 }
@@ -236,38 +233,34 @@
 
 /* Sport Colors (same gradients as the Home sport cards) */
 .create-match .sport-padel {
-  background: linear-gradient(135deg, #ff786b, #ffad71);
+  background: transparent;
 }
 
 .create-match .sport-football {
-  background: linear-gradient(135deg, #ff687c, #ff9767);
+  background: transparent;
 }
 
 .create-match .sport-basketball {
-  background: linear-gradient(135deg, #28cbd0, #c7ff39);
+  background: transparent;
 }
 
 .create-match .sport-volleyball {
-  background: linear-gradient(135deg, #6757ff, #21c8e9);
+  background: transparent;
 }
 
 .create-match .sport-tennis {
-  background: linear-gradient(135deg, #28c978, #c7ff39);
+  background: transparent;
 }
 
 /* Share Box */
 .create-match .share-box {
   flex: 1;
-  padding: 28px;
-  background: #24203f;
-  border: 1px solid #393453;
-  border-radius: 24px;
 }
 
 .create-match .summary-list {
   margin: 0 0 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #393453;
+  border-bottom: 1px solid var(--color-rule);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -280,7 +273,7 @@
 }
 
 .create-match .summary-list dt {
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   font-size: 14px;
 }
 
@@ -293,13 +286,13 @@
 .create-match .share-box strong {
   display: block;
   margin-top: 8px;
-  color: #c7ff39;
+  color: var(--color-ink);
   font-size: 44px;
 }
 
 .create-match .share-box p {
   margin: 10px 0 0;
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   font-size: 14px;
 }
 
@@ -309,29 +302,12 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   font-size: 13px;
   line-height: 1.5;
 }
 
 /* Logged Out */
-.create-match .login-needed {
-  max-width: 440px;
-  padding: 40px;
-  background: #24203f;
-  border: 1px solid #393453;
-  border-radius: 24px;
-}
-
-.create-match .login-needed h1 {
-  font-size: 30px;
-}
-
-.create-match .login-needed p {
-  margin: 12px 0 20px;
-  color: #b8b5c8;
-}
-
 /* Success */
 .create-match .create-success {
   max-width: 560px;
@@ -352,18 +328,18 @@
   align-items: center;
   gap: 12px;
   padding: 20px 24px;
-  background: #24203f;
-  border: 1px solid #393453;
+  background: transparent;
+  border: 1px solid var(--color-rule);
   border-radius: 20px;
 }
 
 .create-match .success-share span {
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   font-size: 14px;
 }
 
 .create-match .success-share strong {
-  color: #c7ff39;
+  color: var(--color-ink);
   font-size: 28px;
 }
 
@@ -379,7 +355,7 @@
 }
 
 .create-match .success-link {
-  color: #c7ff39;
+  color: var(--color-ink);
   font-weight: 700;
   text-decoration: none;
 }
@@ -391,7 +367,7 @@
 /* Tablet and Mobile */
 @media (max-width: 900px) {
   .create-match main {
-    padding: 40px 24px 60px;
+    padding: var(--space-xl) var(--gutter) var(--space-2xl);
   }
 
   .create-match h1 {
@@ -403,7 +379,7 @@
   }
 
   .create-match .create-form {
-    padding: 28px 22px;
+    padding-top: var(--space-md);
   }
 }
 

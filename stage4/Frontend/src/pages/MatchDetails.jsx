@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, Navigate, useLocation, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import JoinLeaveButton from '../components/JoinLeaveButton.jsx';
@@ -16,6 +16,7 @@ import InviteForm from '../components/InviteForm.jsx';
 function MatchDetails() {
   const { id } = useParams();
   const { user, isLoggedIn } = useAuth();
+  const location = useLocation();
 
   const [match, setMatch] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -46,6 +47,11 @@ function MatchDetails() {
     loadMatch();
   }, [id]);
 
+
+  // Match details are for logged-in players
+  if (!isLoggedIn) {
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+  }
 
   if (loading || !match) {
     return (
@@ -203,7 +209,8 @@ function MatchDetails() {
               </div>
             )}
 
-            {(isCreator || me) && (
+            {/* players see their share in "Your Payment" above so only the host needs this list */}
+            {isCreator && (
               <div className="details-box">
                 <MatchPaymentSection
                   key={me?.payment_status}

@@ -5,8 +5,8 @@
 
 .manage-cancel-btn {
   background: transparent;
-  border: 1px solid #ff7b8b;
-  color: #ff7b8b;
+  border: 1px solid var(--color-error);
+  color: var(--color-error);
   padding: 14px 24px;
   border-radius: 30px;
   font-size: 15px;
@@ -14,14 +14,14 @@
 }
 
 .manage-cancel-btn:hover {
-  background: rgba(255, 123, 139, 0.1);
+  background: transparent;
 }
 
 .manage-confirm {
   margin-top: 20px;
   padding: 24px;
-  background: #24203f;
-  border: 1px solid #514b6c;
+  background: transparent;
+  border: 1px solid var(--color-rule);
   border-radius: 20px;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .manage-confirm p {
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   margin-bottom: 20px;
 }
 
@@ -38,9 +38,9 @@
   padding: 12px 20px;
   margin-right: 10px;
   border-radius: 25px;
-  border: 1px solid #514b6c;
-  background: #17142d;
-  color: white;
+  border: 1px solid var(--color-rule);
+  background: transparent;
+  color: var(--color-ink);
   cursor: pointer;
 }
 
@@ -53,8 +53,8 @@
   padding: 12px 20px;
   margin-bottom: 16px;
   border-radius: 25px;
-  background: #c7ff39;
-  color: #121027;
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
   text-align: center;
   text-decoration: none;
   font-weight: 700;

@@ -1,142 +1,137 @@
-/* Navbar */
+/* Navbar: the wordmark, the links, then the account actions */
 .navbar {
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  z-index: var(--z-sticky-nav);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 30px;
-  padding: 24px 60px;
+  gap: var(--space-xl);
+  max-width: var(--container);
+  margin-inline: auto;
+  padding: var(--space-md) var(--gutter);
   direction: ltr;
-  position: relative;
+  background: transparent;
+  color: var(--color-ink);
+  font-family: var(--font-body);
 }
 
 .navbar a {
-  color: white;
+  color: var(--color-ink);
+  font-size: var(--text-md);
+  font-weight: 500;
   text-decoration: none;
-  font-size: 14px;
   white-space: nowrap;
 }
 
-.navbar-logo {
-  font-size: 24px;
-  font-weight: 800;
+.navbar-links a,
+.navbar-auth > a:not(.get-started) {
+  transition: color var(--dur-micro) var(--ease-out), text-shadow var(--dur-micro) var(--ease-out);
+}
+
+/* the links glow lime on hover */
+.navbar-links a:hover,
+.navbar-links a:focus-visible,
+.navbar-auth > a:not(.get-started):hover,
+.navbar-auth > a:not(.get-started):focus-visible {
+  color: var(--color-brand);
+  text-shadow: 0 0 14px color-mix(in oklab, var(--color-brand) 60%, transparent);
+}
+
+.navbar .navbar-logo {
+  font: 800 var(--text-2xl)/1 var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-display);
+}
+
+.navbar-menu {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xl);
 }
 
 .navbar-links,
 .navbar-auth {
   display: flex;
   align-items: center;
-  gap: 30px;
-}
-
-.navbar-links {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.navbar-links a {
-  display: inline-block;
-  position: relative;
-  transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.navbar-links a::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 0;
-  height: 2px;
-  background-color: #c7ff39;
-  transition: width 0.3s ease;
-}
-
-.navbar-links a:hover {
-  color: #c7ff39;
-  transform: none;
-}
-
-.navbar-links a:hover::after {
-  width: 100%;
-}
-
-/* Navbar Buttons */
-.navbar-auth a:not(.get-started) {
-  display: inline-block;
-  padding: 13px 24px;
-  border-radius: 30px;
-  transition: background 0.3s ease, transform 0.3s ease,
-              box-shadow 0.3s ease, color 0.3s ease;
-}
-
-.navbar-auth a:not(.get-started):hover {
-  background: linear-gradient(135deg, #ff906b, #ffb46b);
-  color: #121027;
-  box-shadow: 0 0 25px rgba(255, 144, 107, 0.45);
-  transform: translateY(-3px);
-}
-
-.navbar-auth .get-started {
-  display: inline-block;
-  background: linear-gradient(135deg, #c7ff39, #76ff9c);
-  color: #121027;
-  padding: 13px 24px;
-  border-radius: 30px;
-  font-weight: 700;
-  transition: background 0.3s ease, box-shadow 0.3s ease,
-              transform 0.3s ease;
-}
-
-.navbar-auth .get-started:hover {
-  background: linear-gradient(135deg, #dfff70, #8bffb2);
-  box-shadow: 0 0 30px rgba(199, 255, 57, 0.65);
-  transform: translateY(-3px) scale(1.05);
-}
-
-.logout-btn {
-  background: transparent;
-  color: white;
-  border: 1px solid #c7ff39;
-  padding: 10px 20px;
-  border-radius: 25px;
-  font-size: 14px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.logout-btn:hover {
-  background: #c7ff39;
-  color: #121027;
+  gap: var(--space-lg);
 }
 
 .navbar-username {
-  color: white;
-  font-size: 14px;
+  color: var(--color-ink-2);
+  white-space: nowrap;
 }
 
-.navbar-menu {
-  display: contents;
+.navbar .get-started,
+.navbar .logout-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-pill);
+  border: 0;
+  font-size: var(--text-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+}
+
+.navbar .get-started {
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.navbar .get-started:hover {
+  background: var(--color-brand-deep);
+}
+
+.navbar .logout-btn {
+  background: none;
+  box-shadow: inset 0 0 0 var(--rule-hair) var(--color-ink);
+  color: var(--color-ink);
+}
+
+.navbar .logout-btn:hover {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.navbar .get-started:active,
+.navbar .logout-btn:active {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.navbar-auth p {
+  margin: 0;
+  color: var(--color-error);
+  font-size: var(--text-sm);
 }
 
 .menu-toggle {
   display: none;
 }
 
-
-@media (max-width: 900px) {
-  .navbar {
-    padding: 20px 24px;
-  }
-
+/* Tablet and mobile: the links fold behind a menu button */
+@media (max-width: 60rem) {
   .menu-toggle {
-    display: block;
-    background: transparent;
-    border: 1px solid #c7ff39;
-    color: #c7ff39;
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-size: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: var(--radius-pill);
+    border: 0;
+    background: none;
+    box-shadow: inset 0 0 0 var(--rule-bar) var(--color-ink);
+    color: var(--color-ink);
     cursor: pointer;
   }
 
@@ -144,36 +139,23 @@
     display: none;
     position: absolute;
     top: 100%;
-    left: 20px;
-    right: 20px;
-    background: #211b3b;
-    border: 1px solid #393253;
-    border-radius: 16px;
-    padding: 24px;
-    z-index: 10;
+    left: 0;
+    right: 0;
+    padding: var(--space-lg) var(--gutter);
+    background: var(--color-paper);
+    border-bottom: var(--rule-bar) solid var(--color-ink);
   }
 
   .navbar-menu.open {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    align-items: flex-start;
   }
 
   .navbar-links,
   .navbar-auth {
-    position: static;
-    transform: none;
-    display: flex;
     flex-direction: column;
-    gap: 20px;
+    align-items: flex-start;
+    gap: var(--space-md);
   }
-
-  .navbar-links {
-    align-items: stretch;
-  }
-
-  .navbar-auth {
-    align-items: center;
-  }
-
 }

@@ -29,7 +29,9 @@ function Navbar() {
                 aria-label="Toggle menu"
                 aria-expanded={menuOpen}
             >
-                ☰
+                <svg width="22" height="16" viewBox="0 0 22 16" aria-hidden="true">
+                    <path d="M0 1h22M0 8h22M0 15h22" stroke="currentColor" strokeWidth="2" />
+                </svg>
             </button>
 
             <div className={`navbar-menu ${menuOpen ? 'open' : ''}`}>

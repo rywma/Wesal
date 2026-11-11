@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import '../styles/BrowseMatches.css';
 import BrowseMatchCard from '../components/BrowseMatchCard.jsx';
 import { getMatches, SPORT_IDS } from '../services/matchesApi.js';
@@ -7,7 +8,8 @@ import Footer from '../components/Footer.jsx';
 import '../styles/Footer.css';
 
 function BrowseMatches() {
-    const [sport, setSport] = useState('');
+    const [searchParams] = useSearchParams();
+    const [sport, setSport] = useState(searchParams.get('sport') || '');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [location, setLocation] = useState('');
@@ -47,7 +49,7 @@ function BrowseMatches() {
 
     function renderMatches() {
         if (loading) {
-            return <p>Loading matches...</p>;
+            return <p>Loading matches…</p>;
         }
 
         if (error) {
@@ -56,11 +58,11 @@ function BrowseMatches() {
 
         if (matches.length > 0) {
             return (
-                <div className="matches-grid">
+                <ul className="matches-list">
                     {matches.map((match) => (
                         <BrowseMatchCard key={match.id} match={match} />
                     ))}
-                </div>
+                </ul>
             );
         }
 
