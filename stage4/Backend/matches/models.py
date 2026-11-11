@@ -35,6 +35,11 @@ class Match(models.Model):
     total_cost = models.DecimalField(max_digits=8, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.OPEN, db_index=True)
     players = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Participation', related_name='joined_matches')
+    # the host plays against one opponent (the captain of the other side), and one of them wins
+    opponent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
+                                 related_name='opponent_matches')
+    winner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name='won_matches')
 
     class Meta:
         db_table = 'matches'

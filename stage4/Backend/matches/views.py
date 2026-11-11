@@ -12,8 +12,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-from django.db.models import Q
-from .models import Invitation, Match, Participation
+
+from .models import Invitation, Match, Participation, Sport
 from .serializers import InvitationSerializer, MatchDetailSerializer, MatchSerializer, PaymentStatusSerializer
 from users.views import add_points
 
@@ -26,18 +26,45 @@ def match_list(request):
     return get_matches(request)
 
 
+SLOT_TAKEN = 'This venue is already booked at this date and time.'
+
+
+# Double Booking Prevention: is this venue already booked at this date and time? (cancelled matches don't count)
+def slot_is_taken(location, match_date, match_time, exclude_match_id=None):
+    matches = Match.objects.filter(location__iexact=location, date=match_date, time=match_time)
+    matches = matches.exclude(status=Match.Status.CANCELLED).exclude(pk=exclude_match_id)
+    return matches.exists()
+
+
 # 5 Create a Match
 def create_match(request):
     serializer = MatchSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    data = serializer.validated_data
     # save the match and the creator's spot together, or neither
     with transaction.atomic():
+        # Double Booking Prevention: lock the sport so two bookings at the same moment wait in line
+        Sport.objects.select_for_update().get(pk=data['sport'].pk)
+        if slot_is_taken(data['location'], data['date'], data['time']):
+            return Response({'error': SLOT_TAKEN}, status=status.HTTP_400_BAD_REQUEST)
+
+        opponent = data.get('opponent')
+        if opponent == request.user:
+            return Response({'error': 'You cannot be your own opponent.'}, status=status.HTTP_400_BAD_REQUEST)
+
         match = serializer.save(creator=request.user)
         # the creator is the first player in the match
         Participation.objects.create(user=request.user, match=match, payment_amount=match.share_per_player())
         add_points(request.user, 'match_scheduling')
+        # the opponent plays in the match too, so they take a spot and pay their share
+        if opponent:
+            _, error = add_player(match, opponent)
+            if error:
+                transaction.set_rollback(True)
+                return Response({'error': f'Could not add the opponent: {error}'}, status=status.HTTP_400_BAD_REQUEST)
+
     return Response(MatchSerializer(match).data, status=status.HTTP_201_CREATED)
 
 
@@ -328,10 +355,23 @@ def edit_match(request, match_id):
         return Response({'error': 'A cancelled match cannot be edited.'},
                         status=status.HTTP_400_BAD_REQUEST)
 
+    # the opponent is chosen when the match is created, it can't be swapped later
+    if 'opponent_id' in request.data:
+        return Response({'error': 'The opponent cannot be changed after the match is created.'},
+                        status=status.HTTP_400_BAD_REQUEST)
+
     # PUT = full update, PATCH = partial update
     serializer = MatchSerializer(match, data=request.data, partial=(request.method == 'PATCH'))
     serializer.is_valid(raise_exception=True)
-    serializer.save()
+
+    # Double Booking Prevention: the new venue, date or time must not be booked already
+    data = serializer.validated_data
+    with transaction.atomic():
+        Sport.objects.select_for_update().get(pk=match.sport_id)
+        if slot_is_taken(data.get('location', match.location), data.get('date', match.date),
+                         data.get('time', match.time), exclude_match_id=match.id):
+            return Response({'error': SLOT_TAKEN}, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
     return Response(serializer.data)
     # 10: the creator can cancel a match
 @api_view(['POST'])
@@ -366,7 +406,7 @@ def my_matches(request):
             Q(participations__user=request.user,
               participations__status=Participation.Status.JOINED)
         )
-        .select_related('sport', 'creator')
+        .select_related('sport', 'creator', 'opponent', 'winner')
         .distinct()
         .order_by('date', 'time')
     )
@@ -390,3 +430,77 @@ def cancel_expired_unpaid_participations_internal():
         if match.status == Match.Status.FULL:
             match.status = Match.Status.OPEN
             match.save()
+
+
+POINTS_FOR_WIN = 3
+POINTS_FOR_LOSS = 1  # a small reward for showing up and playing
+
+
+# Submit Result: the host says who won, the match becomes completed and the winner gets the points
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def submit_result(request, match_id):
+    with transaction.atomic():
+        # lock the match so the result can't be submitted twice at the same moment
+        match = get_object_or_404(Match.objects.select_for_update(), pk=match_id)
+
+        if match.creator != request.user:
+            return Response({'error': 'Only the host can submit the result.'}, status=status.HTTP_403_FORBIDDEN)
+        if match.status == Match.Status.CANCELLED:
+            return Response({'error': 'This match was cancelled.'}, status=status.HTTP_400_BAD_REQUEST)
+        if match.status == Match.Status.COMPLETED:
+            return Response({'error': 'The result was already submitted.'}, status=status.HTTP_400_BAD_REQUEST)
+        if not match.opponent_id:
+            return Response({'error': 'This match has no opponent.'}, status=status.HTTP_400_BAD_REQUEST)
+        if match.date > date.today():
+            return Response({'error': 'The match has not been played yet.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # the winner has to be one of the two sides
+        winner_id = str(request.data.get('winner_id', ''))
+        if winner_id not in (str(match.creator_id), str(match.opponent_id)):
+            return Response({'error': 'The winner must be the host or the opponent.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        match.winner_id = int(winner_id)
+        match.status = Match.Status.COMPLETED
+        match.save(update_fields=['winner', 'status'])
+
+    return Response({
+        **MatchSerializer(match).data,
+        'points_added': {'winner': POINTS_FOR_WIN, 'loser': POINTS_FOR_LOSS},
+    }, status=status.HTTP_200_OK)
+
+
+# Opponents Leaderboard: the people I played against (and me), with their wins and points
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def opponents_leaderboard(request):
+    completed = Match.objects.filter(status=Match.Status.COMPLETED)
+
+    # everyone I played against, as host or as opponent
+    my_matches = completed.filter(Q(creator=request.user) | Q(opponent=request.user))
+    people_ids = {request.user.id}
+    for match in my_matches:
+        people_ids.add(match.opponent_id if match.creator_id == request.user.id else match.creator_id)
+
+    rows = []
+    for person in get_user_model().objects.filter(id__in=people_ids):
+        played = completed.filter(Q(creator=person) | Q(opponent=person)).count()
+        wins = completed.filter(winner=person).count()
+        losses = played - wins
+        rows.append({
+            'user_id': person.id,
+            'name': person.first_name,
+            'is_me': person.id == request.user.id,
+            'played': played,
+            'wins': wins,
+            'losses': losses,
+            'points': wins * POINTS_FOR_WIN + losses * POINTS_FOR_LOSS,
+        })
+
+    # ?sort=wins sorts by wins, anything else sorts by points
+    sort_by = 'wins' if request.query_params.get('sort') == 'wins' else 'points'
+    rows.sort(key=lambda row: (row[sort_by], row['wins'] if sort_by == 'points' else row['points']), reverse=True)
+    for rank, row in enumerate(rows, start=1):
+        row['rank'] = rank
+    return Response(rows)
