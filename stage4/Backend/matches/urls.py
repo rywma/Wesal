@@ -9,6 +9,7 @@ urlpatterns = [
     path('<int:match_id>/payments/', views.match_payments, name='match_payments'),
     path('<int:match_id>/my-payment/', views.my_payment, name='my_payment'),
     path('<int:match_id>/invitations/', views.invite_player, name='invite_player'),
+    path('<int:match_id>/result/', views.submit_result, name='submit_result'),
     path('matches/my/', views.my_matches, name='my_matches'),
     path('matches/<int:match_id>/edit/', views.edit_match, name='edit_match'),
     path('matches/<int:match_id>/cancel/', views.cancel_match, name='cancel_match'),
