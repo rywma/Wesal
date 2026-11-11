@@ -3,7 +3,7 @@ import { useState } from "react";
 import '../styles/Auth.css';
 import { loginUser } from '../services/authApi.js';
 import { useAuth } from '../context/AuthContext.jsx';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
 
 export default function Login() {
@@ -11,6 +11,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -28,7 +29,8 @@ await new Promise(resolve => setTimeout(resolve, 3000));
         
         if (data.success && data.tokens?.access && data.user) {
         login(data.user, data.tokens);
-        navigate('/');
+        // go back to the match they wanted to see, or Home
+        navigate(location.state?.from || '/');
       } else {
         setMessage(data.message || 'Login failed.');
       }

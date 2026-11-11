@@ -5,7 +5,7 @@
 
 .pay-share p {
   margin: 0;
-  color: #b8b5c9;
+  color: var(--color-ink-2);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -13,8 +13,8 @@
 .pay-share .pay-btn {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #c7ff39, #76ff9c);
-  color: #121027;
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
   border: none;
   border-radius: 30px;
   font-size: 16px;
@@ -24,27 +24,35 @@
 
 /* Moyasar's form is made for a light background */
 .pay-share .mysr-form {
-  background: white;
-  border-radius: 16px;
-  padding: 16px;
-  color: #121027;
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-md);
+  border-radius: var(--radius-card);
+  background: var(--color-ink);
+  color: var(--color-accent-ink);
+}
+
+.pay-share .mysr-form > * {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
 }
 
 .pay-share .pay-cancel {
   width: 100%;
-  margin-top: 10px;
+  margin-top: var(--space-sm);
   padding: 12px;
   background: transparent;
-  color: white;
-  border: 1px solid #514b6c;
-  border-radius: 30px;
+  color: var(--color-ink);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-pill);
   font-weight: 700;
   cursor: pointer;
 }
 
 .pay-share .pay-done,
 .pay-share .pay-success {
-  color: #c7ff39;
+  color: var(--color-ink);
   font-weight: 700;
 }
 
@@ -54,5 +62,5 @@
 
 .pay-share .pay-error {
   margin-top: 12px;
-  color: #ffb0b2;
+  color: var(--color-error);
 }

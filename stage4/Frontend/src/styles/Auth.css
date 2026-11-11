@@ -6,23 +6,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #171334, #101527);
-  color: white;
+  background: transparent;
+  color: var(--color-ink);
   direction: ltr;
 }
 
 .auth-card {
   width: 100%;
   max-width: 440px;
-  padding: 40px;
-  background: #24203f;
-  border: 1px solid #393453;
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  padding: var(--space-2xl) 0;
+  border-top: var(--rule-hair) solid var(--color-rule);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
 }
 
 .auth-logo {
-  color: #c7ff39;
+  color: var(--color-ink);
   font-size: 32px;
   font-weight: 800;
   margin: 0 0 30px;
@@ -34,7 +32,7 @@
 }
 
 .auth-subtitle {
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   font-size: 14px;
   margin: 0 0 30px;
 }
@@ -59,16 +57,16 @@
 .auth-field input {
   width: 100%;
   padding: 14px 16px;
-  border: 1px solid #514b6c;
+  border: 1px solid var(--color-rule);
   border-radius: 12px;
-  background: #17142d;
-  color: white;
+  background: transparent;
+  color: var(--color-ink);
   font-size: 15px;
   outline: none;
 }
 
 .auth-field input:focus {
-  border-color: #c7ff39;
+  border-color: var(--color-ink);
 }
 
 .auth-submit {
@@ -77,8 +75,8 @@
   margin-top: 10px;
   border: none;
   border-radius: 30px;
-  background: linear-gradient(135deg, #c7ff39, #76ff9c);
-  color: #121027;
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
@@ -102,13 +100,13 @@
 
 .auth-switch {
   margin: 25px 0 0;
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   text-align: center;
   font-size: 14px;
 }
 
 .auth-switch a {
-  color: #c7ff39;
+  color: var(--color-ink);
   font-weight: 700;
   text-decoration: none;
 }

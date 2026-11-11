@@ -5,7 +5,7 @@
 
 .invite-form p {
   margin: 0;
-  color: #b8b5c9;
+  color: var(--color-ink-2);
   font-size: 14px;
 }
 
@@ -18,9 +18,9 @@
 .invite-form input {
   flex: 1;
   min-width: 0;
-  background: #211b3b;
-  color: white;
-  border: 1px solid #393253;
+  background: transparent;
+  color: var(--color-ink);
+  border: 1px solid var(--color-rule);
   border-radius: 10px;
   padding: 12px 15px;
   font-size: 14px;
@@ -28,12 +28,12 @@
 }
 
 .invite-form input:focus {
-  border-color: #c7ff39;
+  border-color: var(--color-ink);
 }
 
 .invite-form button {
-  background: linear-gradient(135deg, #c7ff39, #76ff9c);
-  color: #121027;
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
   border: none;
   border-radius: 10px;
   padding: 0 20px;
@@ -48,10 +48,10 @@
 
 .invite-form .invite-success {
   margin-top: 12px;
-  color: #c7ff39;
+  color: var(--color-ink);
 }
 
 .invite-form .invite-error {
   margin-top: 12px;
-  color: #ffb0b2;
+  color: var(--color-error);
 }
