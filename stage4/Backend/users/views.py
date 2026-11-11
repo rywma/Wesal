@@ -11,6 +11,9 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 import json
+from rest_framework import status
+from .serializers import ProfileSerializer
+from .models import Profile 
 
 @csrf_exempt
 def login(request):
@@ -98,3 +101,46 @@ def logout(request):
         return Response({'status': 'error', 'message': 'Invalid or expired token'}, status=400)
 
     return Response({'status': 'success', 'message': 'Logged out'}, status=200)
+
+# GET /api/v1/profile/me
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_my_profile(request):
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    serializer = ProfileSerializer(profile)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+# PUT /api/v1/profile/update
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    
+    
+    was_incomplete = not profile.bio or not profile.skill_level
+
+    serializer = ProfileSerializer(profile, data=request.data, partial=(request.method == 'PATCH'))
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    updated_profile = serializer.save()
+
+    
+    if was_incomplete and updated_profile.bio and updated_profile.skill_level:
+        add_points(request.user, 'profile_completion')
+
+    return Response(ProfileSerializer(updated_profile).data, status=status.HTTP_200_OK)
+# add a function to add points 
+def add_points(user, event_type):
+    points_mapping = {
+        'profile_completion': 20,
+        'match_scheduling': 15,
+        'participation': 10,
+        'match_win': 50,
+    }
+    
+    earned_points = points_mapping.get(event_type, 0)
+    if earned_points > 0 and hasattr(user, 'profile'):
+        user.profile.points += earned_points
+        user.profile.save(update_fields=['points'])
+    return user.profile.points if hasattr(user, 'profile') else 0

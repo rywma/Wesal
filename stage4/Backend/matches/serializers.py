@@ -125,4 +125,3 @@ class MatchUpdateSerializer(serializers.ModelSerializer):
         if value < 0:
             raise serializers.ValidationError('Total cost cannot be negative.')
         return value
-

@@ -1,5 +1,6 @@
 from datetime import date
 from decimal import Decimal
+from django.utils import timezone
 from django.db.models import Q
 
 from django.contrib.auth import get_user_model
@@ -14,7 +15,7 @@ from rest_framework.pagination import PageNumberPagination
 
 from .models import Invitation, Match, Participation, Sport
 from .serializers import InvitationSerializer, MatchDetailSerializer, MatchSerializer, PaymentStatusSerializer
-
+from users.views import add_points
 
 # /matches/ : GET browses matches (anyone), POST creates one (logged in only)
 @api_view(['GET', 'POST'])
@@ -56,6 +57,7 @@ def create_match(request):
         match = serializer.save(creator=request.user)
         # the creator is the first player in the match
         Participation.objects.create(user=request.user, match=match, payment_amount=match.share_per_player())
+        add_points(request.user, 'match_scheduling')
         # the opponent plays in the match too, so they take a spot and pay their share
         if opponent:
             _, error = add_player(match, opponent)
@@ -100,14 +102,15 @@ def add_player(match, user):
     if match.spots_left() == 0:
         match.status = Match.Status.FULL
         match.save()
-
+    
     return participation, None
-
+    add_points(user, 'participation')
 
 # 4 Join a Match
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def join_match(request, match_id):
+    cancel_expired_unpaid_participations_internal()
     with transaction.atomic():
         # select_for_update locks this match row until the transaction ends,
         # so two players can't take the last spot at the same time
@@ -115,7 +118,7 @@ def join_match(request, match_id):
         participation, error = add_player(match, request.user)
         if error:
             return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
-
+        add_points(request.user, 'participation')
     return Response({
         **match_spots(match),
         'my_share': str(participation.payment_amount),
@@ -200,6 +203,7 @@ ORDERING_FIELDS = ['date', '-date', 'time', '-time', 'total_cost', '-total_cost'
 
 # 2 Browse & Filter Matches: filtering, ordering and pages of 10
 def get_matches(request):
+    matches = Match.objects.filter(date__gte=date.today()).exclude(status='pending_payment').select_related('sport', 'creator')
     # only upcoming matches, so old games don't show up in the list
     matches = Match.objects.filter(date__gte=date.today()).select_related('sport', 'creator')
 
@@ -303,6 +307,7 @@ def my_invitations(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def accept_invitation(request, invitation_id):
+    cancel_expired_unpaid_participations_internal()
     with transaction.atomic():
         # only the receiver can find their invitation, anyone else gets 404
         invitation = get_object_or_404(Invitation.objects.select_for_update(), pk=invitation_id, receiver=request.user)
@@ -406,6 +411,25 @@ def my_matches(request):
         .order_by('date', 'time')
     )
     return Response(MatchSerializer(matches, many=True).data)
+# 12: Cancel expired unpaid participations
+def cancel_expired_unpaid_participations_internal():
+    from datetime import timedelta
+    expiration_limit = timezone.now() - timedelta(minutes=5)
+    
+    expired_participations = Participation.objects.filter(
+        payment_status=Participation.PaymentStatus.PENDING,
+        status=Participation.Status.JOINED,
+        joined_at__lt=expiration_limit
+    )
+    
+    for participation in expired_participations:
+        participation.status = 'cancelled_by_timeout' if hasattr(Participation.Status, 'CANCELLED_BY_TIMEOUT') else Participation.Status.LEFT
+        participation.save()
+        
+        match = participation.match
+        if match.status == Match.Status.FULL:
+            match.status = Match.Status.OPEN
+            match.save()
 
 
 POINTS_FOR_WIN = 3
