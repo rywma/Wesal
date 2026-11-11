@@ -82,7 +82,7 @@ class InvitationSerializer(serializers.ModelSerializer):
         model = Invitation
         fields = ['id', 'sender', 'match', 'status']
 
- class MatchUpdateSerializer(serializers.ModelSerializer):
+class MatchUpdateSerializer(serializers.ModelSerializer):
     # fields the creator is allowed to edit (sport can't be changed)
     class Meta:
         model = Match

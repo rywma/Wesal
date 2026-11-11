@@ -38,7 +38,7 @@ async function matchRequest(endpoint, method, token, body) {
   const data = await response.json();
 
   return {
-    ...data,
+    ...(Array.isArray(data) ? { results: data } : data),
     success: response.ok,
     message: response.ok ? "" : errorMessage(data),
     sessionExpired: data.code === "token_not_valid",
@@ -88,7 +88,26 @@ export function getMatches(token, sport = '', date = '', location = '', page = 1
 }
 
 
-   // One match with its creator and players (used by the Match Details page).
-   export function getMatch(matchId) {
-     return matchRequest(`${matchId}/`, "GET");
-   }
+// One match with its creator and players (used by the Match Details page).
+export function getMatch(matchId) {
+  return matchRequest(`${matchId}/`, "GET");
+}
+
+export function getMyMatches(token) {
+  return matchRequest("matches/my/", "GET", token);
+}
+export function editMatch(matchId, matchData, token) {
+  return matchRequest(
+    `matches/${matchId}/edit/`,
+    'PATCH',
+    token,
+    matchData
+  );
+}
+export function cancelMatch(matchId, token) {
+    return matchRequest(
+        `matches/${matchId}/cancel/`,
+        'POST',
+        token
+    );
+}

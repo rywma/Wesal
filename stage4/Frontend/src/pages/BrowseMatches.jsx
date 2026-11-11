@@ -25,14 +25,19 @@ function BrowseMatches() {
                 const data = await getMatches(null, sportId, date, location, 1, time);
 
                 if (data.success) {
-                    setMatches(data.results || []);
+                    const availableMatches = (data.results || []).filter(
+                        (match) => match.status !== 'cancelled'
+                    );
+
+                    setMatches(availableMatches);
                 } else {
                     setError(data.message || 'Failed to load matches.');
                 }
             } catch (err) {
                 console.error('Fetch matches error:', err);
                 setError('Unable to connect to the server.');
-            } finally {
+            }
+            finally {
                 setLoading(false);
             }
         }

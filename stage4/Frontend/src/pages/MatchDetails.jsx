@@ -10,6 +10,8 @@ import '../styles/MatchDetails.css';
 import '../styles/Footer.css';
 import '../styles/ManageMatch.css';
 import MatchPaymentSection from '../components/MatchPaymentSection.jsx';
+import PayShare from '../components/PayShare.jsx';
+import InviteForm from '../components/InviteForm.jsx';
 
 function MatchDetails() {
   const { id } = useParams();
@@ -63,6 +65,7 @@ function MatchDetails() {
   const isCreator = isLoggedIn && match.creator?.id === user.id;
   const me = isLoggedIn ? match.participants.find((player) => player.user_id === user.id) : null;
   const isFull = match.status === 'full' || match.spots_left <= 0;
+  const isCancelled = match.status === 'cancelled';
   const mapQuery = encodeURIComponent(`${match.location}, Riyadh`);
 
   return (
@@ -76,7 +79,11 @@ function MatchDetails() {
           <section className="details-main">
             <div className={`details-card sport-${match.sport.toLowerCase()}`}>
               <span className="details-badge">
-                {isFull ? 'Full' : `Open · ${spotsText(match.spots_left)}`}
+                {isCancelled
+                  ? 'Cancelled'
+                  : isFull
+                    ? 'Full'
+                    : `Open · ${spotsText(match.spots_left)}`}
               </span>
               <h1>{formatTime(match.time)}</h1>
               <p>{match.sport} · {formatDate(match.date)}</p>
@@ -112,7 +119,7 @@ function MatchDetails() {
                   );
                 })}
 
-                {match.spots_left > 0 && (
+                {!isCancelled && match.spots_left > 0 && (
                   <li className="player-row open">
                     <span className="player-avatar" aria-hidden="true">+</span>
                     <span className="player-name">{spotsText(match.spots_left)}</span>
@@ -167,18 +174,39 @@ function MatchDetails() {
                   Manage Match
                 </Link>
               )}
-              <JoinLeaveButton
-                match={match}
-                isJoined={Boolean(me)}
-                isCreator={isCreator}
-                hasPaid={me?.payment_status === 'paid'}
-                onChange={loadMatch}
-              />
+
+              {!isCancelled && (
+                <JoinLeaveButton
+                  match={match}
+                  isJoined={Boolean(me)}
+                  isCreator={isCreator}
+                  hasPaid={me?.payment_status === 'paid'}
+                  onChange={loadMatch}
+                />
+              )}
             </div>
+
+            {isCreator && match.status === 'open' && (
+              <div className="details-box">
+                <InviteForm matchId={match.id} />
+              </div>
+            )}
+
+            {me && (
+              <div className="details-box">
+                <PayShare
+                  match={match}
+                  amount={me.payment_amount || match.share_per_player}
+                  hasPaid={me.payment_status === 'paid'}
+                  onPaid={loadMatch}
+                />
+              </div>
+            )}
 
             {(isCreator || me) && (
               <div className="details-box">
                 <MatchPaymentSection
+                  key={me?.payment_status}
                   matchId={match.id}
                   isOrganizer={isCreator}
                   onPaymentChange={loadMatch}

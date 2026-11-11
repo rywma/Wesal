@@ -1,6 +1,8 @@
 from datetime import date
 from decimal import Decimal
 from django.utils import timezone
+from django.db.models import Q
+
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.shortcuts import get_object_or_404
@@ -147,26 +149,6 @@ def match_payments(request, match_id):
     })
 
 
-# 7: the creator marks a player as paid or pending
-@api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
-def update_payment(request, match_id, user_id):
-    match = get_object_or_404(Match, pk=match_id)
-    if match.creator != request.user:
-        return Response({'error': 'Only the match creator can update payments.'}, status=status.HTTP_403_FORBIDDEN)
-
-    participation = Participation.objects.filter(
-        match=match, user_id=user_id, status=Participation.Status.JOINED
-    ).first()
-    if not participation:
-        return Response({'error': 'This player is not in this match.'}, status=status.HTTP_404_NOT_FOUND)
-
-    serializer = PaymentStatusSerializer(participation, data=request.data, partial=True)
-    if not serializer.is_valid():
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    serializer.save()
-    return Response(serializer.data)
 
 
 # 6 + 7: a player sees their own share and payment status
@@ -332,8 +314,7 @@ def decline_invitation(request, invitation_id):
     invitation.status = Invitation.Status.DECLINED
     invitation.save()
     return Response(InvitationSerializer(invitation).data, status=status.HTTP_200_OK)
-
-# 9: the creator can edit a match 
+    # 9: the creator can edit a match 
 @api_view(['PUT', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def edit_match(request, match_id):
@@ -352,8 +333,7 @@ def edit_match(request, match_id):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
-
-# 10: the creator can cancel a match
+    # 10: the creator can cancel a match
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def cancel_match(request, match_id):
