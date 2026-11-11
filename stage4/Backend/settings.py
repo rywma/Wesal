@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'matches.apps.MatchesConfig',
     'payments.apps.PaymentsConfig',
+    'challenges.apps.ChallengesConfig',
 ]
 
 MIDDLEWARE = [
