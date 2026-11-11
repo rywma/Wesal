@@ -40,6 +40,8 @@ class Match(models.Model):
                                  related_name='opponent_matches')
     winner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='won_matches')
+    host_payment_expires_at = models.DateTimeField(null=True, blank=True)
+    payment_expires_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         db_table = 'matches'
