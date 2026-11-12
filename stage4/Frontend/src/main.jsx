@@ -1,6 +1,8 @@
 
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route, } from 'react-router-dom'
+import './styles/tokens.css'
+import './styles/base.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 import MyMatches from './pages/MyMatches.jsx';

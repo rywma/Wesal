@@ -1,33 +1,33 @@
 /* Match Details Page */
 .match-details {
   min-height: 100vh;
-  background: linear-gradient(135deg, #171334, #101527);
-  color: white;
+  background: transparent;
+  color: var(--color-ink);
 }
 
 .match-details main {
-  max-width: 1200px;
+  max-width: var(--container);
   margin: 0 auto;
-  padding: 40px 60px 80px;
+  padding: var(--space-2xl) var(--gutter) var(--section-gap-s);
   direction: ltr;
   text-align: left;
 }
 
 .match-details .back-link {
   display: inline-block;
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
 }
 
 .match-details .back-link:hover {
-  color: #c7ff39;
+  color: var(--color-ink);
 }
 
 .match-details .details-status {
   margin-top: 40px;
-  color: #b8b5c8;
+  color: var(--color-ink-2);
 }
 
 /* Layout */
@@ -57,19 +57,24 @@
 
 /* Match Card */
 .match-details .details-card {
-  padding: 32px;
-  border-radius: 28px;
-  color: #121027;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  --sport: var(--sport-padel);
+  padding: 0 0 var(--space-lg);
+  color: var(--color-ink);
 }
+
+.match-details .details-card.sport-football { --sport: var(--sport-football); }
+.match-details .details-card.sport-basketball { --sport: var(--sport-basketball); }
+.match-details .details-card.sport-volleyball { --sport: var(--sport-volleyball); }
+.match-details .details-card.sport-tennis { --sport: var(--sport-tennis); }
 
 .match-details .details-badge {
   display: inline-block;
-  padding: 6px 14px;
-  border-radius: 14px;
-  background: rgba(18, 16, 39, 0.15);
-  font-size: 12px;
-  font-weight: 700;
+  padding: 4px 12px;
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink-2);
+  font-size: var(--text-xs);
+  font-weight: 600;
 }
 
 .match-details .details-card h1 {
@@ -97,31 +102,30 @@
 
 /* Sport Colors (same gradients as the Home sport cards) */
 .match-details .sport-padel {
-  background: linear-gradient(135deg, #ff786b, #ffad71);
+  background: transparent;
 }
 
 .match-details .sport-football {
-  background: linear-gradient(135deg, #ff687c, #ff9767);
+  background: transparent;
 }
 
 .match-details .sport-basketball {
-  background: linear-gradient(135deg, #28cbd0, #c7ff39);
+  background: transparent;
 }
 
 .match-details .sport-volleyball {
-  background: linear-gradient(135deg, #6757ff, #21c8e9);
+  background: transparent;
 }
 
 .match-details .sport-tennis {
-  background: linear-gradient(135deg, #28c978, #c7ff39);
+  background: transparent;
 }
 
 /* Boxes */
+/* No boxes: each part of the page is separated by a thin line */
 .match-details .details-box {
-  padding: 24px 28px;
-  background: #24203f;
-  border: 1px solid #393453;
-  border-radius: 24px;
+  padding: var(--space-lg) 0 0;
+  border-top: var(--rule-hair) solid var(--color-rule);
 }
 
 .match-details .box-header {
@@ -138,7 +142,7 @@
 }
 
 .match-details .box-header span {
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   font-weight: 700;
 }
 
@@ -158,13 +162,13 @@
   gap: 12px;
   padding: 10px 14px;
   border-radius: 16px;
-  background: #17142d;
+  background: transparent;
 }
 
 .match-details .player-row.open {
   background: transparent;
-  border: 1px dashed #514b6c;
-  color: #b8b5c8;
+  border: 1px dashed var(--color-rule);
+  color: var(--color-ink-2);
 }
 
 .match-details .player-avatar {
@@ -174,13 +178,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #6757ff, #21c8e9);
+  border: var(--rule-hair) solid var(--color-rule);
   font-weight: 800;
 }
 
 .match-details .player-row.open .player-avatar {
   background: transparent;
-  border: 1px dashed #514b6c;
+  border: 1px dashed var(--color-rule);
 }
 
 .match-details .player-name {
@@ -193,8 +197,8 @@
   margin-left: 8px;
   padding: 3px 8px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #b8b5c8;
+  background: var(--color-hover);
+  color: var(--color-ink-2);
   font-size: 11px;
 }
 
@@ -208,26 +212,26 @@
 }
 
 .match-details .payment-badge.paid {
-  background: rgba(199, 255, 57, 0.15);
-  color: #c7ff39;
+  background: transparent;
+  color: var(--color-ink);
 }
 
 .match-details .payment-badge.pending {
-  background: rgba(255, 255, 255, 0.1);
-  color: #d3d8ee;
+  background: var(--color-hover);
+  color: var(--color-ink-2);
 }
 
 .match-details .payment-badge.unpaid {
-  background: rgba(255, 151, 103, 0.18);
-  color: #ffad71;
+  background: transparent;
+  color: var(--color-warn);
 }
 
 .match-details .mark-btn {
   padding: 7px 14px;
   border-radius: 20px;
-  border: 1px solid #c7ff39;
+  border: 1px solid var(--color-ink);
   background: transparent;
-  color: #c7ff39;
+  color: var(--color-ink);
   font: inherit;
   font-size: 13px;
   font-weight: 700;
@@ -236,13 +240,13 @@
 }
 
 .match-details .mark-btn:hover {
-  background: #c7ff39;
-  color: #121027;
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
 }
 
 .match-details .details-error {
   margin: 12px 0 0;
-  color: #ffb0b2;
+  color: var(--color-error);
   font-size: 14px;
 }
 
@@ -259,7 +263,7 @@
 .match-details .cost-list {
   margin: 0 0 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #393453;
+  border-bottom: 1px solid var(--color-rule);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -272,7 +276,7 @@
 }
 
 .match-details .cost-list dt {
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   font-size: 14px;
 }
 
@@ -282,18 +286,16 @@
 }
 
 .match-details .side-label {
-  color: #b8b5c8;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
 }
 
 .match-details .share,
 .match-details .collected {
   display: block;
   margin-top: 8px;
-  color: #c7ff39;
+  color: var(--color-ink);
   font-size: 40px;
 }
 
@@ -303,7 +305,7 @@
 
 .match-details .side-note {
   margin: 10px 0 0;
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -314,14 +316,14 @@
   align-items: center;
   margin: 18px 0 0;
   padding-top: 18px;
-  border-top: 1px solid #393453;
+  border-top: 1px solid var(--color-rule);
   font-weight: 700;
 }
 
 /* Tablet and Mobile */
 @media (max-width: 900px) {
   .match-details main {
-    padding: 32px 24px 60px;
+    padding: var(--space-xl) var(--gutter) var(--space-2xl);
   }
 
   .match-details .details-card h1 {

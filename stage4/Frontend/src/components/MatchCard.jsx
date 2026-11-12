@@ -1,23 +1,21 @@
-import '../styles/MatchCard.css';
 import { Link } from 'react-router-dom';
+import '../styles/MatchCard.css';
 
-function MatchCard({ sport, time, location, players }) {
+function MatchCard({ sport, time, location, players, to }) {
   return (
-    <div className="match-card">
+    <li className="match-card">
       <span className="match-sport">{sport}</span>
 
-      <h2>{time}</h2>
+      <h3>{time}</h3>
 
       <p className="match-location">{location}</p>
 
-      <div className="match-bottom">
-        <span>{players}</span>
+      <span className="match-players">{players}</span>
 
-        <Link to="/login" className="match-join">
-          Join →
-        </Link>
-      </div>
-    </div>
+      <Link to={to} className="match-join">
+        View details
+      </Link>
+    </li>
   );
 }
 

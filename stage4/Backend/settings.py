@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+from datetime import timedelta
 import os
 from pathlib import Path
 import os
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'matches.apps.MatchesConfig',
     'payments.apps.PaymentsConfig',
+    'challenges.apps.ChallengesConfig',
 ]
 
 MIDDLEWARE = [
@@ -159,3 +161,10 @@ REST_FRAMEWORK = {
 
 # Moyasar test mode secret key (sk_test_...), used to verify payments
 MOYASAR_SECRET_KEY = os.environ.get("MOYASAR_SECRET_KEY", "")
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),   
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+}

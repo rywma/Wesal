@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.utils import timezone
 
 
 class Sport(models.Model):
@@ -18,6 +19,7 @@ class Sport(models.Model):
 
 class Match(models.Model):
     class Status(models.TextChoices):
+        PENDING_PAYMENT = 'pending_payment', 'Pending Payment'
         OPEN = 'open', 'Open'
         FULL = 'full', 'Full'
         CANCELLED = 'cancelled', 'Cancelled'
@@ -28,10 +30,18 @@ class Match(models.Model):
     date = models.DateField(db_index=True)
     time = models.TimeField()
     location = models.CharField(max_length=255, db_index=True)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING_PAYMENT, db_index=True)
     max_players = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     total_cost = models.DecimalField(max_digits=8, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.OPEN, db_index=True)
     players = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Participation', related_name='joined_matches')
+    # the host plays against one opponent (the captain of the other side), and one of them wins
+    opponent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
+                                 related_name='opponent_matches')
+    winner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name='won_matches')
+    host_payment_expires_at = models.DateTimeField(null=True, blank=True)
+    payment_expires_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         db_table = 'matches'
@@ -59,6 +69,7 @@ class Participation(models.Model):
     class Status(models.TextChoices):
         JOINED = 'joined', 'Joined'
         LEFT = 'left', 'Left'
+        CANCELLED_BY_TIMEOUT = 'cancelled_by_timeout', 'Cancelled By Timeout'
 
     class PaymentStatus(models.TextChoices):
         PENDING = 'pending', 'Pending'
@@ -66,9 +77,10 @@ class Participation(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='participations')
     match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name='participations')
-    status = models.CharField(max_length=20, choices=Status.choices, default=Status.JOINED)
+    status = models.CharField(max_length=25, choices=Status.choices, default=Status.JOINED)
     payment_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     payment_status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING)
+    joined_at = models.DateTimeField(default=timezone.now, db_index=True)
 
     class Meta:
         db_table = 'participations'

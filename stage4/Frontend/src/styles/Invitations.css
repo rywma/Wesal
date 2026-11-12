@@ -2,36 +2,38 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #171334, #101527);
-  color: white;
+  background: transparent;
+  color: var(--color-ink);
   direction: ltr;
 }
 
 .invitations main {
   flex: 1;
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--container);
   margin: 0 auto;
-  padding: 70px 40px;
+  padding: var(--space-2xl) var(--gutter) var(--section-gap-s);
   box-sizing: border-box;
 }
 
 .invitations h1 {
-  font-size: 40px;
+  font-size: var(--text-display-s);
+  text-transform: uppercase;
+  line-height: 1;
   margin-bottom: 12px;
 }
 
 .invitations main p {
-  color: #b8b5c9;
+  color: var(--color-ink-2);
   font-size: 16px;
 }
 
 .invitations main a {
-  color: #c7ff39;
+  color: var(--color-ink);
 }
 
 .invitations .invitations-error {
-  color: #ffb0b2;
+  color: var(--color-error);
 }
 
 .invitations-results {
@@ -39,11 +41,9 @@
 }
 
 .invitations-empty {
-  background: #211b3b;
-  border: 1px solid #393253;
-  border-radius: 14px;
-  padding: 45px 20px;
-  text-align: center;
+  padding: var(--space-xl) 0;
+  border-top: var(--rule-hair) solid var(--color-rule);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
 }
 
 .invitations-empty p {
@@ -51,19 +51,31 @@
 }
 
 .invitations-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  border-top: var(--rule-hair) solid var(--color-rule);
 }
 
+/* one invitation per row, like the games lists */
 .invitation-card {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  background: #211b3b;
-  border: 1px solid #393253;
-  border-radius: 18px;
-  padding: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2xs) var(--space-lg);
+  padding: var(--space-md) 0;
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.invitation-card > * {
+  grid-column: 1;
+}
+
+.invitation-card .invitation-buttons,
+.invitation-card .invitation-status {
+  grid-column: 2;
+  grid-row: 1 / span 4;
+  align-self: center;
+}
+
+.invitation-card .invitation-link {
+  grid-column: 1;
 }
 
 .invitation-card h3 {
@@ -77,14 +89,13 @@
 }
 
 .invitations .invitation-card .invitation-sender {
-  color: #c7ff39;
+  color: var(--color-ink);
   font-weight: 700;
 }
 
 .invitation-buttons {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
 }
 
 .invitation-buttons button {
@@ -96,15 +107,15 @@
 }
 
 .accept-btn {
-  background: linear-gradient(135deg, #c7ff39, #76ff9c);
-  color: #121027;
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
   border: none;
 }
 
 .decline-btn {
   background: transparent;
-  color: white;
-  border: 1px solid #514b6c;
+  color: var(--color-ink);
+  border: 1px solid var(--color-rule);
 }
 
 .invitation-status {
@@ -117,13 +128,13 @@
 }
 
 .invitation-status.accepted {
-  background: rgba(199, 255, 57, 0.15);
-  color: #c7ff39;
+  background: transparent;
+  color: var(--color-ink);
 }
 
 .invitation-status.declined {
-  background: rgba(255, 255, 255, 0.1);
-  color: #d3d8ee;
+  background: var(--color-hover);
+  color: var(--color-ink-2);
 }
 
 .invitations .invitation-link {

@@ -61,16 +61,8 @@ function Invitations() {
   }
 
   function renderInvitations() {
-    if (!isLoggedIn) {
-      return (
-        <p>
-          <Link to="/login">Log in</Link> to see your invitations.
-        </p>
-      );
-    }
-
     if (loading) {
-      return <p>Loading invitations...</p>;
+      return <p>Loading invitations…</p>;
     }
 
     if (invitations.length === 0) {
@@ -135,14 +127,24 @@ function Invitations() {
       <Navbar />
 
       <main>
-        <h1>Invitations</h1>
-        <p>Matches other players invited you to.</p>
+        {!isLoggedIn ? (
+          <div className="login-needed">
+            <h1>Log in to see your invitations.</h1>
+            <p>Invites from other players show up here.</p>
+            <Link to="/login">Log In</Link>
+          </div>
+        ) : (
+          <>
+            <h1>Invitations</h1>
+            <p>Matches other players invited you to.</p>
 
-        {error && <p className="invitations-error" role="alert">{error}</p>}
+            {error && <p className="invitations-error" role="alert">{error}</p>}
 
-        <section className="invitations-results">
-          {renderInvitations()}
-        </section>
+            <section className="invitations-results">
+              {renderInvitations()}
+            </section>
+          </>
+        )}
       </main>
 
       <Footer />

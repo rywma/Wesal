@@ -23,4 +23,6 @@ urlpatterns = [
     path('matches/', include('matches.urls')),
     path('invitations/', include('matches.invitation_urls')),
     path('payments/', include('payments.urls')),
+    path('leaderboard/', include('matches.leaderboard_urls')),
+    path('challenges/', include('challenges.urls')),
 ]

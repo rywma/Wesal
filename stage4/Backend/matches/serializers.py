@@ -14,14 +14,29 @@ class MatchSerializer(serializers.ModelSerializer):
     players_count = serializers.IntegerField(read_only=True)
     spots_left = serializers.IntegerField(read_only=True)
     share_per_player = serializers.DecimalField(max_digits=8, decimal_places=2, read_only=True)
+    # the host can pick an opponent by user id, and gets their id + name back
+    opponent_id = serializers.PrimaryKeyRelatedField(source='opponent', queryset=get_user_model().objects.all(),
+                                                     write_only=True, required=False, allow_null=True)
+    opponent = serializers.SerializerMethodField()
+    winner = serializers.SerializerMethodField()
 
     class Meta:
         model = Match
         fields = [
             'id', 'sport_id', 'sport', 'creator', 'date', 'time', 'location',
             'max_players', 'total_cost', 'status', 'players_count', 'spots_left', 'share_per_player',
+            'opponent_id', 'opponent', 'winner','host_payment_expires_at', 'payment_expires_at',
         ]
         read_only_fields = ['status']
+
+    def person(self, user):
+        return {'id': user.id, 'name': user.first_name} if user else None
+
+    def get_opponent(self, match):
+        return self.person(match.opponent)
+
+    def get_winner(self, match):
+        return self.person(match.winner)
 
     def validate_date(self, value):
         if value < date.today():
@@ -110,4 +125,3 @@ class MatchUpdateSerializer(serializers.ModelSerializer):
         if value < 0:
             raise serializers.ValidationError('Total cost cannot be negative.')
         return value
-

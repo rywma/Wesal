@@ -127,3 +127,136 @@ class InvitationTests(APITestCase):
         response = self.client.post(f'/invitations/{invitation_id}/decline/')
         self.assertEqual(response.data['status'], 'declined')
         self.assertEqual(self.match.players_count(), 1)
+
+
+class DoubleBookingTests(APITestCase):
+    def setUp(self):
+        self.host = User.objects.create_user(username='host@test.com', email='host@test.com',
+                                             password='pass12345', first_name='Host')
+        self.other = User.objects.create_user(username='o@test.com', email='o@test.com',
+                                              password='pass12345', first_name='Other')
+        self.football = Sport.objects.create(name='Football')
+        self.day = (date.today() + timedelta(days=1)).isoformat()
+        self.client.force_authenticate(self.host)
+        self.first = self.book(time='16:00')
+
+    def book(self, time='16:00', location='Tennis Court, Al Malqa'):
+        return self.client.post('/matches/', {'sport_id': self.football.id, 'date': self.day, 'time': time,
+                                              'location': location, 'max_players': 4, 'total_cost': 200},
+                                format='json')
+
+    def test_first_booking_works(self):
+        self.assertEqual(self.first.status_code, 201)
+
+    def test_same_venue_date_and_time_is_blocked(self):
+        self.client.force_authenticate(self.other)
+        response = self.book(time='16:00')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('already booked', response.data['error'])
+        self.assertEqual(Match.objects.count(), 1)
+
+    def test_different_time_or_venue_is_fine(self):
+        self.assertEqual(self.book(time='18:00').status_code, 201)
+        self.assertEqual(self.book(location='Padel Club').status_code, 201)
+
+    def test_cancelled_slot_can_be_booked_again(self):
+        Match.objects.filter(pk=self.first.data['id']).update(status=Match.Status.CANCELLED)
+        self.client.force_authenticate(self.other)
+        self.assertEqual(self.book(time='16:00').status_code, 201)
+
+    def test_edit_into_a_taken_slot_is_blocked(self):
+        second = self.book(time='18:00')
+        response = self.client.patch(f"/matches/matches/{second.data['id']}/edit/", {'time': '16:00'}, format='json')
+        self.assertEqual(response.status_code, 400)
+
+    def test_edit_own_match_keeps_its_slot(self):
+        response = self.client.patch(f"/matches/matches/{self.first.data['id']}/edit/", {'total_cost': 300},
+                                     format='json')
+        self.assertEqual(response.status_code, 200)
+
+
+class OpponentAndResultTests(APITestCase):
+    def setUp(self):
+        self.host = User.objects.create_user(username='host@test.com', email='host@test.com',
+                                             password='pass12345', first_name='Host')
+        self.rival = User.objects.create_user(username='r@test.com', email='r@test.com',
+                                              password='pass12345', first_name='Rival')
+        self.other = User.objects.create_user(username='o@test.com', email='o@test.com',
+                                              password='pass12345', first_name='Other')
+        self.tennis = Sport.objects.create(name='Tennis')
+        self.client.force_authenticate(self.host)
+
+    def create(self, opponent_id=None, days=1, time='16:00'):
+        body = {'sport_id': self.tennis.id, 'date': (date.today() + timedelta(days=days)).isoformat(),
+                'time': time, 'location': 'Tennis Court', 'max_players': 2, 'total_cost': 100}
+        if opponent_id:
+            body['opponent_id'] = opponent_id
+        return self.client.post('/matches/', body, format='json')
+
+    def played_match(self, host, opponent, time='16:00'):
+        # a match from yesterday, ready for a result
+        match = Match.objects.create(creator=host, opponent=opponent, sport=self.tennis,
+                                     date=date.today() - timedelta(days=1), time=time,
+                                     location='Tennis Court', max_players=2, total_cost=100)
+        return match
+
+    def test_create_with_opponent(self):
+        response = self.create(opponent_id=self.rival.id)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['opponent'], {'id': self.rival.id, 'name': 'Rival'})
+        # the opponent is a player in the match and shows in their my matches
+        self.assertEqual(response.data['players_count'], 2)
+        self.client.force_authenticate(self.rival)
+        mine = self.client.get('/matches/matches/my/').data
+        self.assertEqual(mine[0]['opponent']['name'], 'Rival')
+
+    def test_cannot_be_own_opponent(self):
+        self.assertEqual(self.create(opponent_id=self.host.id).status_code, 400)
+        self.assertFalse(Match.objects.exists())
+
+    def test_host_submits_result(self):
+        match = self.played_match(self.host, self.rival)
+        response = self.client.post(f'/matches/{match.id}/result/', {'winner_id': self.rival.id}, format='json')
+        self.assertEqual(response.status_code, 200)
+        match.refresh_from_db()
+        self.assertEqual(match.winner, self.rival)
+        self.assertEqual(match.status, Match.Status.COMPLETED)
+
+    def test_only_host_submits_result(self):
+        match = self.played_match(self.host, self.rival)
+        self.client.force_authenticate(self.rival)
+        response = self.client.post(f'/matches/{match.id}/result/', {'winner_id': self.rival.id}, format='json')
+        self.assertEqual(response.status_code, 403)
+
+    def test_bad_results(self):
+        match = self.played_match(self.host, self.rival)
+        url = f'/matches/{match.id}/result/'
+        # the winner must be one of the two sides
+        self.assertEqual(self.client.post(url, {'winner_id': self.other.id}, format='json').status_code, 400)
+        self.assertEqual(self.client.post(url, {'winner_id': self.host.id}, format='json').status_code, 200)
+        # can't submit twice
+        self.assertEqual(self.client.post(url, {'winner_id': self.rival.id}, format='json').status_code, 400)
+
+    def test_future_match_has_no_result_yet(self):
+        match_id = self.create(opponent_id=self.rival.id).data['id']
+        response = self.client.post(f'/matches/{match_id}/result/', {'winner_id': self.host.id}, format='json')
+        self.assertEqual(response.status_code, 400)
+
+    def test_opponents_leaderboard(self):
+        stranger = User.objects.create_user(username='x@test.com', email='x@test.com', password='pass12345')
+        for i, (host, opponent, winner) in enumerate([(self.host, self.rival, self.rival),
+                                                      (self.host, self.rival, self.rival),
+                                                      (self.other, self.host, self.host),
+                                                      (self.other, stranger, stranger)]):
+            match = self.played_match(host, opponent, time=f'1{i}:00')
+            match.winner, match.status = winner, Match.Status.COMPLETED
+            match.save()
+
+        rows = self.client.get('/leaderboard/opponents/').data
+        names = [row['name'] for row in rows]
+        # I played Rival and Other, never the stranger
+        self.assertEqual(names, ['Rival', 'Host', 'Other'])
+        self.assertEqual(rows[0]['wins'], 2)
+        self.assertEqual(rows[0]['points'], 6)
+        self.assertTrue(rows[1]['is_me'])
+        self.assertEqual(self.client.get('/leaderboard/opponents/?sort=wins').data[0]['name'], 'Rival')

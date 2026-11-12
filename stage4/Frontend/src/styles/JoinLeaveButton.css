@@ -15,30 +15,30 @@
 }
 
 .join-leave .capacity-text span:last-child {
-  color: #b8b5c8;
+  color: var(--color-ink-2);
 }
 
 .join-leave .capacity-bar {
   height: 10px;
   margin-top: 8px;
   border-radius: 5px;
-  background: #393453;
+  background: var(--color-rule);
   overflow: hidden;
 }
 
 .join-leave .capacity-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(135deg, #c7ff39, #76ff9c);
+  background: var(--color-ink);
   transition: width 0.3s ease;
 }
 
 .join-leave .capacity-fill.almost {
-  background: linear-gradient(135deg, #ff9767, #ffad71);
+  background: transparent;
 }
 
 .join-leave .capacity-fill.full {
-  background: #6b6688;
+  background: var(--color-muted);
 }
 
 /* Buttons */
@@ -61,20 +61,20 @@
 
 .join-leave .join-btn {
   border: none;
-  background: linear-gradient(135deg, #c7ff39, #76ff9c);
-  color: #121027;
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
 }
 
 .join-leave .leave-btn {
-  border: 1px solid #ff9a9a;
+  border: 1px solid var(--color-error);
   background: transparent;
-  color: #ffb0b2;
+  color: var(--color-error);
 }
 
 .join-leave .cancel-btn {
-  border: 1px solid #514b6c;
+  border: 1px solid var(--color-rule);
   background: transparent;
-  color: white;
+  color: var(--color-ink);
 }
 
 .join-leave .join-btn:hover:not(:disabled),
@@ -84,43 +84,42 @@
 }
 
 .join-leave .join-btn:disabled {
-  background: #393453;
-  color: #9a96b3;
+  background: var(--color-rule);
+  color: var(--color-muted);
   cursor: not-allowed;
 }
 
 /* Notes */
 .join-leave .join-note {
   margin: 0;
-  padding: 14px 16px;
-  border-radius: 16px;
+  padding: var(--space-xs) 0;
   font-weight: 700;
 }
 
 .join-leave .join-note.joined,
 .join-leave .join-note.host {
-  background: rgba(199, 255, 57, 0.12);
-  color: #c7ff39;
+  background: transparent;
+  color: var(--color-ink);
 }
 
 .join-leave .join-hint,
 .join-leave .join-message {
   margin: 0;
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   font-size: 14px;
   line-height: 1.5;
 }
 
 .join-leave .join-message {
-  color: #ffb0b2;
+  color: var(--color-error);
 }
 
 /* Confirm Box */
 .join-leave .join-confirm {
   padding: 20px;
   border-radius: 18px;
-  background: #17142d;
-  border: 1px solid #c7ff39;
+  background: transparent;
+  border: 1px solid var(--color-ink);
 }
 
 .join-leave .join-confirm h3 {
@@ -130,7 +129,7 @@
 
 .join-leave .join-confirm p {
   margin: 8px 0 0;
-  color: #b8b5c8;
+  color: var(--color-ink-2);
   font-size: 14px;
   line-height: 1.5;
 }
