@@ -19,6 +19,7 @@ function PayShare({
 
   const [showForm, setShowForm] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [retryVerification, setRetryVerification] = useState(0);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [playerDeadline, setPlayerDeadline] = useState(null);
@@ -99,7 +100,7 @@ function PayShare({
     }
 
     verifyPayment();
-  }, [paymentId, paymentStatus, match.id, tokens?.access, setSearchParams]);
+  }, [paymentId, paymentStatus, match.id, tokens?.access, setSearchParams, retryVerification]);
 
   // Open Moyasar's payment form.
   useEffect(() => {
@@ -145,7 +146,21 @@ function PayShare({
     if (verifying) return <p>Verifying your payment...</p>;
 
     if (paymentId && paymentStatus === 'paid') {
-      return <p>Do not pay again. Refresh this page to retry verification.</p>;
+      return (
+        <div>
+          <p>Payment verification was not completed.</p>
+          <button
+            type="button"
+            className="pay-btn"
+            onClick={() => {
+              checkedPayment.current = null;
+              setRetryVerification((count) => count + 1);
+            }}
+          >
+            Retry Verification
+          </button>
+        </div>
+      );
     }
 
     if (hasPaid) {
@@ -157,7 +172,7 @@ function PayShare({
     }
 
     if ((hostPayment && paymentExpired) ||
-        (!hostPayment && deadlinePassed)) {
+      (!hostPayment && deadlinePassed)) {
       return <p role="alert">Payment time has ended.</p>;
     }
 
@@ -166,6 +181,15 @@ function PayShare({
         <p>
           Payment opens when all {match.max_players} spots are filled.
           Your share is {amount} SAR.
+        </p>
+      );
+    }
+
+    if (!hostPayment && !validDeadline) {
+      return (
+        <p role="alert">
+          Payment deadline is unavailable.
+          Please try again later.
         </p>
       );
     }
