@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -11,6 +11,7 @@ import '../styles/Footer.css';
 
 function CreateMatch() {
   const today = toDateString(new Date());
+  const navigate = useNavigate();
 
   const [sport, setSport] = useState('Football');
   const [formatIndex, setFormatIndex] = useState(0);
@@ -20,7 +21,6 @@ function CreateMatch() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const { isLoggedIn, tokens, logout } = useAuth();
-  const [createdMatch, setCreatedMatch] = useState(null);
 
   // Everything below is worked out from the choices above.
   const formats = FORMATS[sport];
@@ -62,7 +62,14 @@ function CreateMatch() {
       const data = await createMatch(matchData, tokens.access);
 
       if (data.success) {
-        setCreatedMatch(data);
+        if (!data.id) {
+          setMessage('Could not open the payment page.');
+          return;
+        }
+
+        navigate(`/matches/${data.id}/host-payment`, {
+          replace: true,
+        });
       } else if (data.sessionExpired) {
         // The login token is too old. Log out so the page asks them to log in again.
         logout();
@@ -89,57 +96,6 @@ function CreateMatch() {
             <Link to="/login" className="create-submit">
               Log In
             </Link>
-          </div>
-        </main>
-
-        <Footer />
-      </div>
-    );
-  }
-
-  if (createdMatch) {
-    return (
-      <div className="create-match">
-        <Navbar />
-
-        <main>
-          <div className="create-success">
-            <span className="preview-label">Match created</span>
-            <h1>
-              You're <span>hosting!</span>
-            </h1>
-            <p className="create-subtitle">
-              Your match is live. Players can join until all {createdMatch.max_players} spots are filled.
-            </p>
-
-            <div className={`preview-card sport-${createdMatch.sport.toLowerCase()}`}>
-              <span className="preview-badge">
-                Open · {spotsText(createdMatch.spots_left)}
-              </span>
-              <h2>{formatTime(createdMatch.time)}</h2>
-              <p>
-                {createdMatch.sport} · {formatDate(createdMatch.date)}
-              </p>
-              <h3>{createdMatch.location}</h3>
-            </div>
-
-            <div className="success-share">
-              <span>Each player pays</span>
-              <strong>{createdMatch.share_per_player} SAR</strong>
-            </div>
-
-            <div className="success-actions">
-              <button
-                type="button"
-                className="create-submit"
-                onClick={() => setCreatedMatch(null)}
-              >
-                Host another game
-              </button>
-              <Link to="/" className="success-link">
-                Back to home
-              </Link>
-            </div>
           </div>
         </main>
 
@@ -291,7 +247,8 @@ function CreateMatch() {
 
               <ul>
                 <li>You're added as the first player.</li>
-                <li>Payment opens when every spot is filled.</li>
+                <li>As the host, you'll pay first to confirm the match.</li>
+                <li>Other players pay once all spots are filled.</li>
                 <li>Not full 24 hours before kickoff? It's cancelled automatically.</li>
               </ul>
             </div>
