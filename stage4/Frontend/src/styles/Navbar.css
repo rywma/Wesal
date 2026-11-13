@@ -60,50 +60,28 @@
   gap: var(--space-lg);
 }
 
-.navbar-username {
-  color: var(--color-ink-2);
-  white-space: nowrap;
-}
-
-.navbar .get-started,
-.navbar .logout-btn {
+.navbar .get-started {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   padding: 0 var(--space-lg);
   border-radius: var(--radius-pill);
   border: 0;
-  font-size: var(--text-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
-}
-
-.navbar .get-started {
   background: var(--color-brand);
   color: var(--color-accent-ink);
   font-family: var(--font-display);
+  font-size: var(--text-md);
   font-weight: 800;
   text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
 }
 
 .navbar .get-started:hover {
   background: var(--color-brand-deep);
 }
 
-.navbar .logout-btn {
-  background: none;
-  box-shadow: inset 0 0 0 var(--rule-hair) var(--color-ink);
-  color: var(--color-ink);
-}
-
-.navbar .logout-btn:hover {
-  background: var(--color-ink);
-  color: var(--color-paper);
-}
-
-.navbar .get-started:active,
-.navbar .logout-btn:active {
+.navbar .get-started:active {
   background: var(--color-ink);
   color: var(--color-paper);
 }
@@ -112,6 +90,75 @@
   margin: 0;
   color: var(--color-error);
   font-size: var(--text-sm);
+}
+
+/* Profile menu avatar + name, opens a small list */
+.profile-menu {
+  position: relative;
+}
+
+.profile-menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: 4px var(--space-md) 4px 4px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  box-shadow: inset 0 0 0 var(--rule-hair) var(--color-rule);
+  color: var(--color-ink);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.profile-menu-toggle:hover,
+.profile-menu-toggle[aria-expanded="true"] {
+  box-shadow: inset 0 0 0 var(--rule-hair) var(--color-ink);
+}
+
+.profile-menu-toggle img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.profile-menu-list {
+  position: absolute;
+  top: calc(100% + var(--space-xs));
+  right: 0;
+  z-index: var(--z-dropdown);
+  display: flex;
+  flex-direction: column;
+  min-width: 12rem;
+  padding: var(--space-xs);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: 12px;
+  background: var(--color-paper-2);
+}
+
+.navbar .profile-menu-list a,
+.profile-menu-list button {
+  padding: var(--space-xs) var(--space-sm);
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--color-ink);
+  font-size: var(--text-md);
+  text-align: left;
+  cursor: pointer;
+}
+
+.navbar .profile-menu-list a:hover,
+.profile-menu-list button:hover {
+  background: var(--color-hover);
+}
+
+.profile-menu-list button {
+  margin-top: var(--space-xs);
+  border-top: var(--rule-hair) solid var(--color-rule);
+  border-radius: 0 0 8px 8px;
 }
 
 .menu-toggle {
@@ -157,5 +204,11 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-md);
+  }
+
+  /* inside the mobile menu the list opens in place instead of floating */
+  .profile-menu-list {
+    position: static;
+    margin-top: var(--space-xs);
   }
 }

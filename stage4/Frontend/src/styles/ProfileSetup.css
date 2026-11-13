@@ -1,0 +1,304 @@
+/* Profile setup the form on the left, the live athlete card on the right */
+.profile-setup main {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--gutter) var(--section-gap-s);
+  direction: ltr;
+  text-align: left;
+}
+
+.profile-setup h1 {
+  font-size: var(--text-display-s);
+  text-transform: uppercase;
+}
+
+.profile-subtitle {
+  margin-top: var(--space-sm);
+  color: var(--color-ink-2);
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: start;
+  gap: var(--gap-columns);
+  margin-top: var(--space-xl);
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-top: var(--space-lg);
+  border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+/* Fields same look as the Host a Game form */
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.profile-field label,
+.profile-form legend {
+  padding: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.profile-field input,
+.profile-field select,
+.profile-field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 15px;
+  outline: none;
+  color-scheme: dark;
+}
+
+.profile-field textarea {
+  resize: vertical;
+}
+
+.profile-field input:focus,
+.profile-field select:focus,
+.profile-field textarea:focus {
+  border-color: var(--color-ink);
+}
+
+.username-input {
+  position: relative;
+}
+
+.username-input span {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-muted);
+}
+
+.profile-field .username-input input {
+  padding-left: 34px;
+}
+
+.field-hint,
+.field-error {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+
+.field-error {
+  color: var(--color-error);
+}
+
+.profile-form fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.profile-form legend {
+  margin-bottom: var(--space-sm);
+}
+
+/* Hidden radio/checkbox the picture or the chip is what gets clicked */
+.avatar-option input,
+.sport-chip input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* Avatar gallery */
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 88px));
+  gap: var(--space-sm);
+}
+
+.avatar-option img {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  outline: var(--rule-bar) solid transparent;
+  outline-offset: 3px;
+  cursor: pointer;
+  transition: outline-color var(--dur-micro) var(--ease-out);
+}
+
+.avatar-option img:hover {
+  outline-color: var(--color-rule);
+}
+
+.avatar-option input:checked + img {
+  outline-color: var(--color-brand);
+}
+
+.avatar-option input:focus-visible + img {
+  outline-color: var(--color-focus);
+}
+
+/* Favorite sports chips */
+.sport-chips-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sport-chip span {
+  display: inline-block;
+  padding: 11px 20px;
+  border-radius: var(--radius-pill);
+  border: var(--rule-hair) solid var(--color-rule);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sport-chip input:checked + span {
+  background: var(--color-ink);
+  border-color: transparent;
+  color: var(--color-accent-ink);
+}
+
+.sport-chip input:focus-visible + span {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* Lime save button, same as the other action buttons */
+.profile-submit {
+  padding: 15px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
+  font: 800 var(--text-md)/1.5 var(--font-display);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.profile-submit:hover {
+  background: var(--color-brand-deep);
+}
+
+.profile-submit:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.profile-message {
+  margin-top: var(--space-lg);
+  color: var(--color-ink-2);
+}
+
+.profile-form .profile-message {
+  margin-top: 0;
+}
+
+/* The athlete card stays in view while scrolling the form */
+.profile-preview {
+  position: sticky;
+  top: var(--space-lg);
+}
+
+.athlete-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xl) var(--space-lg);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-card);
+  background: var(--color-paper-2);
+  text-align: center;
+}
+
+.athlete-avatar {
+  width: 112px;
+  height: 112px;
+  margin-bottom: var(--space-sm);
+  border-radius: 50%;
+  background: var(--color-paper-3);
+}
+
+.athlete-card h2 {
+  max-width: none;
+  font-size: var(--text-2xl);
+  text-transform: uppercase;
+}
+
+.athlete-username {
+  color: var(--color-muted);
+}
+
+.athlete-skill {
+  font-weight: 600;
+}
+
+.athlete-sports {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs);
+  margin: var(--space-xs) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.athlete-sports li {
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  border: var(--rule-hair) solid currentColor;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.athlete-sports .sport-padel { color: var(--sport-padel); }
+.athlete-sports .sport-football { color: var(--sport-football); }
+.athlete-sports .sport-basketball { color: var(--sport-basketball); }
+.athlete-sports .sport-volleyball { color: var(--sport-volleyball); }
+.athlete-sports .sport-tennis { color: var(--sport-tennis); }
+
+.athlete-bio {
+  margin-top: var(--space-xs);
+  color: var(--color-ink-2);
+}
+
+.athlete-points {
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: var(--rule-hair) solid var(--color-rule);
+  align-self: stretch;
+  color: var(--color-ink-2);
+}
+
+.athlete-points strong {
+  color: var(--color-ink);
+  font: 800 var(--text-xl)/1 var(--font-display);
+}
+
+/* Tablet and mobile: the card goes above the form */
+@media (max-width: 60rem) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-preview {
+    position: static;
+    order: -1;
+  }
+}
+
+@media (max-width: 40rem) {
+  .avatar-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

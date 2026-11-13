@@ -13,6 +13,7 @@ import BrowseMatches from './pages/BrowseMatches.jsx'
 import MatchDetails from './pages/MatchDetails.jsx'
 import ManageMatch from './pages/ManageMatch.jsx';
 import Invitations from './pages/Invitations.jsx';
+import ProfileSetup from './pages/ProfileSetup.jsx';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/my-matches" element={<MyMatches />} />
         <Route path="/matches/:id/manage" element={<ManageMatch />} />
         <Route path="/invitations" element={<Invitations />} />
+        <Route path="/profile" element={<ProfileSetup />} />
       </Routes>
     </BrowserRouter>
   )
