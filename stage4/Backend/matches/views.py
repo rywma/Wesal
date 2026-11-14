@@ -54,7 +54,13 @@ def create_match(request):
         if opponent == request.user:
             return Response({'error': 'You cannot be your own opponent.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        match = serializer.save(creator=request.user)
+       host_expiration = timezone.now() + timedelta(minutes=5)
+        
+        match = serializer.save(
+            creator=request.user,
+            host_payment_expires_at=host_expiration,
+            status='pending_payment'
+        )
         # the creator is the first player in the match
         Participation.objects.create(user=request.user, match=match, payment_amount=match.share_per_player())
         add_points(request.user, 'match_scheduling')
