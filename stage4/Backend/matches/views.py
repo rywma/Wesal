@@ -422,7 +422,7 @@ def my_matches(request):
 def confirm_payment(request, match_id):
     match = get_object_or_404(Match, pk=match_id)
     
-if match.creator != request.user:
+    if match.creator != request.user:
         return Response(
             {'error': 'You are not authorized to confirm payment for this match as you are not its creator.'}, 
             status=status.HTTP_403_FORBIDDEN
