@@ -437,7 +437,7 @@ if match.creator != request.user:
     
     return Response({'message': 'Payment confirmed successfully, match is now open!'}, status=status.HTTP_200_OK)
 # 12: Cancel expired unpaid participations
-def cancel_expired_unpaid_participations_internal():
+def cancel_expired_bookings():
     from datetime import timedelta
     expiration_limit = timezone.now() - timedelta(minutes=5)
     
