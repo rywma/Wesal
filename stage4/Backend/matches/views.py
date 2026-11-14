@@ -417,7 +417,11 @@ def my_matches(request):
 def confirm_payment(request, match_id):
     match = get_object_or_404(Match, pk=match_id)
     
-
+if match.creator != request.user:
+        return Response(
+            {'error': 'You are not authorized to confirm payment for this match as you are not its creator.'}, 
+            status=status.HTTP_403_FORBIDDEN
+        )
     if match.host_payment_expires_at and timezone.now() > match.host_payment_expires_at:
         return Response({'error': 'Payment window has expired.'}, status=status.HTTP_400_BAD_REQUEST)
     
