@@ -19,6 +19,8 @@ class MatchSerializer(serializers.ModelSerializer):
                                                      write_only=True, required=False, allow_null=True)
     opponent = serializers.SerializerMethodField()
     winner = serializers.SerializerMethodField()
+    host_payment_expires_at = serializers.DateTimeField(read_only=True)
+    payment_expires_at = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = Match
