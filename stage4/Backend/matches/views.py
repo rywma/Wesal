@@ -53,7 +53,7 @@ def create_match(request):
         opponent = data.get('opponent')
         if opponent == request.user:
             return Response({'error': 'You cannot be your own opponent.'}, status=status.HTTP_400_BAD_REQUEST)
-host_expiration = timezone.now() + timedelta(minutes=5)
+        host_expiration = timezone.now() + timedelta(minutes=5)
         
         match = serializer.save(
             creator=request.user,
