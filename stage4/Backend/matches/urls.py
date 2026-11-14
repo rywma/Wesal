@@ -14,4 +14,5 @@ urlpatterns = [
     path('matches/<int:match_id>/edit/', views.edit_match, name='edit_match'),
     path('matches/<int:match_id>/cancel/', views.cancel_match, name='cancel_match'),
     path('matches/<int:match_id>/confirm-payment/', views.confirm_payment, name='confirm_payment'),
+    path('leaderboard/', views.opponents_leaderboard, name='opponents_leaderboard'),
 ]
