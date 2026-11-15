@@ -1,12 +1,22 @@
 import '../styles/Navbar.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
+import { DEFAULT_AVATAR, getMyProfile } from '../services/profileApi.js';
 
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const { user, isLoggedIn, logout } = useAuth();
+    const [profileOpen, setProfileOpen] = useState(false);
+    const { user, tokens, profile, setProfile, isLoggedIn, logout } = useAuth();
     const [logoutError, setLogoutError] = useState('');
+
+    useEffect(() => {
+        if (isLoggedIn && !profile) {
+            getMyProfile(tokens.access)
+                .then((data) => setProfile(data))
+                .catch((error) => console.error('Profile error:', error));
+        }
+    }, [isLoggedIn, profile]);
 
     const handleLogout = async () => {
         setLogoutError('');
@@ -63,23 +73,38 @@ function Navbar() {
 
                 <div className="navbar-auth">
                     {isLoggedIn ? (
-                        <>
-                            <span className="navbar-username">
-                                Hi, {user.name || user.email}
-                            </span>
-
+                        <div className="profile-menu">
                             <button
                                 type="button"
-                                className="logout-btn"
-                                onClick={handleLogout}
+                                className="profile-menu-toggle"
+                                onClick={() => setProfileOpen(!profileOpen)}
+                                aria-expanded={profileOpen}
                             >
-                                Log Out
+                                <img
+                                    src={profile?.avatar_url || DEFAULT_AVATAR}
+                                    alt=""
+                                />
+                                {profile?.full_name || user.name || user.email}
                             </button>
+
+                            {profileOpen && (
+                                <div className="profile-menu-list">
+                                    <Link to="/profile" onClick={() => setProfileOpen(false)}>
+                                        Profile setup
+                                    </Link>
+                                    <Link to="/my-matches" onClick={() => setProfileOpen(false)}>
+                                        My Matches
+                                    </Link>
+                                    <button type="button" onClick={handleLogout}>
+                                        Log Out
+                                    </button>
+                                </div>
+                            )}
 
                             {logoutError && (
                                 <p role="alert">{logoutError}</p>
                             )}
-                        </>
+                        </div>
                     ) : (
                         <>
                             <Link to="/login">Log In</Link>

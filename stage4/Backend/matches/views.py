@@ -53,8 +53,13 @@ def create_match(request):
         opponent = data.get('opponent')
         if opponent == request.user:
             return Response({'error': 'You cannot be your own opponent.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        match = serializer.save(creator=request.user)
+        host_expiration = timezone.now() + timedelta(minutes=5)
+        
+        match = serializer.save(
+            creator=request.user,
+            host_payment_expires_at=host_expiration,
+            status='pending_payment'
+        )
         # the creator is the first player in the match
         Participation.objects.create(user=request.user, match=match, payment_amount=match.share_per_player())
         add_points(request.user, 'match_scheduling')
@@ -417,7 +422,11 @@ def my_matches(request):
 def confirm_payment(request, match_id):
     match = get_object_or_404(Match, pk=match_id)
     
-
+    if match.creator != request.user:
+        return Response(
+            {'error': 'You are not authorized to confirm payment for this match as you are not its creator.'}, 
+            status=status.HTTP_403_FORBIDDEN
+        )
     if match.host_payment_expires_at and timezone.now() > match.host_payment_expires_at:
         return Response({'error': 'Payment window has expired.'}, status=status.HTTP_400_BAD_REQUEST)
     
@@ -427,7 +436,7 @@ def confirm_payment(request, match_id):
     
     return Response({'message': 'Payment confirmed successfully, match is now open!'}, status=status.HTTP_200_OK)
 # 12: Cancel expired unpaid participations
-def cancel_expired_unpaid_participations_internal():
+def cancel_expired_bookings():
     from datetime import timedelta
     expiration_limit = timezone.now() - timedelta(minutes=5)
     

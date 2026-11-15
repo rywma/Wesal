@@ -14,6 +14,7 @@ import MatchDetails from './pages/MatchDetails.jsx'
 import ManageMatch from './pages/ManageMatch.jsx';
 import Invitations from './pages/Invitations.jsx';
 import HostPayment from './pages/HostPayment.jsx';
+import ProfileSetup from './pages/ProfileSetup.jsx';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           path="/matches/:id/host-payment"
           element={<HostPayment />}
         />
+        <Route path="/profile" element={<ProfileSetup />} />
       </Routes>
     </BrowserRouter>
   )

@@ -18,6 +18,7 @@ export function AuthProvider({ children }) {
   const savedAuth = getSavedAuth();
   const [user, setUser] = useState(savedAuth.user || null);
   const [tokens, setTokens] = useState(savedAuth.tokens || null);
+  const [profile, setProfile] = useState(null);
 
   const login = (userData, userTokens) => {
     setUser(userData);
@@ -28,6 +29,7 @@ export function AuthProvider({ children }) {
   const clearAuth = () => {
     setUser(null);
     setTokens(null);
+    setProfile(null);
     localStorage.removeItem('wesal-auth');
   };
 
@@ -53,6 +55,8 @@ export function AuthProvider({ children }) {
       value={{
         user,
         tokens,
+        profile,
+        setProfile,
         isLoggedIn: Boolean(user && tokens?.access),
         login,
         logout,
