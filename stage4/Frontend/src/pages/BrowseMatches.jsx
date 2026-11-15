@@ -28,7 +28,8 @@ function BrowseMatches() {
 
                 if (data.success) {
                     const availableMatches = (data.results || []).filter(
-                        (match) => match.status !== 'cancelled'
+                        (match) => match.status !== 'cancelled' &&
+                            match.status !== 'pending_payment'
                     );
 
                     setMatches(availableMatches);

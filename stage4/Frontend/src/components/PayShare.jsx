@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
-import { getMyPayment, payMyShare } from '../services/paymentApi.js';
+import { payMyShare } from '../services/paymentApi.js';
 import PaymentTimer from './PaymentTimer.jsx';
 import '../styles/PayShare.css';
 
@@ -22,7 +22,7 @@ function PayShare({
   const [retryVerification, setRetryVerification] = useState(0);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  const [playerDeadline, setPlayerDeadline] = useState(null);
+  const playerDeadline = match.payment_expires_at;
   const [playerExpired, setPlayerExpired] = useState(false);
 
   const checkedPayment = useRef(null);
@@ -32,29 +32,6 @@ function PayShare({
   const isFull = match.status === 'full' || match.spots_left <= 0;
   const paymentId = searchParams.get('id');
   const paymentStatus = searchParams.get('status');
-
-  // Get the player's payment deadline from the backend.
-  useEffect(() => {
-    if (hostPayment || !isFull || hasPaid || !tokens?.access) {
-      return;
-    }
-
-    let active = true;
-
-    getMyPayment(match.id, tokens.access)
-      .then((data) => {
-        if (active && data.payment_expires_at) {
-          setPlayerDeadline(data.payment_expires_at);
-        }
-      })
-      .catch((err) => {
-        if (active) setError(err.message);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [hostPayment, isFull, hasPaid, match.id, tokens?.access]);
 
   // Verify the payment after returning from Moyasar.
   useEffect(() => {
