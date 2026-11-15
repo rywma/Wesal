@@ -1,0 +1,32 @@
+.payment-timer {
+    padding: 24px;
+    background: #24203f;
+    border: 1px solid #514b6c;
+    border-radius: 16px;
+    text-align: center;
+    color: white;
+}
+
+.payment-timer p {
+    margin: 0;
+    color: #b8b5c8;
+    font-size: 14px;
+}
+
+.payment-timer strong {
+    display: block;
+    margin: 16px 0;
+    font-size: 42px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #c7ff39;
+}
+
+.payment-timer .timer-warning {
+    line-height: 1.6;
+}
+
+.payment-timer.expired strong,
+.payment-timer.expired .timer-warning {
+    color: #ff8b8b;
+}
