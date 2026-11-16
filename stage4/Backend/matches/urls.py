@@ -13,8 +13,7 @@ urlpatterns = [
     path('matches/my/', views.my_matches, name='my_matches'),
     path('matches/<int:match_id>/edit/', views.edit_match, name='edit_match'),
     path('matches/<int:match_id>/cancel/', views.cancel_match, name='cancel_match'),
-    path('matches/<int:match_id>/confirm-payment/', views.confirm_payment, name='confirm_payment'),
-    path('leaderboard/', views.opponents_leaderboard, name='opponents_leaderboard'),
+    path('<int:match_id>/confirm-payment/', views.confirm_payment, name='confirm_payment'),    path('leaderboard/', views.opponents_leaderboard, name='opponents_leaderboard'),
     path('cancel_expired_bookings/', views.cancel_expired_bookings, name='cancel_expired_bookings'),
     
 ]
