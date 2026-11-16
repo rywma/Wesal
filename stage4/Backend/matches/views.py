@@ -115,7 +115,7 @@ def add_player(match, user):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def join_match(request, match_id):
-    cancel_expired_unpaid_participations_internal()
+    cancel_expired_bookings()
     with transaction.atomic():
         # select_for_update locks this match row until the transaction ends,
         # so two players can't take the last spot at the same time
@@ -312,7 +312,7 @@ def my_invitations(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def accept_invitation(request, invitation_id):
-    cancel_expired_unpaid_participations_internal()
+    cancel_expired_bookings()
     with transaction.atomic():
         # only the receiver can find their invitation, anyone else gets 404
         invitation = get_object_or_404(Invitation.objects.select_for_update(), pk=invitation_id, receiver=request.user)
