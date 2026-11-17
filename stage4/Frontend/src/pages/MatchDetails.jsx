@@ -4,24 +4,25 @@ import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import JoinLeaveButton from '../components/JoinLeaveButton.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
-import { getMatch } from '../services/matchesApi.js';
+import { getMatch, cancelMatch } from '../services/matchesApi.js';
 import { formatDate, formatTime, paymentBadge, spotsText } from '../utils/matchHelpers.js';
 import '../styles/MatchDetails.css';
 import '../styles/Footer.css';
-import '../styles/ManageMatch.css';
 import MatchPaymentSection from '../components/MatchPaymentSection.jsx';
 import PayShare from '../components/PayShare.jsx';
 import InviteForm from '../components/InviteForm.jsx';
 
 function MatchDetails() {
   const { id } = useParams();
-  const { user, isLoggedIn } = useAuth();
+  const { user, isLoggedIn, tokens } = useAuth();
   const location = useLocation();
 
   const [match, setMatch] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
-
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+  const [cancelMessage, setCancelMessage] = useState('');
 
   const loadMatch = async () => {
     try {
@@ -42,6 +43,27 @@ function MatchDetails() {
       setLoading(false);
     }
   };
+
+  async function handleCancel() {
+    setCancelling(true);
+    setCancelMessage('');
+
+    try {
+      const data = await cancelMatch(id, tokens.access);
+
+      if (data.success) {
+        setMatch((prev) => ({ ...prev, status: 'cancelled' }));
+        setShowCancelConfirm(false);
+        setCancelMessage('Match cancelled successfully!');
+      } else {
+        setCancelMessage(data.message || 'Failed to cancel match.');
+      }
+    } catch (error) {
+      setCancelMessage('Unable to connect to the server.');
+    } finally {
+      setCancelling(false);
+    }
+  }
 
   useEffect(() => {
     loadMatch();
@@ -72,6 +94,15 @@ function MatchDetails() {
   const me = isLoggedIn ? match.participants.find((player) => player.user_id === user.id) : null;
   const isFull = match.status === 'full' || match.spots_left <= 0;
   const isCancelled = match.status === 'cancelled';
+  const matchStart = new Date(`${match.date}T${match.time}`);
+
+  const canCancel =
+    isCreator &&
+    !isCancelled &&
+    !isFull &&
+    match.status !== 'completed' &&
+    matchStart > new Date();
+
   const mapQuery = encodeURIComponent(`${match.location}, Riyadh`);
 
   return (
@@ -172,14 +203,42 @@ function MatchDetails() {
             </div>
 
             <div className="details-box">
-              {isCreator && (
-                <Link
-                  to={`/matches/${match.id}/manage`}
-                  className="manage-match-link"
-                >
-                  Manage Match
-                </Link>
+              {canCancel && (
+                <div className="manage-cancel-section">
+                  <button
+                    type="button"
+                    className="manage-cancel-btn"
+                    onClick={() => setShowCancelConfirm(true)}
+                  >
+                    Cancel Match
+                  </button>
+
+                  {showCancelConfirm && (
+                    <div className="manage-confirm">
+                      <h3>Cancel this match?</h3>
+                      <p>Are you sure? This cannot be undone.</p>
+
+                      <button
+                        type="button"
+                        onClick={() => setShowCancelConfirm(false)}
+                        disabled={cancelling}
+                      >
+                        Keep Match
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleCancel}
+                        disabled={cancelling}
+                      >
+                        {cancelling ? 'Cancelling...' : 'Confirm Cancellation'}
+                      </button>
+                    </div>
+                  )}
+                </div>
               )}
+
+              {cancelMessage && <p role="status">{cancelMessage}</p>}
 
               {!isCancelled && (
                 <JoinLeaveButton

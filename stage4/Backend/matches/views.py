@@ -1,4 +1,5 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+from zoneinfo import ZoneInfo
 from decimal import Decimal
 from django.utils import timezone
 from django.db.models import Q
@@ -346,38 +347,8 @@ def decline_invitation(request, invitation_id):
     invitation.status = Invitation.Status.DECLINED
     invitation.save()
     return Response(InvitationSerializer(invitation).data, status=status.HTTP_200_OK)
-    # 9: the creator can edit a match 
-@api_view(['PUT', 'PATCH'])
-@permission_classes([IsAuthenticated])
-def edit_match(request, match_id):
-    match = get_object_or_404(Match, pk=match_id)
 
-    if match.creator != request.user:
-        return Response({'error': 'Only the match creator can edit this match.'},
-                        status=status.HTTP_403_FORBIDDEN)
 
-    if match.status == Match.Status.CANCELLED:
-        return Response({'error': 'A cancelled match cannot be edited.'},
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    # the opponent is chosen when the match is created, it can't be swapped later
-    if 'opponent_id' in request.data:
-        return Response({'error': 'The opponent cannot be changed after the match is created.'},
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    # PUT = full update, PATCH = partial update
-    serializer = MatchSerializer(match, data=request.data, partial=(request.method == 'PATCH'))
-    serializer.is_valid(raise_exception=True)
-
-    # Double Booking Prevention: the new venue, date or time must not be booked already
-    data = serializer.validated_data
-    with transaction.atomic():
-        Sport.objects.select_for_update().get(pk=match.sport_id)
-        if slot_is_taken(data.get('location', match.location), data.get('date', match.date),
-                         data.get('time', match.time), exclude_match_id=match.id):
-            return Response({'error': SLOT_TAKEN}, status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
-    return Response(serializer.data)
     # 10: the creator can cancel a match
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -388,13 +359,24 @@ def cancel_match(request, match_id):
         return Response({'error': 'Only the match creator can cancel this match.'},
                         status=status.HTTP_403_FORBIDDEN)
 
-    if match.status == Match.Status.CANCELLED:
-        return Response({'error': 'This match is already cancelled.'},
+    if match.status in (Match.Status.CANCELLED, Match.Status.COMPLETED):
+        return Response({'error': 'This match cannot be cancelled.'},
                         status=status.HTTP_400_BAD_REQUEST)
+    if match.status == Match.Status.FULL or match.spots_left() <= 0:
+        return Response(
+            {'error': 'A full match cannot be cancelled.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    match_start = datetime.combine(
+        match.date,
+        match.time,
+        tzinfo=ZoneInfo('Asia/Riyadh')
+    )
 
-    if match.date < date.today():
-        return Response({'error': 'A match that already took place cannot be cancelled.'},
-                        status=status.HTTP_400_BAD_REQUEST)
+    if match_start <= timezone.now():
+        return Response({'error': 'This match has already started.'},
+                        status=status.HTTP_400_BAD_REQUEST
+    )
 
     match.status = Match.Status.CANCELLED
     match.save(update_fields=['status'])
