@@ -11,6 +11,7 @@ class MatchSerializer(serializers.ModelSerializer):
     sport_id = serializers.PrimaryKeyRelatedField(source='sport', queryset=Sport.objects.all(), write_only=True)
     sport = serializers.StringRelatedField(read_only=True)
     creator = serializers.CharField(source='creator.first_name', read_only=True)
+    creator_id = serializers.IntegerField(read_only=True)
     players_count = serializers.IntegerField(read_only=True)
     spots_left = serializers.IntegerField(read_only=True)
     share_per_player = serializers.DecimalField(max_digits=8, decimal_places=2, read_only=True)
@@ -25,7 +26,7 @@ class MatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
         fields = [
-            'id', 'sport_id', 'sport', 'creator', 'date', 'time', 'location',
+            'id', 'sport_id', 'sport', 'creator', 'creator_id', 'date', 'time', 'location',
             'max_players', 'total_cost', 'status', 'players_count', 'spots_left', 'share_per_player',
             'opponent_id', 'opponent', 'winner','host_payment_expires_at', 'payment_expires_at',
         ]
