@@ -96,14 +96,7 @@ export function getMatch(matchId, token) {
 export function getMyMatches(token) {
   return matchRequest("matches/my/", "GET", token);
 }
-export function editMatch(matchId, matchData, token) {
-  return matchRequest(
-    `matches/${matchId}/edit/`,
-    'PATCH',
-    token,
-    matchData
-  );
-}
+
 export function cancelMatch(matchId, token) {
   return matchRequest(
     `matches/${matchId}/cancel/`,
