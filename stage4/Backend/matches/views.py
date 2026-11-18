@@ -209,10 +209,8 @@ ORDERING_FIELDS = ['date', '-date', 'time', '-time', 'total_cost', '-total_cost'
 
 # 2 Browse & Filter Matches: filtering, ordering and pages of 10
 def get_matches(request):
+        # only upcoming matches, so old games don't show up in the list
     matches = Match.objects.filter(date__gte=date.today()).exclude(status='pending_payment').select_related('sport', 'creator')
-    # only upcoming matches, so old games don't show up in the list
-    matches = Match.objects.filter(date__gte=date.today()).select_related('sport', 'creator')
-
     sport_id = request.GET.get('sport')
     if sport_id:
         if not sport_id.isdigit():
