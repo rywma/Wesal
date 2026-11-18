@@ -16,5 +16,5 @@ urlpatterns = [
     path('matches/<int:match_id>/confirm-payment/', views.confirm_payment, name='confirm_payment'),
     path('leaderboard/', views.opponents_leaderboard, name='opponents_leaderboard'),
     path('cancel_expired_bookings/', views.cancel_expired_bookings, name='cancel_expired_bookings'),
-    
+    path('api/venue-requests/', views.VenueRequestCreateAPIView.as_view(), name='venue-request-create'),
 ]

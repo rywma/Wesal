@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from decimal import Decimal
 from django.utils import timezone
 from django.db.models import Q
-
+from rest_framework import generics, permissions
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.shortcuts import get_object_or_404
@@ -12,7 +12,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-
+from .models import VenueRequest
+from .serializers import VenueRequestSerializer
 from .models import Invitation, Match, Participation, Sport
 from .serializers import InvitationSerializer, MatchDetailSerializer, MatchSerializer, PaymentStatusSerializer
 from users.views import add_points
@@ -528,3 +529,22 @@ def opponents_leaderboard(request):
     for rank, row in enumerate(rows, start=1):
         row['rank'] = rank
     return Response(rows)
+
+class VenueRequestCreateAPIView(generics.CreateAPIView):
+    queryset = VenueRequest.objects.all()
+    serializer_class = VenueRequestSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+
+        serializer.save(status='pending')
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return Response(
+            {
+                'message': 'Venue request submitted successfully and is pending admin approval.',
+                'data': response.data
+            },
+            status=status.HTTP_201_CREATED
+        )

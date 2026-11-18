@@ -111,3 +111,37 @@ class Invitation(models.Model):
 
     def __str__(self):
         return f'{self.sender} invited {self.receiver} to {self.match}'
+
+
+# model VenueRequest
+class VenueRequest(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'pending', 'Pending'
+        APPROVED = 'approved', 'Approved'
+        REJECTED = 'rejected', 'Rejected'
+
+    facility_name = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+    google_maps_link = models.URLField(max_length=500)
+    date = models.DateField(db_index=True)
+    time = models.TimeField()
+    total_cost = models.DecimalField(max_digits=8, decimal_places=2)
+    contact_number = models.CharField(max_length=50)
+    description = models.TextField(blank=True, null=True)
+    
+    
+    status = models.CharField(
+        max_length=20, 
+        choices=Status.choices, 
+        default=Status.PENDING, 
+        db_index=True
+    )
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'venue_requests'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.facility_name} - {self.status}"
