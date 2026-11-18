@@ -128,3 +128,11 @@ class MatchUpdateSerializer(serializers.ModelSerializer):
         if value < 0:
             raise serializers.ValidationError('Total cost cannot be negative.')
         return value
+from rest_framework import serializers
+from .models import VenueRequest
+
+class VenueRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VenueRequest
+        fields = '__all__'
+        read_only_fields = ['id', 'status', 'created_at']
