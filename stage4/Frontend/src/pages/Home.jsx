@@ -3,16 +3,45 @@ import { Link } from 'react-router-dom';
 import MatchCard from '../components/MatchCard.jsx';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 import { getMatches } from '../services/matchesApi.js';
-import { formatTime } from '../utils/matchHelpers.js';
+import { getChallenges } from '../services/challengesApi.js';
+import { challengeDaysLeft, challengeGoal, formatTime } from '../utils/matchHelpers.js';
 import '../styles/Home.css';
+import '../styles/Challenges.css';
 import '../styles/Footer.css';
 
 const SPORTS = ['Padel', 'Football', 'Basketball', 'Volleyball', 'Tennis'];
 
+// The one challenge to show on Home: one I'm working on first, then one I could join
+function pickChallenge(challenges) {
+    // is_active comes from the backend: today is between the start and end dates
+    const live = challenges.filter((c) => c.is_active);
+    return (
+        live.find((c) => c.joined && !c.completed) ||
+        live.find((c) => !c.joined) ||
+        null
+    );
+}
+
 function Home() {
+    const { isLoggedIn, tokens } = useAuth();
     const [games, setGames] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [challenge, setChallenge] = useState(null);
+
+    // challenges need an account, so this only runs when logged in
+    useEffect(() => {
+        if (!isLoggedIn || !tokens?.access) {
+            setChallenge(null);
+            return;
+        }
+        getChallenges(tokens.access)
+            .then((data) => {
+                if (data.success) setChallenge(pickChallenge(data.results || []));
+            })
+            .catch((error) => console.error('Home challenge error:', error));
+    }, [isLoggedIn, tokens?.access]);
 
     useEffect(() => {
         async function loadGames() {
@@ -64,6 +93,60 @@ function Home() {
         );
     }
 
+    function renderChallenge() {
+        const left = challengeDaysLeft(challenge);
+        const done = Math.min(challenge.progress ?? 0, challenge.target);
+        const sport = challenge.sport ? challenge.sport.toLowerCase() : 'any';
+
+        return (
+            <section className="challenge-section">
+                <h2>This month’s challenge</h2>
+                <p>Hit the goal before the month ends and earn a badge.</p>
+
+                <ul className="challenges-list">
+                    <li className={`challenge-row sport-${sport}`}>
+                        <p className="challenge-row-days">
+                            {left.number}
+                            <span>{left.label}</span>
+                        </p>
+
+                        <div>
+                            <p className="challenge-row-sport">{challenge.sport || 'Any sport'}</p>
+                            <Link to={`/challenges/${challenge.id}`} className="challenge-row-title">
+                                {challenge.title}
+                            </Link>
+                        </div>
+
+                        <div className="challenge-row-goal">
+                            <p>{challengeGoal(challenge)}</p>
+                            {challenge.joined && (
+                                <div className="progress">
+                                    <div className="progress-track">
+                                        <div
+                                            className="progress-fill"
+                                            style={{ width: `${(done * 100) / challenge.target}%` }}
+                                        />
+                                    </div>
+                                    <span>{done} of {challenge.target}</span>
+                                </div>
+                            )}
+                        </div>
+
+                        <p className="challenge-row-players">
+                            {challenge.players_count} {challenge.players_count === 1 ? 'player' : 'players'}
+                        </p>
+
+                        <span className={challenge.joined ? 'challenge-view' : 'challenge-join'}>
+                            {challenge.joined ? 'View' : 'See challenge'}
+                        </span>
+                    </li>
+                </ul>
+
+                <Link to="/challenges" className="challenge-section-all">All challenges</Link>
+            </section>
+        );
+    }
+
     return (
         <div className="home">
             <Navbar />
@@ -101,6 +184,8 @@ function Home() {
                         ))}
                     </ul>
                 </section>
+
+                {challenge && renderChallenge()}
 
                 <section className="why-section">
                     <h2>Split the cost, not the effort.</h2>

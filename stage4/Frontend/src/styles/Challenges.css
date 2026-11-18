@@ -1,0 +1,460 @@
+/* Challenges: built on the same pieces as Find Games (ruled rows, big condensed number,
+   sport dot, lime pills) and Match Details (back link, big title, facts on the side) */
+.challenges-page {
+  max-width: var(--container);
+  min-height: 70vh;
+  margin-inline: auto;
+  padding: var(--space-2xl) var(--gutter) var(--section-gap-s);
+  direction: ltr;
+  color: var(--color-ink);
+}
+
+.challenges-page h1 {
+  font-size: var(--text-display-s);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.challenges-page h2 {
+  font-size: var(--text-2xl);
+  text-transform: uppercase;
+}
+
+.challenges-lead {
+  margin-top: var(--space-sm);
+  font-size: var(--text-lead);
+  color: var(--color-ink-2);
+}
+
+.challenges-page section {
+  margin-top: var(--space-2xl);
+}
+
+.challenges-empty,
+.challenges-status {
+  margin-top: var(--space-md);
+  color: var(--color-ink-2);
+}
+
+.challenges-error {
+  margin-top: var(--space-md);
+  color: var(--color-error);
+}
+
+/* sport colours, same names as the match rows */
+.sport-any { --sport: var(--color-ink-2); }
+.sport-padel { --sport: var(--sport-padel); }
+.sport-football { --sport: var(--sport-football); }
+.sport-basketball { --sport: var(--sport-basketball); }
+.sport-volleyball { --sport: var(--sport-volleyball); }
+.sport-tennis { --sport: var(--sport-tennis); }
+
+/* ---------- List: one challenge per row ---------- */
+.challenges-list {
+  margin: var(--space-md) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.challenge-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1.4fr) minmax(0, 1.6fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-md) var(--space-lg);
+  padding: var(--space-md) var(--space-sm);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+
+.challenge-row:hover {
+  background: var(--color-hover);
+}
+
+.challenge-row p {
+  margin: 0;
+}
+
+/* the big number on the left, like the time on Find Games */
+.challenge-row .challenge-row-days {
+  font: 800 var(--text-3xl)/1 var(--font-display);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.challenge-row-days span {
+  display: block;
+  margin-top: var(--space-2xs);
+  font: 600 var(--text-xs)/1.2 var(--font-body);
+  letter-spacing: 0.04em;
+  color: var(--color-ink-2);
+}
+
+.challenge-row .challenge-row-sport {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+}
+
+/* the small sport dot */
+.challenge-row-sport::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sport);
+}
+
+.challenge-row-title {
+  display: block;
+  margin-top: var(--space-3xs);
+  color: var(--color-ink);
+  font-size: var(--text-md);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* the title link covers the whole row, so the row is one click target */
+.challenge-row-title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.challenge-row-title:focus-visible {
+  outline: none;
+}
+
+.challenge-row:has(.challenge-row-title:focus-visible) {
+  outline: 2px solid var(--color-focus);
+  outline-offset: -2px;
+}
+
+.challenge-row-goal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.challenge-row .challenge-row-players {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+}
+
+.challenge-row-done {
+  padding: 2px var(--space-xs);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink);
+  font-size: var(--text-xs);
+}
+
+/* Join (lime) and View (outline): the same pill as "View details" on Find Games */
+.challenge-join,
+.challenge-view,
+.challenge-leave {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-pill);
+  font: 800 var(--text-md)/1 var(--font-display);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+
+.challenge-join {
+  position: relative;
+  z-index: var(--z-base); /* sits above the row link so it can be clicked */
+  border: none;
+  background: var(--color-brand);
+  color: var(--color-accent-ink);
+  cursor: pointer;
+}
+
+.challenge-join:hover {
+  background: var(--color-brand-deep);
+}
+
+.challenge-view,
+.challenge-leave {
+  border: var(--rule-hair) solid var(--color-rule);
+  background: transparent;
+  color: var(--color-ink);
+}
+
+.challenge-row:hover .challenge-view,
+.challenge-leave:hover {
+  background: var(--color-hover);
+  border-color: var(--color-muted);
+}
+
+.challenge-leave {
+  cursor: pointer;
+}
+
+.challenge-join:disabled,
+.challenge-leave:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.challenge-join:focus-visible,
+.challenge-leave:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.challenges-ended .challenge-row {
+  color: var(--color-muted);
+}
+
+.challenges-ended .challenge-row-title {
+  color: var(--color-ink-2);
+}
+
+/* ---------- Progress bar: thin, in the sport colour ---------- */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  max-width: 22rem;
+}
+
+.progress-track {
+  flex: 1;
+  height: 4px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--color-rule);
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--sport, var(--color-ink));
+  transition: width var(--dur-long) var(--ease-out);
+}
+
+.progress span {
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- Details page ---------- */
+.challenge-back {
+  display: inline-block;
+  color: var(--color-ink-2);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.challenge-back:hover {
+  color: var(--color-ink);
+}
+
+.challenge-head {
+  margin-top: var(--space-xl);
+}
+
+/* outline pill with the sport dot, like the badge on Match Details */
+.challenge-sport-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 4px 12px;
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink-2);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.challenge-sport-tag::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sport);
+}
+
+.challenge-head h1 {
+  margin: 18px 0 var(--space-xs);
+}
+
+.challenge-head-goal {
+  margin: 0;
+  font-size: var(--text-lead);
+  font-weight: 600;
+}
+
+.challenge-head-description {
+  max-width: 60ch;
+  margin: var(--space-xs) 0 0;
+  color: var(--color-ink-2);
+}
+
+.challenge-layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-xl) var(--space-2xl);
+}
+
+.challenge-main {
+  flex: 999 1 560px;
+  min-width: 0;
+}
+
+.challenge-side {
+  flex: 1 1 280px;
+  min-width: 0;
+  margin-top: var(--space-2xl);
+}
+
+/* the facts as ruled lines */
+.challenge-facts {
+  margin: 0;
+  border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.challenge-facts div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.challenge-facts dt {
+  color: var(--color-ink-2);
+}
+
+.challenge-facts dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* my progress: a big number, then the bar */
+.challenge-progress .challenge-progress-number {
+  margin: var(--space-md) 0 var(--space-sm);
+  font: 800 var(--text-display-s)/1 var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+
+.challenge-progress-number span {
+  color: var(--color-muted);
+}
+
+.challenge-progress .progress {
+  max-width: 32rem;
+}
+
+.challenge-progress-done {
+  margin: var(--space-sm) 0 0;
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.challenge-progress-empty {
+  margin: var(--space-md) 0 0;
+  color: var(--color-ink-2);
+}
+
+.challenge-progress .challenge-join,
+.challenge-progress .challenge-leave {
+  margin-top: var(--space-lg);
+}
+
+/* leaderboard: ruled rows with the rank in the big condensed font */
+.challenge-leaderboard ol {
+  margin: var(--space-md) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.challenge-leaderboard li {
+  display: grid;
+  grid-template-columns: 4rem 1fr auto;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.challenge-leaderboard li.is-me {
+  background: var(--color-hover);
+}
+
+.leaderboard-rank {
+  font: 800 var(--text-2xl)/1 var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+
+.leaderboard-name,
+.leaderboard-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.leaderboard-name {
+  font-weight: 600;
+}
+
+.leaderboard-progress {
+  color: var(--color-ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.challenge-leaderboard small {
+  padding: 2px var(--space-xs);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+/* ---------- Tablet and mobile: rows stack, like Find Games ---------- */
+@media (max-width: 60rem) {
+  .challenges-page {
+    padding-inline: var(--space-md);
+  }
+
+  .challenge-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "days action"
+      "what what"
+      "goal goal"
+      "players players";
+    gap: var(--space-xs) var(--space-md);
+    padding: var(--space-md) 0;
+  }
+
+  .challenge-row-days { grid-area: days; }
+  .challenge-row > div:first-of-type { grid-area: what; }
+  .challenge-row-goal { grid-area: goal; }
+  .challenge-row-players { grid-area: players; }
+  .challenge-join,
+  .challenge-view { grid-area: action; }
+
+  .challenge-side {
+    margin-top: 0;
+  }
+}
