@@ -41,6 +41,10 @@ class Match(models.Model):
     winner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='won_matches')
     host_payment_expires_at = models.DateTimeField(null=True, blank=True)
+    # extra venue details, filled when an admin approves a venue request
+    maps_link = models.URLField(max_length=500, blank=True)
+    contact_number = models.CharField(max_length=50, blank=True)
+    description = models.TextField(blank=True)
     payment_expires_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:

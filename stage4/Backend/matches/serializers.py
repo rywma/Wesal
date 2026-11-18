@@ -29,8 +29,10 @@ class MatchSerializer(serializers.ModelSerializer):
             'id', 'sport_id', 'sport', 'creator', 'creator_id', 'date', 'time', 'location',
             'max_players', 'total_cost', 'status', 'players_count', 'spots_left', 'share_per_player',
             'opponent_id', 'opponent', 'winner','host_payment_expires_at', 'payment_expires_at',
+            'maps_link', 'contact_number', 'description',
         ]
-        read_only_fields = ['status']
+        # the venue details come from an approved venue request, not from the create form
+        read_only_fields = ['status', 'maps_link', 'contact_number', 'description']
 
     def person(self, user):
         return {'id': user.id, 'name': user.first_name} if user else None
