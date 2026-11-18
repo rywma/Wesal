@@ -1,7 +1,3 @@
-/* Hallmark · shape: Poster · genre: playful · theme: Piste (deal 3/3, seed pickup-sports-games-riyadh-8be8·c5b908d7·2026-11-07·r0) · redesign: full
- * hero: Poster (/) · nav: edge-aligned, a wordmark, links and the account actions · footer: one quiet line · imagery: the product (the open-games board) · signature: the open games set as a ruled board beside the headline · piste: brand (the team's Figma: plum ground, soft glows behind, off-white actions, no neon, rows instead of cards)
- * axes: light/display-condensed/cool · posture: committed · contrast: pass · fold: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P4 H4 E4 S3 R4 V3 · weakest: S (no photographs of Riyadh courts yet), the board carries the hero until the team supplies real pictures */
 @import url("./tokens.css");
 @import url("./base.css");
 
@@ -206,4 +202,34 @@
   .home .sports-list a {
     font-size: var(--text-3xl);
   }
+}
+
+/* This month's challenge (logged in only) */
+.home .challenge-section {
+  padding-block: var(--section-gap-s) 0;
+}
+
+.home .challenge-section h2 {
+  font-size: var(--text-display-s);
+}
+
+.home .challenge-section > p {
+  margin-top: var(--space-sm);
+  font-size: var(--text-lead);
+  color: var(--color-ink-2);
+}
+
+.home .challenge-section .challenges-list {
+  margin-top: var(--space-xl);
+}
+
+.home .challenge-section-all {
+  display: inline-block;
+  margin-top: var(--space-md);
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.home .challenge-section .challenge-join {
+  position: static;
 }

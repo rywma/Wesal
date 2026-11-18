@@ -14,6 +14,8 @@ import MatchDetails from './pages/MatchDetails.jsx'
 import Invitations from './pages/Invitations.jsx';
 import HostPayment from './pages/HostPayment.jsx';
 import ProfileSetup from './pages/ProfileSetup.jsx';
+import Challenges from './pages/Challenges.jsx';
+import ChallengeDetails from './pages/ChallengeDetails.jsx';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
           element={<HostPayment />}
         />
         <Route path="/profile" element={<ProfileSetup />} />
+        <Route path="/challenges" element={<Challenges />} />
+        <Route path="/challenges/:id" element={<ChallengeDetails />} />
       </Routes>
     </BrowserRouter>
   )

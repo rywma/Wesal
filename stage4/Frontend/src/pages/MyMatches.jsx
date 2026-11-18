@@ -8,6 +8,7 @@ import '../styles/BrowseMatches.css';
 import BrowseMatchCard from '../components/BrowseMatchCard.jsx';
 import { useState, useEffect } from 'react';
 import { getMyMatches } from '../services/matchesApi.js';
+import { getMyBadges } from '../services/challengesApi.js';
 
 function MyMatches() {
     const { isLoggedIn, user, tokens } = useAuth();
@@ -15,6 +16,20 @@ function MyMatches() {
     const [matches, setMatches] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [badges, setBadges] = useState([]);
+
+    // badges are the challenges I completed
+    useEffect(() => {
+        if (!isLoggedIn || !tokens?.access) {
+            setBadges([]);
+            return;
+        }
+        getMyBadges(tokens.access)
+            .then((data) => {
+                if (data.success) setBadges(data.results || []);
+            })
+            .catch((err) => console.error('Badges error:', err));
+    }, [isLoggedIn, tokens?.access]);
 
     useEffect(() => {
         if (!isLoggedIn || !tokens?.access) {
@@ -93,6 +108,24 @@ function MyMatches() {
                     <p role="alert">{error}</p>
                 ) : (
                     <>
+                        <section className="my-badges">
+                            <h2>Badges</h2>
+                            {badges.length === 0 ? (
+                                <p>
+                                    No badges yet. <Link to="/challenges">Join a challenge</Link> to earn one.
+                                </p>
+                            ) : (
+                                <ul>
+                                    {badges.map((badge) => (
+                                        <li key={badge.challenge_id}>
+                                            <strong>{badge.badge_name}</strong>
+                                            <span>{badge.challenge}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </section>
+
                         <section>
                             <h2>Hosted Matches</h2>
                             {hostedMatches.length === 0 ? (

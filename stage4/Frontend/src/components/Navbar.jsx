@@ -63,6 +63,12 @@ function Navbar() {
                     </Link>
 
                     {isLoggedIn && (
+                        <Link to="/challenges" onClick={() => setMenuOpen(false)}>
+                            Challenges
+                        </Link>
+                    )}
+
+                    {isLoggedIn && (
                         <Link to="/invitations" onClick={() => setMenuOpen(false)}>
                             Invitations
                         </Link>
