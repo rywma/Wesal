@@ -25,4 +25,5 @@ urlpatterns = [
     path('payments/', include('payments.urls')),
     path('leaderboard/', include('matches.leaderboard_urls')),
     path('challenges/', include('challenges.urls')),
+    path('venue-requests/', include('matches.venue_urls')),
 ]
