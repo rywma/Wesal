@@ -43,17 +43,11 @@ This part covers the logout error case, the profile, and the points system:
 
 | Item | Link |
 |---|---|
-| Sprint Reviews | [link](https://) |
-| Retrospectives | [link](https://) |
-| Sprint Planning | [link](https://) |
+| Sprint Reviews | [link](https://app.notion.com/p/Stage-4-3e2574250fa9803593dbc46fe6eb996f?source=copy_link) |
+| Retrospectives | [link](https://app.notion.com/p/Stage-4-3e2574250fa9803593dbc46fe6eb996f?source=copy_link) |
+| Sprint Planning | [link]([https://](https://app.notion.com/p/Stage-4-3e2574250fa9803593dbc46fe6eb996f?source=copy_link)) |
 | Source Repository | [link](https://github.com/ORG/REPO) |
 | Bug Tracking | [link](https://) |
 | Testing Evidence and Results | [link](#unit-tests) |
 | Production Environment |(https://wesal-frontend.onrender.com)|
 
-### Notes
-
-- **Sprint Reviews / Retrospectives / Sprint Planning:** link to the Notion, Google Docs, or Miro pages where they are documented.
-- **Bug Tracking:** link to GitHub Issues, Jira, or Trello.
-- **Testing Evidence and Results:** points to the Unit Tests section in this README, which includes the test code screenshots and the run command.
-- **Production Environment:** link to the live deployment (for example Render, Railway, or Vercel).
