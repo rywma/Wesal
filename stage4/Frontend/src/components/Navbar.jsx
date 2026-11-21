@@ -58,9 +58,6 @@ function Navbar() {
                         Host a Game
                     </Link>
 
-                    <Link to="/my-matches" onClick={() => setMenuOpen(false)}>
-                        My Matches
-                    </Link>
 
                     {isLoggedIn && (
                         <Link to="/challenges" onClick={() => setMenuOpen(false)}>
