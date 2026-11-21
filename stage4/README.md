@@ -39,3 +39,21 @@ This part covers the logout error case, the profile, and the points system:
 - `test_logout_missing_token` checks that logout returns `400` when no refresh token is sent.
 - `ProfileTests` checks that the profile is returned and that completing it (bio and skill level) awards 20 points.
 - `AddPointsTests` checks that `match_win` gives 50 points and that an unknown event gives 0.
+## Project Links
+
+| Item | Link |
+|---|---|
+| Sprint Reviews | [link](https://) |
+| Retrospectives | [link](https://) |
+| Sprint Planning | [link](https://) |
+| Source Repository | [link](https://github.com/ORG/REPO) |
+| Bug Tracking | [link](https://) |
+| Testing Evidence and Results | [link](#unit-tests) |
+| Production Environment |(https://wesal-frontend.onrender.com)|
+
+### Notes
+
+- **Sprint Reviews / Retrospectives / Sprint Planning:** link to the Notion, Google Docs, or Miro pages where they are documented.
+- **Bug Tracking:** link to GitHub Issues, Jira, or Trello.
+- **Testing Evidence and Results:** points to the Unit Tests section in this README, which includes the test code screenshots and the run command.
+- **Production Environment:** link to the live deployment (for example Render, Railway, or Vercel).
