@@ -34,3 +34,13 @@
   margin-left: auto;
   color: var(--color-muted);
 }
+
+.footer .footer-link {
+  color: var(--color-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer .footer-link:hover {
+  text-decoration: underline;
+}
