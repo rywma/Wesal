@@ -39,15 +39,54 @@ This part covers the logout error case, the profile, and the points system:
 - `test_logout_missing_token` checks that logout returns `400` when no refresh token is sent.
 - `ProfileTests` checks that the profile is returned and that completing it (bio and skill level) awards 20 points.
 - `AddPointsTests` checks that `match_win` gives 50 points and that an unknown event gives 0.
+
+## Integration Tests
+
+Run from the project root:
+
+```bash
+PYTHONPATH=Backend python manage.py test integration_tests
+```
+
+These tests check that the frontend, the backend APIs and the database work together. Each test sends the same requests the React pages send (same URLs, same data, real login tokens) and checks what is saved in the database. Moyasar payments are mocked, so no real payment is made.
+
+| Test class | What it checks |
+|---|---|
+| `MatchJourneyTests` | Full journey: sign up, log in, create match, host pays, browse, join, players pay. The host must pay before the match opens, only the host can confirm, unpaid reservations expire and free the venue slot |
+| `PaymentWindowTests` | Players keep their spot until the match is full, then have 5 minutes to pay. Unpaid players lose their spot, and leaving a full match closes the payment window |
+| `OpponentResultTests` | Match with an opponent, submit result, opponents leaderboard, challenge progress and badge |
+| `InvitationTests` | Host invites a player, the player accepts and joins the match |
+| `AuthTests` | Invalid token returns `401`, browsing works without logging in, logout |
+
+### Integration bugs found and fixed
+
+| Bug | Fix |
+|---|---|
+| A match could be opened without the host paying | `confirm-payment` now checks the host's payment first |
+| Unpaid reservations never expired and blocked the venue slot | They are cancelled after 5 minutes |
+| Creating a match with an opponent always failed | The opponent can be added while the match waits for host payment |
+| Players were removed 5 minutes after joining, before they could pay | The 5-minute payment window now starts when the match becomes full |
+
+### API Testing (Postman)
+
+Each backend feature was tested in Postman. The screenshots are in the pull requests:
+
+| Feature | Pull request |
+|---|---|
+| Join or Leave a Match | [#24](https://github.com/rywma/Wesal/pull/24) |
+| Cost Splitting & Payment Status | [#25](https://github.com/rywma/Wesal/pull/25) |
+| Invite Players | [#40](https://github.com/rywma/Wesal/pull/40) |
+| Payment Simulation (Moyasar) | [#41](https://github.com/rywma/Wesal/pull/41) |
+| Admin Venue Requests | [#64](https://github.com/rywma/Wesal/pull/64) |
+
 ## Project Links
 
 | Item | Link |
 |---|---|
-| Sprint Reviews | [link](https://app.notion.com/p/Stage-4-3e2574250fa9803593dbc46fe6eb996f?source=copy_link) |
-| Retrospectives | [link](https://app.notion.com/p/Stage-4-3e2574250fa9803593dbc46fe6eb996f?source=copy_link) |
-| Sprint Planning | [link](https://app.notion.com/p/Stage-4-3e2574250fa9803593dbc46fe6eb996f?source=copy_link) |
-| Source Repository | [link](https://github.com/ORG/REPO) |
-| Bug Tracking | [link](https://) |
-| Testing Evidence and Results | [link](#unit-tests) |
-| Production Environment |(https://wesal-frontend.onrender.com)|
-
+| Sprint Planning | [SPRINTS.md](SPRINTS.md#sprint-planning) |
+| Sprint Reviews | [SPRINTS.md](SPRINTS.md#sprint-reviews) |
+| Retrospectives | [SPRINTS.md](SPRINTS.md#retrospectives) |
+| Source Repository | [github.com/rywma/Wesal](https://github.com/rywma/Wesal) |
+| Bug Tracking | [Pull requests](https://github.com/rywma/Wesal/pulls?q=is%3Apr), [Integration bugs fixed](#integration-bugs-found-and-fixed) |
+| Testing Evidence and Results | [Unit Tests](#unit-tests), [Integration Tests](#integration-tests), [API Testing](#api-testing-postman) |
+| Production Environment | [wesal-frontend.onrender.com](https://wesal-frontend.onrender.com) |
