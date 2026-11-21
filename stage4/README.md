@@ -86,7 +86,7 @@ Each backend feature was tested in Postman. The screenshots are in the pull requ
 | Sprint Planning | [SPRINTS.md](SPRINTS.md#sprint-planning) |
 | Sprint Reviews | [SPRINTS.md](SPRINTS.md#sprint-reviews) |
 | Retrospectives | [SPRINTS.md](SPRINTS.md#retrospectives) |
-| Source Repository | [github.com/rywma/Wesal](https://github.com/rywma/Wesal) |
+| Source Repository | [github.com/rywma/Wesal](https://github.com/rywma/Wesal.git) |
 | Bug Tracking | [Pull requests](https://github.com/rywma/Wesal/pulls?q=is%3Apr), [Integration bugs fixed](#integration-bugs-found-and-fixed) |
 | Testing Evidence and Results | [Unit Tests](#unit-tests), [Integration Tests](#integration-tests), [API Testing](#api-testing-postman) |
 | Production Environment | [wesal-frontend.onrender.com](https://wesal-frontend.onrender.com) |
