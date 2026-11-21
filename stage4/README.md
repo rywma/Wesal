@@ -45,7 +45,7 @@ This part covers the logout error case, the profile, and the points system:
 |---|---|
 | Sprint Reviews | [link](https://app.notion.com/p/Stage-4-3e2574250fa9803593dbc46fe6eb996f?source=copy_link) |
 | Retrospectives | [link](https://app.notion.com/p/Stage-4-3e2574250fa9803593dbc46fe6eb996f?source=copy_link) |
-| Sprint Planning | [link]([https://](https://app.notion.com/p/Stage-4-3e2574250fa9803593dbc46fe6eb996f?source=copy_link)) |
+| Sprint Planning | [link](https://app.notion.com/p/Stage-4-3e2574250fa9803593dbc46fe6eb996f?source=copy_link) |
 | Source Repository | [link](https://github.com/ORG/REPO) |
 | Bug Tracking | [link](https://) |
 | Testing Evidence and Results | [link](#unit-tests) |
