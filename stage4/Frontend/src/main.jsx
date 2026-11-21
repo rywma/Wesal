@@ -16,6 +16,7 @@ import HostPayment from './pages/HostPayment.jsx';
 import ProfileSetup from './pages/ProfileSetup.jsx';
 import Challenges from './pages/Challenges.jsx';
 import ChallengeDetails from './pages/ChallengeDetails.jsx';
+import AdminDashboard from './pages/AdminDashboard.jsx';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/matches/:id" element={<MatchDetails />} />
         <Route path="/my-matches" element={<MyMatches />} />
         <Route path="/invitations" element={<Invitations />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         <Route
           path="/matches/:id/host-payment"
           element={<HostPayment />}
