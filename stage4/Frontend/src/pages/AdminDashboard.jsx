@@ -21,6 +21,7 @@ function AdminDashboard() {
     const [selectedSports, setSelectedSports] = useState({});
     const [playerCounts, setPlayerCounts] = useState({});
     const [processingId, setProcessingId] = useState(null);
+    const [requestToReject, setRequestToReject] = useState(null);
 
     async function handleApprove(requestId) {
         const sportId = SPORT_IDS[selectedSports[requestId]];
@@ -35,7 +36,12 @@ function AdminDashboard() {
         setError('');
 
         try {
-            await approveVenueRequest(requestId, sportId, maxPlayers, tokens.access);
+            await approveVenueRequest(
+                requestId,
+                sportId,
+                maxPlayers,
+                tokens.access
+            );
 
             setRequests((prev) =>
                 prev.filter((request) => request.id !== requestId)
@@ -48,8 +54,6 @@ function AdminDashboard() {
     }
 
     async function handleReject(requestId) {
-        if (!window.confirm('Reject this venue request?')) return;
-
         setProcessingId(requestId);
         setError('');
 
@@ -59,6 +63,8 @@ function AdminDashboard() {
             setRequests((prev) =>
                 prev.filter((request) => request.id !== requestId)
             );
+
+            setRequestToReject(null);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -66,13 +72,15 @@ function AdminDashboard() {
         }
     }
 
-
     useEffect(() => {
         async function loadRequests() {
             if (!isLoggedIn) {
                 setLoading(false);
                 return;
             }
+
+            setLoading(true);
+            setError('');
 
             try {
                 const data = await getPendingVenueRequests(tokens.access);
@@ -88,9 +96,16 @@ function AdminDashboard() {
     }, [isLoggedIn, tokens?.access]);
 
     if (!isLoggedIn) {
-        return <p>Please log in to access the admin dashboard.</p>;
+        return (
+            <>
+                <Navbar />
+                <main className="admin-dashboard">
+                    <h1>Admin Dashboard</h1>
+                    <p>Please log in to access the admin dashboard.</p>
+                </main>
+            </>
+        );
     }
-
 
     return (
         <>
@@ -102,103 +117,166 @@ function AdminDashboard() {
 
                 {loading && <p>Loading requests...</p>}
 
-                {error && <p role="alert">{error}</p>}
+                {error && !requestToReject && (
+                    <p role="alert">{error}</p>
+                )}
 
                 {!loading && !error && requests.length === 0 && (
                     <p>No pending requests.</p>
                 )}
 
-                <div className="admin-requests-list">
-                    {requests.map((request) => (
-                        <section className="admin-request" key={request.id}>
-                            <h2>{request.facility_name}</h2>
+                {!loading && !error && (
+                    <div className="admin-requests-list">
+                        {requests.map((request) => (
+                            <section
+                                className="admin-request"
+                                key={request.id}
+                            >
+                                <h2>{request.facility_name}</h2>
 
-                            <p>Location: {request.location}</p>
-                            <p>Date: {request.date}</p>
-                            <p>Time: {request.time}</p>
-                            <p>Cost: {request.total_cost} SAR</p>
-                            <p>Contact: {request.contact_number}</p>
+                                <p>Location: {request.location}</p>
+                                <p>Date: {request.date}</p>
+                                <p>Time: {request.time}</p>
+                                <p>Cost: {request.total_cost} SAR</p>
+                                <p>Contact: {request.contact_number}</p>
 
-                            {request.google_maps_link && (
-                                <p>
-                                    <a
-                                        href={request.google_maps_link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        View on Google Maps
-                                    </a>
-                                </p>
-                            )}
+                                {request.google_maps_link && (
+                                    <p>
+                                        <a
+                                            href={request.google_maps_link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            View on Google Maps
+                                        </a>
+                                    </p>
+                                )}
 
-                            {request.description && (
-                                <p>Description: {request.description}</p>
-                            )}
+                                {request.description && (
+                                    <p>Description: {request.description}</p>
+                                )}
 
-                            <div className="admin-request-actions">
-                                <label>
-                                    Sport
-                                    <select
-                                        value={selectedSports[request.id] || ''}
-                                        onChange={(e) =>
-                                            setSelectedSports({
-                                                ...selectedSports,
-                                                [request.id]: e.target.value
-                                            })
-                                        }
-                                        disabled={processingId !== null}
-                                    >
-                                        <option value="">Select sport</option>
-                                        {SPORTS.map((sport) => (
-                                            <option key={sport} value={sport}>
-                                                {sport}
+                                <div className="admin-request-actions">
+                                    <label>
+                                        Sport
+                                        <select
+                                            value={selectedSports[request.id] || ''}
+                                            onChange={(e) =>
+                                                setSelectedSports({
+                                                    ...selectedSports,
+                                                    [request.id]: e.target.value
+                                                })
+                                            }
+                                            disabled={processingId !== null}
+                                        >
+                                            <option value="">
+                                                Select sport
                                             </option>
-                                        ))}
-                                    </select>
-                                </label>
 
-                                <label>
-                                    Max Players
-                                    <input
-                                        type="number"
-                                        min="2"
-                                        value={playerCounts[request.id] || ''}
-                                        onChange={(e) =>
-                                            setPlayerCounts({
-                                                ...playerCounts,
-                                                [request.id]: e.target.value
-                                            })
-                                        }
-                                        disabled={processingId !== null}
-                                        placeholder="Enter number"
-                                    />
-                                </label>
+                                            {SPORTS.map((sport) => (
+                                                <option
+                                                    key={sport}
+                                                    value={sport}
+                                                >
+                                                    {sport}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </label>
 
-                                <div className="admin-buttons">
-                                    <button
-                                        type="button"
-                                        onClick={() => handleApprove(request.id)}
-                                        disabled={processingId !== null}
-                                    >
-                                        {processingId === request.id ? 'Processing...' : 'Approve'}
-                                    </button>
+                                    <label>
+                                        Max Players
+                                        <input
+                                            type="number"
+                                            min="2"
+                                            value={playerCounts[request.id] || ''}
+                                            onChange={(e) =>
+                                                setPlayerCounts({
+                                                    ...playerCounts,
+                                                    [request.id]: e.target.value
+                                                })
+                                            }
+                                            disabled={processingId !== null}
+                                            placeholder="Enter number"
+                                        />
+                                    </label>
 
-                                    <button
-                                        type="button"
-                                        onClick={() => handleReject(request.id)}
-                                        disabled={processingId !== null}
-                                    >
-                                        Reject
-                                    </button>
+                                    <div className="admin-buttons">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleApprove(request.id)}
+                                            disabled={processingId !== null}
+                                        >
+                                            {processingId === request.id
+                                                ? 'Processing...'
+                                                : 'Approve'}
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setError('');
+                                                setRequestToReject(request.id);
+                                            }}
+                                            disabled={processingId !== null}
+                                        >
+                                            Reject
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </section>
-                    ))}
-                </div>
+                            </section>
+                        ))}
+                    </div>
+                )}
             </main>
+
+            {requestToReject !== null && (
+                <div className="admin-modal-overlay">
+                    <div
+                        className="admin-modal"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="reject-title"
+                    >
+                        <h2 id="reject-title">
+                            Reject this request?
+                        </h2>
+
+                        <p>
+                            This will permanently remove the venue request.
+                        </p>
+
+                        {error && (
+                            <p role="alert">{error}</p>
+                        )}
+
+                        <div className="admin-modal-buttons">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setRequestToReject(null);
+                                    setError('');
+                                }}
+                                disabled={processingId !== null}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => handleReject(requestToReject)}
+                                disabled={processingId !== null}
+                            >
+                                {processingId !== null
+                                    ? 'Rejecting...'
+                                    : 'Reject request'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
-
 }
 
 export default AdminDashboard;
