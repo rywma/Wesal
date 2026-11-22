@@ -66,3 +66,27 @@ export async function rejectVenueRequest(requestId, token) {
 
     return data;
 }
+
+// A venue owner submits a stadium for the admin to review
+// If the backend rejects a field those messages come back as 
+// { field_name: ["message"] }, so they're attached to the error as fieldErrors.
+export async function submitVenueRequest(requestData, token) {
+    const response = await fetch(`${API_URL}/matches/api/venue-requests/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        const error = new Error(data.error || data.detail || 'Could not submit your request.');
+        error.fieldErrors = data.detail || data.error ? {} : data;
+        throw error;
+    }
+
+    return data;
+}
