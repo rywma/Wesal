@@ -98,6 +98,9 @@ function Navbar() {
                                     <Link to="/my-matches" onClick={() => setProfileOpen(false)}>
                                         My Matches
                                     </Link>
+                                    <Link to="/my-badges" onClick={() => setProfileOpen(false)}>
+                                        My Badges
+                                    </Link>
                                     <button type="button" onClick={handleLogout}>
                                         Log Out
                                     </button>
