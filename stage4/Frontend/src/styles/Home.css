@@ -21,7 +21,7 @@
   line-height: 1;
 }
 
-/* Hero: the headline on the left, the open games on the right */
+/* Home hero */
 .home .hero {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -31,17 +31,20 @@
 }
 
 .home .hero-content {
-  grid-column: 1 / 8;
+  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  text-align: center;
   gap: var(--space-lg);
+  transform: translateY(100px);
 }
 
 .home .hero h1 {
-  max-width: 11ch;
-  font-size: clamp(3.5rem, 8vw, 8rem);
+  max-width: none;
+  font-size: clamp(2rem, 6vw, 6rem);
   line-height: 0.95;
+  white-space: nowrap;
 }
 
 .home .hero-content p {
@@ -62,6 +65,7 @@
   text-transform: uppercase;
   text-decoration: none;
   transition: background-color var(--dur-micro) var(--ease-out);
+  margin-top: 30px;
 }
 
 .home .explore-btn:hover {
@@ -73,38 +77,6 @@
   color: var(--color-accent-ink);
 }
 
-.home .hero-visual {
-  grid-column: 8 / 13;
-}
-
-.home .hero-visual h2 {
-  max-width: none;
-  font-family: var(--font-body);
-  font-weight: 600;
-  padding-bottom: var(--space-sm);
-  border-bottom: var(--rule-hair) solid var(--color-rule);
-  font-size: var(--text-md);
-  color: var(--color-ink-2);
-}
-
-.home .games-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.home .games-status,
-.home .games-empty p {
-  margin-top: var(--space-md);
-  color: var(--color-ink-2);
-}
-
-.home .games-empty a {
-  display: inline-block;
-  margin-top: var(--space-xs);
-  color: var(--color-ink);
-  font-weight: 600;
-}
 
 /* Sports: the names set big, each lights up in its own colour */
 .home .sports-section {
@@ -116,30 +88,73 @@
   font-size: var(--text-display-s);
 }
 
-.home .sports-section > p {
+.home .sports-section>p {
   margin-top: var(--space-sm);
   font-size: var(--text-lead);
   color: var(--color-ink-2);
 }
 
+.home .sports-marquee {
+  overflow: hidden;
+  width: 100%;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.home .sports-track {
+  display: flex;
+  width: max-content;
+  animation: sports-scroll 35s linear infinite;
+}
+
 .home .sports-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--space-xl);
-  margin: var(--space-xl) 0 0;
-  padding: var(--space-lg) 0 0;
-  border-top: var(--rule-hair) solid var(--color-rule);
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-xl);
+  margin: 0;
+  padding: 0 var(--space-xl) 0 0;
   list-style: none;
+  white-space: nowrap;
+}
+
+@keyframes sports-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.home .sports-marquee:hover .sports-track,
+.home .sports-marquee:focus-within .sports-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home .sports-track {
+    animation: none;
+  }
 }
 
 .home .sports-list li {
   --sport: var(--sport-padel);
 }
 
-.home .sports-list .sport-football { --sport: var(--sport-football); }
-.home .sports-list .sport-basketball { --sport: var(--sport-basketball); }
-.home .sports-list .sport-volleyball { --sport: var(--sport-volleyball); }
-.home .sports-list .sport-tennis { --sport: var(--sport-tennis); }
+.home .sports-list .sport-football {
+  --sport: var(--sport-football);
+}
+
+.home .sports-list .sport-basketball {
+  --sport: var(--sport-basketball);
+}
+
+.home .sports-list .sport-volleyball {
+  --sport: var(--sport-volleyball);
+}
+
+.home .sports-list .sport-tennis {
+  --sport: var(--sport-tennis);
+}
 
 .home .sports-list a {
   display: inline-block;
@@ -187,11 +202,10 @@
 @media (max-width: 60rem) {
   .home .hero {
     row-gap: var(--space-2xl);
-    padding-block: var(--space-xl) var(--space-2xl);
+    padding-block: calc(var(--space-2xl) + 70px) var(--space-3xl);
   }
 
-  .home .hero-content,
-  .home .hero-visual {
+  .home .hero-content {
     grid-column: 1 / -1;
   }
 
@@ -213,7 +227,7 @@
   font-size: var(--text-display-s);
 }
 
-.home .challenge-section > p {
+.home .challenge-section>p {
   margin-top: var(--space-sm);
   font-size: var(--text-lead);
   color: var(--color-ink-2);
@@ -232,4 +246,42 @@
 
 .home .challenge-section .challenge-join {
   position: static;
+}
+
+/* Shiny text animation */
+.home .hero-shiny-title,
+.home .hero-shiny-description {
+  background: linear-gradient(110deg,
+      #b5b5b5 40%,
+      #ffffff 50%,
+      #b5b5b5 60%);
+  background-size: 200% 100%;
+  background-position: 100% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: hero-shine 3s linear infinite;
+}
+
+.home .hero-shiny-description {
+  animation-duration: 5s;
+}
+
+@keyframes hero-shine {
+  from {
+    background-position: 100% 50%;
+  }
+
+  to {
+    background-position: -100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .home .hero-shiny-title,
+  .home .hero-shiny-description {
+    animation: none;
+    background-position: 50% 50%;
+  }
 }
