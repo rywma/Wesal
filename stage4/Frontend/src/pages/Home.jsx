@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import MatchCard from '../components/MatchCard.jsx';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
-import { getMatches } from '../services/matchesApi.js';
 import { getChallenges } from '../services/challengesApi.js';
-import { challengeDaysLeft, challengeGoal, formatTime } from '../utils/matchHelpers.js';
+import { challengeDaysLeft, challengeGoal } from '../utils/matchHelpers.js';
 import '../styles/Home.css';
 import '../styles/Challenges.css';
 import '../styles/Footer.css';
@@ -26,8 +24,6 @@ function pickChallenge(challenges) {
 
 function Home() {
     const { isLoggedIn, tokens } = useAuth();
-    const [games, setGames] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [challenge, setChallenge] = useState(null);
 
     // challenges need an account, so this only runs when logged in
@@ -43,55 +39,6 @@ function Home() {
             .catch((error) => console.error('Home challenge error:', error));
     }, [isLoggedIn, tokens?.access]);
 
-    useEffect(() => {
-        async function loadGames() {
-            try {
-                const data = await getMatches(null);
-
-                if (data.success) {
-                    // the next three games that still have room
-                    const openGames = data.results.filter((match) => match.status === 'open');
-                    setGames(openGames.slice(0, 3));
-                }
-            } catch (error) {
-                console.error('Home games error:', error);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        loadGames();
-    }, []);
-
-    function renderGames() {
-        if (loading) {
-            return <p className="games-status">Loading open games…</p>;
-        }
-
-        if (games.length === 0) {
-            return (
-                <div className="games-empty">
-                    <p>No open games right now.</p>
-                    <Link to="/create-match">Host a game</Link>
-                </div>
-            );
-        }
-
-        return (
-            <ul className="games-list">
-                {games.map((match) => (
-                    <MatchCard
-                        key={match.id}
-                        sport={match.sport}
-                        time={formatTime(match.time)}
-                        location={match.location}
-                        players={`${match.players_count} of ${match.max_players} joined`}
-                        to={`/matches/${match.id}`}
-                    />
-                ))}
-            </ul>
-        );
-    }
 
     function renderChallenge() {
         const left = challengeDaysLeft(challenge);
@@ -154,9 +101,9 @@ function Home() {
             <main>
                 <section className="hero">
                     <div className="hero-content">
-                        <h1>Never miss a game.</h1>
+                        <h1 className="hero-shiny-title">Never miss a game.</h1>
 
-                        <p>
+                        <p className="hero-shiny-description">
                             Find people near you to play football,
                             padel, basketball and more.
                         </p>
@@ -166,23 +113,38 @@ function Home() {
                         </Link>
                     </div>
 
-                    <div className="hero-visual">
-                        <h2>Open games</h2>
-                        {renderGames()}
-                    </div>
+
                 </section>
 
                 <section className="sports-section" id="sports">
                     <h2>Whatever you play, there’s a game.</h2>
                     <p>Find your sport and start playing.</p>
 
-                    <ul className="sports-list">
-                        {SPORTS.map((sport) => (
-                            <li key={sport} className={`sport-${sport.toLowerCase()}`}>
-                                <Link to={`/matches?sport=${sport}`}>{sport}</Link>
-                            </li>
-                        ))}
-                    </ul>
+                    <div className="sports-marquee">
+                        <div className="sports-track">
+                            {[0, 1].map((copy) => (
+                                <ul
+                                    key={copy}
+                                    className="sports-list"
+                                    aria-hidden={copy === 1}
+                                >
+                                    {SPORTS.map((sport) => (
+                                        <li
+                                            key={`${copy}-${sport}`}
+                                            className={`sport-${sport.toLowerCase()}`}
+                                        >
+                                            <Link
+                                                to={`/matches?sport=${sport}`}
+                                                tabIndex={copy === 1 ? -1 : undefined}
+                                            >
+                                                {sport}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ))}
+                        </div>
+                    </div>
                 </section>
 
                 {challenge && renderChallenge()}

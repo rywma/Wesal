@@ -12,6 +12,7 @@
   "type": "module",
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.21.0",
+    "motion": "^14.14.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-router-dom": "^7.18.4"
