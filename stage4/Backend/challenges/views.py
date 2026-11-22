@@ -1,6 +1,8 @@
 from datetime import date
 
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
+from django.db.models import F
+from users.models import Profile
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import status
@@ -31,13 +33,34 @@ def challenge_progress(challenge, user):
         )
     return matches.distinct().count()
 
+def challenge_reward_points(challenge):
+    if challenge.goal_type == Challenge.GoalType.WIN:
+        return max(20, challenge.target * 20)
 
-# works out the progress and marks the entry completed the first time the target is reached
+    return max(20, challenge.target * 10)
+
+# Awards points when a player completes a challenge
 def update_entry(entry):
     progress = challenge_progress(entry.challenge, entry.user)
-    if progress >= entry.challenge.target and not entry.completed_at:
-        entry.completed_at = timezone.now()
-        entry.save(update_fields=['completed_at'])
+
+    if progress < entry.challenge.target or entry.completed_at:
+        return progress
+
+    with transaction.atomic():
+        current = ChallengeEntry.objects.select_for_update().get(pk=entry.pk)
+
+        if current.completed_at is None:
+            profile, _ = Profile.objects.get_or_create(user=current.user)
+
+            Profile.objects.filter(pk=profile.pk).update(
+                points=F('points') + challenge_reward_points(entry.challenge)
+            )
+
+            current.completed_at = timezone.now()
+            current.save(update_fields=['completed_at'])
+
+        entry.completed_at = current.completed_at
+
     return progress
 
 
@@ -52,6 +75,7 @@ def challenge_data(challenge):
         'start_date': challenge.start_date,
         'end_date': challenge.end_date,
         'badge_name': challenge.badge_name,
+        'reward_points': challenge_reward_points(challenge),
         'is_active': challenge.start_date <= date.today() <= challenge.end_date,
         'players_count': challenge.entries.count(),
     }

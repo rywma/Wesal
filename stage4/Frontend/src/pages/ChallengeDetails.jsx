@@ -103,8 +103,7 @@ function ChallengeDetails() {
                                     </div>
                                     {challenge.completed && (
                                         <p className="challenge-progress-done">
-                                            Done. You earned the {challenge.badge_name} badge.
-                                        </p>
+                                            Done! You earned {challenge.reward_points} points.                                        </p>
                                     )}
                                 </>
                             ) : (
@@ -168,7 +167,7 @@ function ChallengeDetails() {
                             <div><dt>Time left</dt><dd>{left.ended ? `Ended ${left.number}` : `${left.number} ${left.label}`}</dd></div>
                             <div><dt>Dates</dt><dd>{formatDate(challenge.start_date)} – {formatDate(challenge.end_date)}</dd></div>
                             <div><dt>Players</dt><dd>{challenge.players_count}</dd></div>
-                            <div><dt>Badge</dt><dd>{challenge.badge_name}</dd></div>
+                            <div><dt>Reward</dt><dd>{challenge.reward_points} points</dd></div>
                         </dl>
                     </aside>
                 </div>
@@ -183,7 +182,7 @@ function ChallengeDetails() {
                 {!isLoggedIn ? (
                     <div className="login-needed">
                         <h1>Log in to see this challenge.</h1>
-                        <p>Join a monthly goal, track your progress and earn badges.</p>
+                        <p>Join challenges and earn points when you complete them.</p>
                         <Link to="/login">Log In</Link>
                     </div>
                 ) : (

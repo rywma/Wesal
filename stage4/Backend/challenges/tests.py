@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-
+from users.models import Profile
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 
@@ -112,6 +112,26 @@ class ChallengeTests(APITestCase):
         self.play(self.sara, days_ago=1)
         self.play(self.sara, days_ago=2)
         self.assertEqual(self.client.post(f'/challenges/{self.challenge.id}/leave/').status_code, 400)
+
+    def test_challenge_points_only_once(self):
+        self.join()
+        self.play(self.sara, days_ago=1)
+        self.play(self.sara, days_ago=2)
+
+        profile, _ = Profile.objects.get_or_create(user=self.sara)
+        points_before = profile.points
+
+        url = f'/challenges/{self.challenge.id}/'
+
+        self.client.get(url)
+        profile.refresh_from_db()
+
+        self.assertEqual(profile.points, points_before + 20)
+
+        self.client.get(url)
+        profile.refresh_from_db()
+
+        self.assertEqual(profile.points, points_before + 20)
 
     def test_login_required(self):
         self.client.force_authenticate(None)
