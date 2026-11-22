@@ -1,0 +1,104 @@
+
+.venue-page .auth-card {
+  max-width: 560px;
+}
+
+.venue-page .auth-card h2 {
+  text-transform: uppercase;
+}
+
+/* small headings that split the form into three parts */
+.venue-page .venue-section {
+  width: 100%;
+  max-width: none;
+  margin: var(--space-md) 0 0;
+  padding-top: var(--space-md);
+  border-top: var(--rule-hair) solid var(--color-rule);
+  color: var(--color-ink-2);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.venue-page .venue-section:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.venue-page .venue-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* select and textarea styled like the auth inputs */
+.venue-page .auth-field select,
+.venue-page .auth-field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--color-rule);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  color-scheme: dark;
+}
+
+.venue-page .auth-field textarea {
+  resize: vertical;
+}
+
+.venue-page .auth-field select:focus,
+.venue-page .auth-field textarea:focus {
+  border-color: var(--color-ink);
+}
+
+.venue-page .auth-field input::placeholder,
+.venue-page .auth-field textarea::placeholder {
+  color: var(--color-muted);
+}
+
+.venue-page .auth-field input {
+  box-sizing: border-box;
+  color-scheme: dark;
+}
+
+.venue-page .venue-optional {
+  color: var(--color-muted);
+  font-weight: 400;
+}
+
+.venue-page .venue-hint {
+  margin: 0;
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+}
+
+.venue-page .venue-hint a {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.venue-page .venue-field-error {
+  margin: 0;
+  color: var(--color-error);
+  font-size: var(--text-sm);
+}
+
+.venue-page .venue-button-link {
+  display: block;
+  box-sizing: border-box;
+  text-align: center;
+  text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  .venue-page .venue-row {
+    grid-template-columns: 1fr;
+  }
+}

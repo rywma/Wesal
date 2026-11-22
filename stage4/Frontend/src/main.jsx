@@ -17,7 +17,9 @@ import ProfileSetup from './pages/ProfileSetup.jsx';
 import Challenges from './pages/Challenges.jsx';
 import ChallengeDetails from './pages/ChallengeDetails.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
+import VenueRequest from './pages/VenueRequest.jsx';
 import MyBadges from './pages/MyBadges.jsx';
+
 
 function App() {
   return (
@@ -33,6 +35,7 @@ function App() {
         <Route path="/my-badges" element={<MyBadges />} />
         <Route path="/invitations" element={<Invitations />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/list-your-venue" element={<VenueRequest />} />
         <Route
           path="/matches/:id/host-payment"
           element={<HostPayment />}
