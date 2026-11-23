@@ -129,6 +129,8 @@ class VenueRequest(models.Model):
     google_maps_link = models.URLField(max_length=500)
     date = models.DateField(db_index=True)
     time = models.TimeField()
+    end_date = models.DateField(null=True, blank=True)   
+    end_time = models.TimeField()                         
     sport = models.ForeignKey(Sport, on_delete=models.PROTECT, related_name='VenueRequest')
     max_players = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     total_cost = models.DecimalField(max_digits=8, decimal_places=2)
