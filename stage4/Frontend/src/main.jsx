@@ -18,7 +18,6 @@ import Challenges from './pages/Challenges.jsx';
 import ChallengeDetails from './pages/ChallengeDetails.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import VenueRequest from './pages/VenueRequest.jsx';
-import MyBadges from './pages/MyBadges.jsx';
 
 
 function App() {
@@ -32,7 +31,6 @@ function App() {
         <Route path="/matches" element={<BrowseMatches />} />
         <Route path="/matches/:id" element={<MatchDetails />} />
         <Route path="/my-matches" element={<MyMatches />} />
-        <Route path="/my-badges" element={<MyBadges />} />
         <Route path="/invitations" element={<Invitations />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/list-your-venue" element={<VenueRequest />} />

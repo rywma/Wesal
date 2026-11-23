@@ -26,15 +26,15 @@
 }
 
 .navbar-links a,
-.navbar-auth > a:not(.get-started) {
+.navbar-auth>a:not(.get-started) {
   transition: color var(--dur-micro) var(--ease-out), text-shadow var(--dur-micro) var(--ease-out);
 }
 
 /* the links glow lime on hover */
 .navbar-links a:hover,
 .navbar-links a:focus-visible,
-.navbar-auth > a:not(.get-started):hover,
-.navbar-auth > a:not(.get-started):focus-visible {
+.navbar-auth>a:not(.get-started):hover,
+.navbar-auth>a:not(.get-started):focus-visible {
   color: var(--color-brand);
   text-shadow: 0 0 14px color-mix(in oklab, var(--color-brand) 60%, transparent);
 }
@@ -131,11 +131,42 @@
   z-index: var(--z-dropdown);
   display: flex;
   flex-direction: column;
-  min-width: 12rem;
+  min-width: 15rem;
   padding: var(--space-xs);
   border: var(--rule-hair) solid var(--color-rule);
   border-radius: 12px;
   background: var(--color-paper-2);
+}
+
+.profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-bottom: 1px solid var(--color-rule);
+  margin-bottom: 8px;
+}
+
+.profile-badge img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+
+.profile-badge>div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-badge strong {
+  font-size: 16px;
+  color: var(--color-ink);
+}
+
+.profile-badge span {
+  font-size: 14px;
+  color: var(--color-brand);
 }
 
 .navbar .profile-menu-list a,

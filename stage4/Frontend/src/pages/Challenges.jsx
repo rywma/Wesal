@@ -99,8 +99,7 @@ function Challenges() {
 
                 <p className="challenge-row-players">
                     {challenge.players_count} {challenge.players_count === 1 ? 'player' : 'players'}
-                    {challenge.completed && <span className="challenge-row-done">Badge earned</span>}
-                </p>
+                    {challenge.completed && <span className="challenge-row-done">Completed</span>}                </p>
 
                 {!challenge.joined && !left.ended ? (
                     <button
@@ -128,14 +127,14 @@ function Challenges() {
                 {!isLoggedIn ? (
                     <div className="login-needed">
                         <h1>Log in to see challenges.</h1>
-                        <p>Join a monthly goal, track your progress and earn badges.</p>
+                        <p>Join challenges and earn points when you complete them.</p>
                         <Link to="/login">Log In</Link>
                     </div>
                 ) : (
                     <>
                         <h1>Challenges</h1>
                         <p className="challenges-lead">
-                            Join a monthly goal, play your games and earn a badge when you hit the target.
+                            Complete challenges, earn points and level up your badge.
                         </p>
 
                         {error && <p role="alert" className="challenges-error">{error}</p>}

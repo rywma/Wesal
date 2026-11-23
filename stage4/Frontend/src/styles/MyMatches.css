@@ -39,37 +39,3 @@
 .my-matches main h2 + p {
   margin-top: var(--space-sm);
 }
-
-/* Badges: one outline pill per completed challenge */
-.my-badges ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-  margin: var(--space-md) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.my-badges li {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-xs);
-  padding: var(--space-xs) var(--space-md);
-  border: var(--rule-hair) solid var(--color-rule);
-  border-radius: var(--radius-pill);
-}
-
-.my-badges strong {
-  font: 800 var(--text-lg)/1 var(--font-display);
-  text-transform: uppercase;
-}
-
-.my-badges span {
-  color: var(--color-ink-2);
-  font-size: var(--text-sm);
-}
-
-.my-badges a {
-  color: var(--color-ink);
-  font-weight: 600;
-}

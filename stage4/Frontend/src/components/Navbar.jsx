@@ -9,14 +9,22 @@ function Navbar() {
     const [profileOpen, setProfileOpen] = useState(false);
     const { user, tokens, profile, setProfile, isLoggedIn, logout } = useAuth();
     const [logoutError, setLogoutError] = useState('');
+    const points = profile?.points ?? 0;
+
+    const badge = points >= 300
+        ? { name: 'Gold', image: '/badges/wesal_badge_gold.webp' }
+        : points >= 100
+            ? { name: 'Silver', image: '/badges/wesal_badge_silver.png' }
+            : { name: 'Bronze', image: '/badges/wesal_badge_bronze.png' };
 
     useEffect(() => {
-        if (isLoggedIn && !profile) {
-            getMyProfile(tokens.access)
-                .then((data) => setProfile(data))
-                .catch((error) => console.error('Profile error:', error));
-        }
-    }, [isLoggedIn, profile]);
+        if (!isLoggedIn || !tokens?.access) return;
+
+        getMyProfile(tokens.access)
+            .then((data) => setProfile(data))
+            .catch((error) => console.error('Profile error:', error));
+
+    }, [isLoggedIn, tokens?.access, profileOpen, setProfile]);
 
     const handleLogout = async () => {
         setLogoutError('');
@@ -92,14 +100,19 @@ function Navbar() {
 
                             {profileOpen && (
                                 <div className="profile-menu-list">
+                                    <div className="profile-badge">
+                                        <img src={badge.image} alt={`${badge.name} badge`} />
+
+                                        <div>
+                                            <strong>{badge.name} Badge</strong>
+                                            <span>{points} Points</span>
+                                        </div>
+                                    </div>
                                     <Link to="/profile" onClick={() => setProfileOpen(false)}>
                                         Profile setup
                                     </Link>
                                     <Link to="/my-matches" onClick={() => setProfileOpen(false)}>
                                         My Matches
-                                    </Link>
-                                    <Link to="/my-badges" onClick={() => setProfileOpen(false)}>
-                                        My Badges
                                     </Link>
                                     <button type="button" onClick={handleLogout}>
                                         Log Out
