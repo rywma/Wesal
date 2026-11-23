@@ -2,7 +2,7 @@ from datetime import date, timedelta, datetime
 from zoneinfo import ZoneInfo
 from decimal import Decimal
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from rest_framework import generics, permissions
 from django.contrib.auth import get_user_model
 from django.db import transaction
@@ -45,6 +45,8 @@ def create_match(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     data = serializer.validated_data
+    # an unpaid reservation whose 5 minutes ran out frees its slot
+    cancel_expired_bookings()
     # save the match and the creator's spot together, or neither
     with transaction.atomic():
         # Double Booking Prevention: lock the sport so two bookings at the same moment wait in line
@@ -67,7 +69,8 @@ def create_match(request):
         add_points(request.user, 'match_scheduling')
         # the opponent plays in the match too, so they take a spot and pay their share
         if opponent:
-            _, error = add_player(match, opponent)
+            # the match is still waiting for the host's payment here, so allow that status
+            _, error = add_player(match, opponent, allow_pending=True)
             if error:
                 transaction.set_rollback(True)
                 return Response({'error': f'Could not add the opponent: {error}'}, status=status.HTTP_400_BAD_REQUEST)
@@ -86,8 +89,11 @@ def match_spots(match):
 
 # puts a player in a match, used by Join and by accepting an invitation
 # (the match must already be locked with select_for_update)
-def add_player(match, user):
-    if match.status not in (Match.Status.OPEN, Match.Status.FULL):
+def add_player(match, user, allow_pending=False):
+    allowed = [Match.Status.OPEN, Match.Status.FULL]
+    if allow_pending:
+        allowed.append(Match.Status.PENDING_PAYMENT)
+    if match.status not in allowed:
         return None, 'This match is not open.'
 
     participation = Participation.objects.filter(user=user, match=match).first()
@@ -106,10 +112,13 @@ def add_player(match, user):
     else:
         participation = Participation.objects.create(user=user, match=match, payment_amount=match.share_per_player())
 
-    if match.spots_left() == 0:
+    # (a match still waiting for the host's payment becomes full when the host confirms)
+    if match.spots_left() == 0 and match.status != Match.Status.PENDING_PAYMENT:
         match.status = Match.Status.FULL
+        # payment opens when the match is full, and every player has 5 minutes to pay
+        match.payment_expires_at = timezone.now() + timedelta(minutes=5)
         match.save()
-    
+
     return participation, None
     add_points(user, 'participation')
 
@@ -155,6 +164,8 @@ def leave_match(request, match_id):
 
         if match.status == Match.Status.FULL:
             match.status = Match.Status.OPEN
+            # not full anymore, so the payment window closes until it fills again
+            match.payment_expires_at = None
             match.save()
 
     return Response(match_spots(match), status=status.HTTP_200_OK)
@@ -259,6 +270,8 @@ def get_matches(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_match_detail(request, match_id):
+    # so the page shows the real status (an expired reservation shows as cancelled)
+    cancel_expired_bookings()
     match = get_object_or_404(Match.objects.select_related('sport', 'creator'), pk=match_id)
     serializer = MatchDetailSerializer(match)
     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -408,32 +421,53 @@ def confirm_payment(request, match_id):
             {'error': 'You are not authorized to confirm payment for this match as you are not its creator.'}, 
             status=status.HTTP_403_FORBIDDEN
         )
-    if match.host_payment_expires_at and timezone.now() > match.host_payment_expires_at:
-        return Response({'error': 'Payment window has expired.'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-    match.status = Match.Status.OPEN
+    # confirming twice (for example after a page refresh) is fine
+    if match.status in (Match.Status.OPEN, Match.Status.FULL):
+        return Response({'message': 'Payment confirmed successfully, match is now open!'}, status=status.HTTP_200_OK)
+    if match.status != Match.Status.PENDING_PAYMENT:
+        return Response({'error': 'This match is not waiting for payment.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # the match only opens after the backend recorded the host's payment (from Moyasar)
+    host = Participation.objects.filter(match=match, user=request.user).first()
+    if not host or host.payment_status != Participation.PaymentStatus.PAID:
+        if match.host_payment_expires_at and timezone.now() > match.host_payment_expires_at:
+            return Response({'error': 'Payment window has expired.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Pay your share first.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if match.spots_left() <= 0:
+        # the opponent already took the last spot, so payment opens for them now
+        match.status = Match.Status.FULL
+        match.payment_expires_at = timezone.now() + timedelta(minutes=5)
+    else:
+        match.status = Match.Status.OPEN
     match.save()
-    
+
     return Response({'message': 'Payment confirmed successfully, match is now open!'}, status=status.HTTP_200_OK)
-# 12: Cancel expired unpaid participations
+
+
+# 12: Cancel expired unpaid bookings
 def cancel_expired_bookings():
-    from datetime import timedelta
-    expiration_limit = timezone.now() - timedelta(minutes=5)
-    
-    expired_participations = Participation.objects.filter(
-        payment_status=Participation.PaymentStatus.PENDING,
-        status=Participation.Status.JOINED,
-        joined_at__lt=expiration_limit
+    now = timezone.now()
+
+    # a host who did not pay within 5 minutes loses the reservation, so the venue slot is free again
+    host_paid = Participation.objects.filter(
+        match=OuterRef('pk'), user=OuterRef('creator'), payment_status=Participation.PaymentStatus.PAID
     )
-    
-    for participation in expired_participations:
-        participation.status = 'cancelled_by_timeout' if hasattr(Participation.Status, 'CANCELLED_BY_TIMEOUT') else Participation.Status.LEFT
-        participation.save()
-        
-        match = participation.match
-        if match.status == Match.Status.FULL:
+    Match.objects.filter(
+        status=Match.Status.PENDING_PAYMENT, host_payment_expires_at__lt=now
+    ).exclude(Exists(host_paid)).update(status=Match.Status.CANCELLED)
+
+    # players can only pay once the match is full, so their 5 minutes start then (payment_expires_at);
+    # whoever did not pay in time loses their spot and the match opens again
+    expired_matches = Match.objects.filter(status=Match.Status.FULL, payment_expires_at__lt=now)
+    for match in expired_matches:
+        match.participations.filter(
+            status=Participation.Status.JOINED,
+            payment_status=Participation.PaymentStatus.PENDING,
+        ).update(status=Participation.Status.LEFT)
+        if match.spots_left() > 0:
             match.status = Match.Status.OPEN
+            match.payment_expires_at = None
             match.save()
 
 
