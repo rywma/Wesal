@@ -7,6 +7,7 @@ Stage 4 focuses on building and integrating Wesal's Minimum Viable Product (MVP)
 
 - [0. Plan and Define Sprints](#0-plan-and-define-sprints)
 - [1. Execute Development Tasks](#1-execute-development-tasks)
+- [2. Monitor Progress and Adjust](#2-monitor-progress-and-adjust)
 - [Sprint Reviews](#sprint-reviews)
 - [Retrospectives](#retrospectives)
 - [Unit Tests](#unit-tests)
@@ -177,6 +178,103 @@ These are selected examples from our development history. All implementation cha
 
 ---
 
+## 2. Monitor Progress and Adjust
+
+Throughout Stage 4, we tracked our progress daily, measured how much work we completed in each sprint, and adjusted our plans when features turned out to be harder, less useful, or more important than expected.
+
+### 2.1 Daily Stand-ups
+
+We held a short stand-up meetings every working day in the workspace, usually lasting about 10–15 minutes.
+
+Each team member answered three questions:
+
+1. What did I complete since the last stand-up?
+2. What will I work on today?
+3. Is anything blocking me?
+
+Blockers that needed more than a minute were discussed after the stand-up with only the people involved, so the meeting stayed short.
+
+**Example stand-up (Sprint 3):**
+
+| Team member | Done | Today | Blockers |
+|---|---|---|---|
+| Ahad (Project Manager) | Venue request backend | Admin approve / reject endpoints | Venue form fields need to be agreed with frontend |
+| Hadeel (Frontend) | Challenges list and details pages | Badges and "This month's challenge" on Home | None |
+| Jouri (Backend) | Integration tests for the payment flow | Fix unpaid reservations blocking the venue slot | None |
+| Reema (UI/UX) | Frontend rework task list in Notion | Replacing sport icons with pictures | Needs final photos for each sport |
+
+### 2.2 Task Tracking
+
+We used **Notion** as our team workspace and **GitHub** to track the actual development work.
+
+**Notion** held the sprint timeline, each member's role and current task, and a task tracker with three statuses: *Not Started*, *In Progress* and *Done*.
+
+| Team member | Role |
+|---|---|
+| Ahad | Project Manager |
+| Hadeel | Frontend Developer |
+| Jouri | Backend Engineer |
+| Reema | UI/UX Designer |
+
+**GitHub** was our record of completed work. Every task had its own branch and Pull Request, and a task counted as *done* only once its Pull Request was merged into `main`. This also gave us an exact history of when each feature and bug fix was completed, which we used for the sprint metrics below.
+
+### 2.3 Sprint Metrics
+
+We measured three things in each sprint:
+
+- **Velocity:** how many tasks we completed, counted as Pull Requests merged into `main`.
+- **Completion rate:** how many of the sprint's planned goals ([0.4 Sprint Planning](#04-sprint-planning)) were finished by the end of the sprint.
+- **Bugs:** how many bugs we found and how many we fixed.
+
+| Sprint | Dates | Velocity (merged PRs) | Planned goals | Goals completed | Completion rate | Bug-fix PRs merged |
+|---|---|---|---|---|---|---|
+| Sprint 1 | 11–24 Oct | 21 | 5 | 5 | 100% | 6 |
+| Sprint 2 | 25 Oct – 7 Nov | 20 | 10 | 8 | 80% | 3 |
+| Sprint 3 | 8–21 Nov | 20 | 10 | 9 | 90% | 5 |
+| **Total** | | **61** | **25** | **22** | **88%** | **14** |
+
+**Planned goals per sprint:**
+
+- **Sprint 1 (5):** project setup, database, deployment, authentication backend, and the Home / Login / Signup pages. *All completed.*
+- **Sprint 2 (10):** match creation, browse & filter, match details, join/leave, cost splitting, payment status, invitations, Moyasar test payments, My Matches integration, Manage Match integration. *My Matches and Manage Match integration were carried over to Sprint 3.*
+- **Sprint 3 (10):** double-booking prevention, My Matches and Manage Match integration, host payment with countdown, profiles, points, leaderboards, challenges, badges, venue requests, and testing & bug fixes. *Venue requests were only partly finished: the form's sport, player and date-range fields still need a backend migration.*
+
+**What the numbers show:**
+
+- Our velocity stayed steady at about **20 tasks per sprint** across all three sprints.
+- Sprint 1 had the most bug fixes (6), mostly small setup issues such as a missing comma in `INSTALLED_APPS`, empty URL patterns and the location of the users app. This is expected when a project is first set up.
+- Sprint 2 had the fewest bug fixes (3), but two frontend–backend integrations (My Matches and Manage Match) were carried over to Sprint 3, which lowered its completion rate to 80%.
+- In Sprint 3, integration testing found 4 more bugs in the booking and payment flow, all of which were fixed (see [Integration bugs found and fixed](#integration-bugs-found-and-fixed)). The only unfinished goal was the venue form's new fields, which are waiting on a backend migration.
+
+**Bug resolution:**
+
+| Source | Found | Fixed | Resolution rate |
+|---|---|---|---|
+| Bug-fix Pull Requests | 14 | 14 | 100% |
+| Integration testing | 4 | 4 | 100% |
+
+**Known limitations (to fix after the MVP):**
+
+| Limitation | Status |
+|---|---|
+| `users/points/` and `cancel_expired_bookings/` routes point to helper functions, not endpoints, and error if called | Open |
+| The venue request model has new fields (sport, max players, end date, end time) without a migration yet | Open |
+| Login tokens expire after one day and are not refreshed automatically, so users must log in again | Open |
+
+### 2.4 Adjusting the Plan
+
+We changed our sprint goals several times when we learned more about a feature. The main adjustments were:
+
+| What changed | Why | Result |
+|---|---|---|
+| **Manage Match: editing removed, only cancelling kept** | Editing caused inconsistencies: the venue dropdown broke, and hosts could switch to a more expensive venue after players had already paid | Simpler and safer: hosts can cancel a match, but not change it after payments ([PR #60](https://github.com/rywma/Wesal/pull/60)) |
+| **Challenges and badges added** | Originally *Won't Have*, but the backend was ready early and the feature made the app more engaging | Built in Sprint 3 ([PR #53](https://github.com/rywma/Wesal/pull/53), [PR #66](https://github.com/rywma/Wesal/pull/66), [PR #71](https://github.com/rywma/Wesal/pull/71)) |
+| **My Matches and Manage Match integration carried over** | Sprint 2 ran out of time after the payment integration | Finished at the start of Sprint 3 ([PR #46](https://github.com/rywma/Wesal/pull/46), [PR #47](https://github.com/rywma/Wesal/pull/47)) |
+| **Venue requests added** | Venue owners needed a way to list available slots, reviewed by an admin | Backend ([PR #63](https://github.com/rywma/Wesal/pull/63), [PR #64](https://github.com/rywma/Wesal/pull/64)), admin dashboard ([PR #68](https://github.com/rywma/Wesal/pull/68)) and form ([PR #70](https://github.com/rywma/Wesal/pull/70)) |
+| **Venue form fields agreed between frontend and backend** | The first version only had a single date and time; the team decided a slot needs a sport, a player limit, and a date and time range | Fields added in both the model and the form |
+| **Player profiles postponed** | Viewing other players' profiles needs a new backend endpoint, and the demo was close | Moved to future work |
+
+---
 
 ## Sprint Reviews
 
