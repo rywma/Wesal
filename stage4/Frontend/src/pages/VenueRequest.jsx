@@ -3,9 +3,19 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { submitVenueRequest } from '../services/venueRequestsApi.js';
-import { toDateString } from '../utils/matchHelpers.js';
+import { SPORTS, SPORT_IDS } from '../services/matchesApi.js';
+import { formatDate, toDateString } from '../utils/matchHelpers.js';
 import '../styles/Auth.css';
 import '../styles/VenueRequest.css';
+
+// every hour from 6 AM to midnight: shown as "4:00 PM" sent as "16:00"
+const HOURS = Array.from({ length: 19 }, (_, i) => {
+  const h = (i + 6) % 24;
+  const label = h === 0 ? '12:00 AM (midnight)' : `${h % 12 || 12}:00 ${h < 12 ? 'AM' : 'PM'}`;
+  return { value: `${String(h).padStart(2, '0')}:00`, label };
+});
+
+const hourText = (value) => HOURS.find((h) => h.value === value)?.label || '';
 
 function VenueRequest() {
   const today = toDateString(new Date());
@@ -15,8 +25,12 @@ function VenueRequest() {
     facility_name: '',
     location: '',
     google_maps_link: '',
+    sport: 'Football',
+    max_players: '10',
     date: '',
-    time: '',
+    end_date: '',
+    time: '16:00',
+    end_time: '23:00',
     total_cost: '',
     contact_number: '',
     description: '',
@@ -33,6 +47,17 @@ function VenueRequest() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const closes = form.end_time === '00:00' ? '24:00' : form.end_time;
+    if (closes <= form.time) {
+      setMessage('Closing time must be after opening time.');
+      return;
+    }
+    if (form.end_date && form.end_date < form.date) {
+      setMessage('The last day must be on or after the first day.');
+      return;
+    }
+
     setLoading(true);
     setMessage('');
     setFieldErrors({});
@@ -43,8 +68,12 @@ function VenueRequest() {
           facility_name: form.facility_name,
           location: form.location,
           google_maps_link: form.google_maps_link,
+          sport: SPORT_IDS[form.sport],
+          max_players: Number(form.max_players),
           date: form.date,
+          end_date: form.end_date || null,
           time: form.time,
+          end_time: form.end_time,
           total_cost: Number(form.total_cost),
           contact_number: form.contact_number,
           description: form.description.trim() || null,
@@ -143,18 +172,62 @@ function VenueRequest() {
 
             <div className="venue-row">
               <div className="auth-field">
-                <label htmlFor="date">Date</label>
+                <label htmlFor="sport">Sport</label>
+                <select id="sport" name="sport" value={form.sport} onChange={handleChange}>
+                  {SPORTS.map((sport) => <option key={sport}>{sport}</option>)}
+                </select>
+                {errorFor('sport')}
+              </div>
+              <div className="auth-field">
+                <label htmlFor="max_players">Max players</label>
+                <input id="max_players" name="max_players" type="number" min="2" max="30"
+                  value={form.max_players} onChange={handleChange} required />
+                {errorFor('max_players')}
+              </div>
+            </div>
+
+            <div className="venue-row">
+              <div className="auth-field">
+                <label htmlFor="date">First day</label>
                 <input id="date" name="date" type="date" min={today}
                   value={form.date} onChange={handleChange} required />
                 {errorFor('date')}
               </div>
               <div className="auth-field">
-                <label htmlFor="time">Time</label>
-                <input id="time" name="time" type="time"
-                  value={form.time} onChange={handleChange} required />
-                {errorFor('time')}
+                <label htmlFor="end_date">
+                  Last day <span className="venue-optional">(optional)</span>
+                </label>
+                <input id="end_date" name="end_date" type="date" min={form.date || today}
+                  value={form.end_date} onChange={handleChange} />
+                {errorFor('end_date')}
               </div>
             </div>
+
+            <div className="venue-row">
+              <div className="auth-field">
+                <label htmlFor="time">Opens at</label>
+                <select id="time" name="time" value={form.time} onChange={handleChange}>
+                  {HOURS.slice(0, -1).map((h) => <option key={h.value} value={h.value}>{h.label}</option>)}
+                </select>
+                {errorFor('time')}
+              </div>
+              <div className="auth-field">
+                <label htmlFor="end_time">Closes at</label>
+                <select id="end_time" name="end_time" value={form.end_time} onChange={handleChange}>
+                  {HOURS.slice(1).map((h) => <option key={h.value} value={h.value}>{h.label}</option>)}
+                </select>
+                {errorFor('end_time')}
+              </div>
+            </div>
+
+            {form.date && (
+              <p className="venue-summary">
+                {form.end_date && form.end_date !== form.date
+                  ? `Open ${formatDate(form.date)} – ${formatDate(form.end_date)}`
+                  : `Open ${formatDate(form.date)}`}
+                , {hourText(form.time)} – {hourText(form.end_time)}
+              </p>
+            )}
 
             <div className="auth-field">
               <label htmlFor="total_cost">Total cost (SAR)</label>
