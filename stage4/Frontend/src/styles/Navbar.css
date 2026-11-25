@@ -1,18 +1,18 @@
-/* Navbar: the wordmark, the links, then the account actions */
+/* Navbar layout */
 .navbar {
   width: 100%;
-  box-sizing: border-box;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding: var(--space-md) var(--gutter);
   position: relative;
   z-index: var(--z-sticky-nav);
+
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-xl);
-  max-width: var(--container);
-  margin-inline: auto;
-  padding: var(--space-md) var(--gutter);
+
   direction: ltr;
-  background: transparent;
   color: var(--color-ink);
   font-family: var(--font-body);
 }
@@ -23,20 +23,6 @@
   font-weight: 500;
   text-decoration: none;
   white-space: nowrap;
-}
-
-.navbar-links a,
-.navbar-auth>a:not(.get-started) {
-  transition: color var(--dur-micro) var(--ease-out), text-shadow var(--dur-micro) var(--ease-out);
-}
-
-/* the links glow lime on hover */
-.navbar-links a:hover,
-.navbar-links a:focus-visible,
-.navbar-auth>a:not(.get-started):hover,
-.navbar-auth>a:not(.get-started):focus-visible {
-  color: var(--color-brand);
-  text-shadow: 0 0 14px color-mix(in oklab, var(--color-brand) 60%, transparent);
 }
 
 .navbar .navbar-logo {
@@ -53,11 +39,73 @@
   gap: var(--space-xl);
 }
 
-.navbar-links,
 .navbar-auth {
   display: flex;
   align-items: center;
   gap: var(--space-lg);
+}
+
+
+/* Continuous navigation tabs */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px;
+
+  background: #29153E;
+  border-radius: 18px;
+}
+
+.navbar-links .navbar-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 14px;
+
+  color: #CFC3D9;
+  text-shadow: none;
+  transition: color 0.2s ease;
+}
+
+.navbar-links .navbar-tab:hover,
+.navbar-links .navbar-tab:focus-visible {
+  color: #FFFFFF;
+  text-shadow: none;
+}
+
+.navbar-links .navbar-tab.active {
+  color: #FFFFFF;
+}
+
+/* Sliding background controlled by Motion */
+.navbar-tab-indicator {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  background: #4A2A64;
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.navbar-tab-label {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* Login and Get Started */
+.navbar-auth>a:not(.get-started) {
+  transition: color var(--dur-micro) var(--ease-out);
+}
+
+.navbar-auth>a:not(.get-started):hover {
+  color: var(--color-brand);
 }
 
 .navbar .get-started {
@@ -65,16 +113,19 @@
   align-items: center;
   min-height: 44px;
   padding: 0 var(--space-lg);
-  border-radius: var(--radius-pill);
+
   border: 0;
+  border-radius: var(--radius-pill);
   background: var(--color-brand);
   color: var(--color-accent-ink);
+
   font-family: var(--font-display);
   font-size: var(--text-md);
   font-weight: 800;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+
+  transition: background-color var(--dur-micro) var(--ease-out);
 }
 
 .navbar .get-started:hover {
@@ -92,7 +143,8 @@
   font-size: var(--text-sm);
 }
 
-/* Profile menu avatar + name, opens a small list */
+
+/* Profile button */
 .profile-menu {
   position: relative;
 }
@@ -101,12 +153,15 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
+
   min-height: 44px;
   padding: 4px var(--space-md) 4px 4px;
+
   border: 0;
-  border-radius: var(--radius-pill);
+  border-radius: 16px;
   background: none;
   box-shadow: inset 0 0 0 var(--rule-hair) var(--color-rule);
+
   color: var(--color-ink);
   font-weight: 500;
   white-space: nowrap;
@@ -124,15 +179,19 @@
   border-radius: 50%;
 }
 
+
+/* Profile dropdown */
 .profile-menu-list {
   position: absolute;
   top: calc(100% + var(--space-xs));
   right: 0;
   z-index: var(--z-dropdown);
+
   display: flex;
   flex-direction: column;
   min-width: 15rem;
   padding: var(--space-xs);
+
   border: var(--rule-hair) solid var(--color-rule);
   border-radius: 12px;
   background: var(--color-paper-2);
@@ -143,8 +202,8 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  border-bottom: 1px solid var(--color-rule);
   margin-bottom: 8px;
+  border-bottom: 1px solid var(--color-rule);
 }
 
 .profile-badge img {
@@ -175,6 +234,7 @@
   border: 0;
   border-radius: 8px;
   background: none;
+
   color: var(--color-ink);
   font-size: var(--text-md);
   text-align: left;
@@ -192,23 +252,50 @@
   border-radius: 0 0 8px 8px;
 }
 
+
+/* Mobile menu button */
 .menu-toggle {
   display: none;
 }
 
-/* Tablet and mobile: the links fold behind a menu button */
+
+/* Desktop: keep the tabs centered */
+@media (min-width: 60.001rem) {
+  .navbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
+  .navbar-menu {
+    display: contents;
+  }
+
+  .navbar-links {
+    justify-self: center;
+  }
+
+  .navbar-auth {
+    justify-self: end;
+  }
+}
+
+
+/* Tablet and mobile */
 @media (max-width: 60rem) {
   .menu-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
     width: 44px;
     height: 44px;
     padding: 0;
-    border-radius: var(--radius-pill);
+
     border: 0;
+    border-radius: 12px;
     background: none;
     box-shadow: inset 0 0 0 var(--rule-bar) var(--color-ink);
+
     color: var(--color-ink);
     cursor: pointer;
   }
@@ -219,6 +306,7 @@
     top: 100%;
     left: 0;
     right: 0;
+
     padding: var(--space-lg) var(--gutter);
     background: var(--color-paper);
     border-bottom: var(--rule-bar) solid var(--color-ink);
@@ -237,7 +325,25 @@
     gap: var(--space-md);
   }
 
-  /* inside the mobile menu the list opens in place instead of floating */
+  .navbar-links {
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .navbar-links .navbar-tab {
+    justify-content: flex-start;
+    padding: 8px 12px;
+  }
+
+  .navbar-tab-indicator {
+    display: none;
+  }
+
+  .navbar-links .navbar-tab.active {
+    color: var(--color-brand);
+  }
+
   .profile-menu-list {
     position: static;
     margin-top: var(--space-xs);
