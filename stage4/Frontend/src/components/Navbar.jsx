@@ -1,6 +1,7 @@
 import '../styles/Navbar.css';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { motion } from 'motion/react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { DEFAULT_AVATAR, getMyProfile } from '../services/profileApi.js';
 
@@ -9,6 +10,19 @@ function Navbar() {
     const [profileOpen, setProfileOpen] = useState(false);
     const { user, tokens, profile, setProfile, isLoggedIn, logout } = useAuth();
     const [logoutError, setLogoutError] = useState('');
+
+    const { pathname } = useLocation();
+
+    const tabs = [
+        { path: '/', label: 'Home' },
+        { path: '/matches', label: 'Find Games' },
+        { path: '/create-match', label: 'Host a Game' },
+        ...(isLoggedIn ? [
+            { path: '/challenges', label: 'Challenges' },
+            { path: '/invitations', label: 'Invitations' }
+        ] : [])
+    ];
+
     const points = profile?.points ?? 0;
 
     const badge = points >= 300
@@ -53,33 +67,41 @@ function Navbar() {
             </button>
 
             <div className={`navbar-menu ${menuOpen ? 'open' : ''}`}>
+
                 <div className="navbar-links">
-                    <Link to="/" onClick={() => setMenuOpen(false)}>
-                        Home
-                    </Link>
+                    {tabs.map((tab) => {
+                        const active = pathname === tab.path ||
+                            (tab.path !== '/' && pathname.startsWith(`${tab.path}/`));
 
-                    <Link to="/matches" onClick={() => setMenuOpen(false)}>
-                        Find Games
-                    </Link>
+                        return (
+                            <Link
+                                key={tab.path}
+                                to={tab.path}
+                                className={`navbar-tab ${active ? 'active' : ''}`}
+                                aria-current={active ? 'page' : undefined}
+                                onClick={() => setMenuOpen(false)}
+                            >
+                                {active && (
+                                    <motion.span
+                                        layoutId="navbar-active-tab"
+                                        className="navbar-tab-indicator"
+                                        initial={false}
+                                        transition={{
+                                            type: 'spring',
+                                            stiffness: 380,
+                                            damping: 30
+                                        }}
+                                    />
+                                )}
 
-                    <Link to="/create-match" onClick={() => setMenuOpen(false)}>
-                        Host a Game
-                    </Link>
-
-
-                    {isLoggedIn && (
-                        <Link to="/challenges" onClick={() => setMenuOpen(false)}>
-                            Challenges
-                        </Link>
-                    )}
-
-                    {isLoggedIn && (
-                        <Link to="/invitations" onClick={() => setMenuOpen(false)}>
-                            Invitations
-                        </Link>
-                    )}
-
+                                <span className="navbar-tab-label">
+                                    {tab.label}
+                                </span>
+                            </Link>
+                        );
+                    })}
                 </div>
+
 
 
                 <div className="navbar-auth">

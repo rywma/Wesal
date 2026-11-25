@@ -48,7 +48,7 @@ function Home() {
         return (
             <section className="challenge-section">
                 <h2>This month’s challenge</h2>
-                <p>Hit the goal before the month ends and earn a badge.</p>
+                <p>Take on the challenge, reach your goal, and earn points.</p>
 
                 <ul className="challenges-list">
                     <li className={`challenge-row sport-${sport}`}>
@@ -148,6 +148,79 @@ function Home() {
                 </section>
 
                 {challenge && renderChallenge()}
+
+
+                <section className="familiar-section">
+                    <div className="familiar-heading">
+                        <h2>Sound familiar?</h2>
+                        <p>We've all been there. Wesal gets it.</p>
+                    </div>
+
+                    <div className="familiar-grid">
+                        <article className="familiar-card">
+                            <div className="familiar-card-header">
+
+                                <span className="familiar-tag">THE NO-SHOW</span>
+                                <h3>The friend who bailed</h3>
+                            </div>
+                            <div className="familiar-chat">
+                                <p className="chat-bubble sent">Tennis at 7? 🎾</p>
+                                <p className="chat-bubble received">I'm in!</p>
+                                <p className="chat-bubble received">
+                                    Bro I can't make it 💀
+                                </p>
+                            </div>
+
+                            <p className="familiar-ending">
+                                Don't cancel. Find another player.
+                            </p>
+                        </article>
+
+                        <article className="familiar-card">
+                            <div className="familiar-card-header">
+                                <span className="familiar-tag">NEW IN TOWN</span>
+                                <h3>New city, no teammates</h3>
+                            </div>
+                            <div className="familiar-chat">
+                                <p className="chat-bubble sent">
+                                    Just moved to Riyadh
+                                </p>
+                                <p className="chat-bubble sent">
+                                    Where's everyone playing?
+                                </p>
+                                <p className="chat-bubble received">👀</p>
+                            </div>
+
+                            <p className="familiar-ending">
+                                New city. New teammates.
+                            </p>
+                        </article>
+
+                        <article className="familiar-card">
+                            <div className="familiar-card-header">
+                                <span className="familiar-tag">THE SPORTY FRIEND</span>
+                                <h3>The odd one out</h3>
+                            </div>
+
+                            <div className="familiar-chat">
+                                <p className="chat-bubble sent">
+                                    Padel this weekend?
+                                </p>
+                                <p className="chat-bubble received">
+                                    Brunch instead? 🥐
+                                </p>
+                                <p className="chat-bubble sent">
+                                    Again?? 😭
+                                </p>
+                            </div>
+
+                            <p className="familiar-ending">
+                                Find people who get your game.
+                            </p>
+                        </article>
+                    </div>
+                </section>
+
 
                 <section className="why-section">
                     <h2>Split the cost, not the effort.</h2>
