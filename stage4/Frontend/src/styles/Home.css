@@ -285,3 +285,139 @@
     background-position: 50% 50%;
   }
 }
+
+/* Sound Familiar */
+.home .familiar-section {
+  padding-block: var(--section-gap-s);
+}
+
+.home .familiar-heading h2 {
+  font-size: var(--text-display-s);
+}
+
+.home .familiar-heading p {
+  margin-top: var(--space-sm);
+  color: var(--color-ink-2);
+  font-size: var(--text-lead);
+}
+
+.home .familiar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: var(--space-2xl);
+}
+
+.home .familiar-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 28px;
+  border: 1px solid rgba(151, 114, 190, 0.35);
+  border-radius: 18px;
+  background: #2c1d49;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.home .familiar-card:hover {
+  transform: translateY(-3px);
+  background: #312050;
+}
+
+.home .familiar-card-header {
+  padding-bottom: 18px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.22);
+}
+
+.home .familiar-tag {
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 6px 10px;
+  border: 1px solid rgba(199, 255, 57, 0.4);
+  border-radius: 6px;
+  color: #c7ff39;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home .familiar-card h3 {
+  margin: 0;
+  font-size: clamp(20px, 2vw, 26px);
+  line-height: 1.12;
+}
+
+.home .familiar-chat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+  margin-top: 24px;
+  margin-bottom: 30px;
+}
+
+.home .chat-bubble {
+  max-width: 92%;
+  padding: 11px 15px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.home .chat-bubble.sent {
+  align-self: flex-end;
+  background: #c7ff39;
+  color: #171329;
+  border-bottom-right-radius: 4px;
+}
+
+.home .chat-bubble.received {
+  align-self: flex-start;
+  background: #513a75;
+  color: #ffffff;
+  border-bottom-left-radius: 4px;
+}
+
+.home .familiar-card:first-child .chat-bubble:last-child {
+  margin-top: 8px;
+}
+
+.home .familiar-card:nth-child(2) .chat-bubble:last-child {
+  margin-top: 16px;
+}
+
+.home .familiar-card:nth-child(3) .chat-bubble:last-child {
+  margin-top: 6px;
+}
+
+
+.home .familiar-ending {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(151, 114, 190, 0.35);
+  color: #c7ff39;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+
+@media (max-width: 60rem) {
+  .home .familiar-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home .familiar-card {
+    padding: 24px;
+  }
+
+  .home .familiar-chat {
+    min-height: 180px;
+  }
+}
