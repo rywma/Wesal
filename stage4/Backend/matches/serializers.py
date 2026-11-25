@@ -138,3 +138,9 @@ class VenueRequestSerializer(serializers.ModelSerializer):
         model = VenueRequest
         fields = '__all__'
         read_only_fields = ['id', 'status', 'created_at']
+        # nullable in the database only so older requests keep working; new requests must send them
+        extra_kwargs = {
+            'sport': {'required': True, 'allow_null': False},
+            'max_players': {'required': True, 'allow_null': False},
+            'end_time': {'required': True, 'allow_null': False},
+        }
